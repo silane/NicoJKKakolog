@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ソース ファイル\ChatProvider">
+      <UniqueIdentifier>{8bf13231-c3ce-4fe7-bc78-c7d385f21c32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\ChatProvider">
+      <UniqueIdentifier>{7ed82ac4-e334-4c7e-9091-30743040fe4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Utils">
+      <UniqueIdentifier>{72f4b4d4-f817-4a5a-b48a-0c6e28f6e8a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\NiconicoJikkyouUtils">
+      <UniqueIdentifier>{7bf790f6-2317-4132-9cb5-3f4683ecbc28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Utils">
+      <UniqueIdentifier>{c39276a9-b82c-413b-b48a-385313ed89a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\NiconicoJikkyouUtils">
+      <UniqueIdentifier>{ece16e1c-c9c2-4a12-982a-85a502ab6fdd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="NicoJK.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="CommentWindow.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="TVTestPlugin.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkServiceIDTable.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="TextFileReader.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="OsdCompositor.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Chat.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="OnceASecondChatProvider.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="ChannelInfo.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="IChatProvider.h">
+      <Filter>ヘッダー ファイル\ChatProvider</Filter>
+    </ClInclude>
+    <ClInclude Include="IChatProviderEntry.h">
+      <Filter>ヘッダー ファイル\ChatProvider</Filter>
+    </ClInclude>
+    <ClInclude Include="NiconicoJikkyouChatProvider.h">
+      <Filter>ヘッダー ファイル\ChatProvider</Filter>
+    </ClInclude>
+    <ClInclude Include="NiconicoJikkyouChatProviderEntry.h">
+      <Filter>ヘッダー ファイル\ChatProvider</Filter>
+    </ClInclude>
+    <ClInclude Include="NiconicoJikkyouLogChatProvider.h">
+      <Filter>ヘッダー ファイル\ChatProvider</Filter>
+    </ClInclude>
+    <ClInclude Include="NiconicoJikkyouLogChatProviderEntry.h">
+      <Filter>ヘッダー ファイル\ChatProvider</Filter>
+    </ClInclude>
+    <ClInclude Include="NiconicoJikkyouLogStreamChatProvider.h">
+      <Filter>ヘッダー ファイル\ChatProvider</Filter>
+    </ClInclude>
+    <ClInclude Include="NiconicoJikkyouLogFileStreamChatProviderEntry.h">
+      <Filter>ヘッダー ファイル\ChatProvider</Filter>
+    </ClInclude>
+    <ClInclude Include="NicoJikkyouLogFileStreamChatProvider.h">
+      <Filter>ヘッダー ファイル\ChatProvider</Filter>
+    </ClInclude>
+    <ClInclude Include="NicoJKKakolog.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="IniFile.h">
+      <Filter>ヘッダー ファイル\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultJkIdTable.h">
+      <Filter>ヘッダー ファイル\NiconicoJikkyouUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="NiconicoJikkyouXmlParser.h">
+      <Filter>ヘッダー ファイル\NiconicoJikkyouUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="NiconicoLoginSession.h">
+      <Filter>ヘッダー ファイル\NiconicoJikkyouUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="PracticalSocket.h">
+      <Filter>ヘッダー ファイル\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="AsyncSocket.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="TestChatProvider.h">
+      <Filter>ヘッダー ファイル\ChatProvider</Filter>
+    </ClInclude>
+    <ClInclude Include="JKIDNameTable.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="NicoJK.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="CommentWindow.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="TextFileReader.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="OsdCompositor.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Chat.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="NiconicoJikkyouChatProvider.cpp">
+      <Filter>ソース ファイル\ChatProvider</Filter>
+    </ClCompile>
+    <ClCompile Include="NiconicoJikkyouChatProviderEntry.cpp">
+      <Filter>ソース ファイル\ChatProvider</Filter>
+    </ClCompile>
+    <ClCompile Include="NiconicoJikkyouLogChatProvider.cpp">
+      <Filter>ソース ファイル\ChatProvider</Filter>
+    </ClCompile>
+    <ClCompile Include="NiconicoJikkyouLogChatProviderEntry.cpp">
+      <Filter>ソース ファイル\ChatProvider</Filter>
+    </ClCompile>
+    <ClCompile Include="TestChatProvider.cpp">
+      <Filter>ソース ファイル\ChatProvider</Filter>
+    </ClCompile>
+    <ClCompile Include="NiconicoJikkyouLogStreamChatProvider.cpp">
+      <Filter>ソース ファイル\ChatProvider</Filter>
+    </ClCompile>
+    <ClCompile Include="NiconicoJikkyouLogFileStreamChatProviderEntry.cpp">
+      <Filter>ソース ファイル\ChatProvider</Filter>
+    </ClCompile>
+    <ClCompile Include="NicoJikkyouLogFileStreamChatProvider.cpp">
+      <Filter>ソース ファイル\ChatProvider</Filter>
+    </ClCompile>
+    <ClCompile Include="NicoJKKakolog.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="IniFile.cpp">
+      <Filter>ソース ファイル\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="DefaultJkIdTable.cpp">
+      <Filter>ソース ファイル\NiconicoJikkyouUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="NiconicoJikkyouXmlParser.cpp">
+      <Filter>ソース ファイル\NiconicoJikkyouUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="NiconicoLoginSession.cpp">
+      <Filter>ソース ファイル\NiconicoJikkyouUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="PracticalSocket.cpp">
+      <Filter>ソース ファイル\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="AsyncSocket.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="OnceASecondChatProvider.cpp">
+      <Filter>ソース ファイル\ChatProvider</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="NicoJK.rc">
+      <Filter>リソース ファイル</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>

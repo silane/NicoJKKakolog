@@ -1,0 +1,45 @@
+#pragma once
+#include <string>
+#include <codecvt>
+#include "TVTestPlugin.h"
+#include "IniFile.h"
+#include "NiconicoJikkyouChatProviderEntry.h"
+#include "NiconicoJikkyouLogChatProviderEntry.h"
+#include "NiconicoJikkyouLogFileStreamChatProviderEntry.h"
+
+namespace NicoJKKakolog {
+	//NicoJKクラスが巨大すぎるので分離
+	//追加の処理はすべてこっちに書いているというわけではない
+	class NicoJKKakolog
+	{
+	private:
+		//+３桁は他で使われてる
+		static constexpr int WM_CHECKSTATECHANGE = WM_APP + 1000;//チャット元選択のチェックボックスが変更された
+
+		TVTest::CTVTestApp *tvtest;
+		Utility::IniFile iniFile;
+
+		HWND listview;
+		HWND dialog;
+		
+		std::vector<IChatProviderEntry*> chatProviderEntries;
+		std::vector<IChatProvider *> chatProviders;
+
+		std::chrono::milliseconds timelag;
+
+	public:
+		static std::wstring_convert < std::codecvt_utf8<WCHAR>, WCHAR > utf8_wide_conv;
+		bool showingListView = false;
+
+	public:
+		NicoJKKakolog();
+		void Init(TVTest::CTVTestApp *tvtest, const std::basic_string<TCHAR> &iniFileName);
+		void DialogInit(HWND dialog,HWND listview);
+		INT_PTR DialogProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
+		std::vector<Chat> GetChats(std::time_t);
+		~NicoJKKakolog();
+
+		static std::time_t NicoJKKakolog::FileTimeToUnixTime(const FILETIME &ft);
+	};
+
+}
