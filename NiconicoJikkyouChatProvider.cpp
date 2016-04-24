@@ -21,7 +21,6 @@ namespace NicoJKKakolog
 		}catch (std::out_of_range) {
 			return{};
 		}
-		jkID = 1;
 		if (lastJKId == jkID)
 		{
 			//非同期部分で集めたデータからチャットを生成して返す
