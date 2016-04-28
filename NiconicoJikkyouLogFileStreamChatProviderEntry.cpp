@@ -24,7 +24,7 @@ namespace NicoJKKakolog
 	}
 	IChatProvider * NiconicoJikkyouLogFileStreamChatProviderEntry::NewProvider()
 	{
-		static std::wstring_convert < std::codecvt<WCHAR, char, mbstate_t>, WCHAR > multi_wide_conv;
+		std::wstring_convert<std::codecvt_byname<wchar_t, char, std::mbstate_t>, wchar_t> multi_wide_conv(new std::codecvt_byname<wchar_t, char, std::mbstate_t>("japanese"));
 		TCHAR path[MAX_PATH];
 		if (!FileOpenDialog(nullptr, TEXT("実況ログ(*.jkl;*.xml)\0*.jkl;*.xml\0すべてのファイル\0*.*\0"), path, _countof(path)))
 			return nullptr;
