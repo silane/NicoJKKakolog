@@ -26,7 +26,7 @@ namespace NicoJKKakolog
 	void NiconicoJikkyouLogStreamChatProvider::SetStream(std::istream &input)
 	{
 		this->fileReadTask=pplx::task<void>([this,&input]() {
-			while (!input.eof())
+			while (!input.fail() && !input.eof())
 			{
 				std::string buf;
 				std::getline(input, buf);
