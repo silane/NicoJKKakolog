@@ -11,6 +11,7 @@ namespace NicoJKKakolog
 	private:
 		std::unordered_map<uint_least32_t, int> jkIdTable;
 		NiconicoLoginSession login;
+		Utility::IniFile *iniFile;
 
 	public:
 		NiconicoJikkyouLogChatProviderEntry(Utility::IniFile *iniFile);

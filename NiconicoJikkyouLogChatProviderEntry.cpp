@@ -7,15 +7,8 @@
 namespace NicoJKKakolog
 {
 	NiconicoJikkyouLogChatProviderEntry::NiconicoJikkyouLogChatProviderEntry(Utility::IniFile *iniFile):
-		jkIdTable(GetDefaultJkIdTable())
+		jkIdTable(GetDefaultJkIdTable()),iniFile(iniFile)
 	{
-		static std::wstring_convert<std::codecvt_utf8<TCHAR>, TCHAR> cvt;
-		auto userid=iniFile->GetString(TEXT("NicoJKKakolog"),TEXT("niconicouserid"),TEXT(""));
-		auto password= iniFile->GetString(TEXT("NicoJKKakolog"), TEXT("niconicopassword"), TEXT(""));
-		if (userid == TEXT("") || password == TEXT(""))
-			return;
-		login.Login(cvt.to_bytes(userid), cvt.to_bytes(password));
-
 		for (auto &pair : iniFile->GetSectionContent(TEXT("Channels")))
 		{
 			try {
@@ -42,11 +35,23 @@ namespace NicoJKKakolog
 	}
 	IChatProvider * NiconicoJikkyouLogChatProviderEntry::NewProvider()
 	{
+		static std::wstring_convert<std::codecvt_utf8<TCHAR>, TCHAR> cvt;
+		auto userid = iniFile->GetString(TEXT("NicoJKKakolog"), TEXT("niconicouserid"), TEXT(""));
+		auto password = iniFile->GetString(TEXT("NicoJKKakolog"), TEXT("niconicopassword"), TEXT(""));
+		if (userid == TEXT("") || password == TEXT(""))
+		{
+			MessageBox(nullptr, TEXT("ニコニコ動画のログイン情報がiniファイルに設定されていません"), TEXT(""), 0);
+			return nullptr;
+		}
+		
+		login.Login(cvt.to_bytes(userid), cvt.to_bytes(password));
+
 		if (!login.IsLoggedIn())
 		{
 			MessageBox(nullptr, TEXT("ニコニコ動画にログインできませんでした"),TEXT(""),0);
 			return nullptr;
 		}
+
 		NiconicoJikkyouLogChatProvider *ret = new NiconicoJikkyouLogChatProvider(jkIdTable,&login);
 		return ret;
 	}
