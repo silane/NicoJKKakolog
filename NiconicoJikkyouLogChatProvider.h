@@ -23,6 +23,7 @@ namespace NicoJKKakolog {
 
 		pplx::task<void> chatCollectTask;
 
+		int lastJkId;
 		std::chrono::system_clock::time_point lastGetTime;
 
 	public:

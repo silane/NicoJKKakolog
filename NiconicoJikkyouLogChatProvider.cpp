@@ -4,7 +4,7 @@
 
 namespace NicoJKKakolog {
 	NiconicoJikkyouLogChatProvider::NiconicoJikkyouLogChatProvider(const std::unordered_map<uint_least32_t, int> &jkidTable,const NiconicoLoginSession *login):
-		OnceASecondChatProvider(std::chrono::seconds(10)), client(U("http://jk.nicovideo.jp")), jkidTable(jkidTable), chatCollectTask([] {}),login(login)
+		OnceASecondChatProvider(std::chrono::seconds(10)), client(U("http://jk.nicovideo.jp")), jkidTable(jkidTable), chatCollectTask([] {}),login(login),lastJkId(0)
 	{
 	}
 
@@ -28,18 +28,29 @@ namespace NicoJKKakolog {
 
 		{
 			std::lock_guard<std::mutex> lock(this->chatsMutex);
-			auto range = chats.equal_range(std::chrono::system_clock::to_time_t(t));
-			std::for_each(range.first, range.second, [&ret](const std::unordered_multimap<std::time_t, Chat>::value_type &x) {ret.push_back(x.second); });
+			if (lastJkId == jkID)
+			{
+				auto range = chats.equal_range(std::chrono::system_clock::to_time_t(t));
+				std::for_each(range.first, range.second, [&ret](const std::unordered_multimap<std::time_t, Chat>::value_type &x) {ret.push_back(x.second); });
+			}
+			else
+			{
+				chats.clear();
+			}
 		}
 
-		if (t - lastGetTime < std::chrono::seconds(10) && lastGetTime - t < std::chrono::seconds(10))
+		if (t - lastGetTime < std::chrono::seconds(10) && lastGetTime - t < std::chrono::seconds(10) && lastJkId==jkID)
 			return ret;
 
-		//10秒に一回取得する
+		//10秒に一回かチャンネルが変わったら取得する
+
+		lastJkId = jkID;
 		lastGetTime = t;
 
 		std::time_t startTime = std::chrono::system_clock::to_time_t(t);
 		std::time_t endTime = std::chrono::system_clock::to_time_t(std::chrono::seconds(10) + t);
+
+		this->chatCollectTask.wait();//this->loginへ同時アクセス防止のためこの位置
 
 		web::http::http_request req;
 		req.headers().add(U("Cookie"), login->GetUserSessionCookie().c_str());
@@ -47,7 +58,6 @@ namespace NicoJKKakolog {
 			U("&start_time=") + utility::conversions::to_string_t(std::to_string(startTime)) +
 			U("&end_time=") + utility::conversions::to_string_t(std::to_string(endTime)));
 
-		this->chatCollectTask.wait();
 		this->chatCollectTask=client.request(req).then([this, endTime](web::http::http_response &response) {
 			//非同期実行部分
 			auto query = web::uri::split_query(response.extract_string().get());
