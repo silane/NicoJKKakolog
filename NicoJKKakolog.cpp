@@ -59,7 +59,7 @@ namespace NicoJKKakolog {
 			item.pszText = new wchar_t[text.size() + 1];
 			text.copy(item.pszText, text.size());
 			item.pszText[text.size()] = L'\0';
-			item.iItem = i;
+			item.iItem = (int)i;
 			item.iSubItem = 0;
 			ListView_InsertItem(listview, &item);
 			delete[] item.pszText;
@@ -69,7 +69,7 @@ namespace NicoJKKakolog {
 			item.pszText = new wchar_t[text.size() + 1];
 			text.copy(item.pszText, text.size());
 			item.pszText[text.size()] = L'\0';
-			item.iItem = i;
+			item.iItem = (int)i;
 			item.iSubItem = 1;
 			ListView_SetItem(listview, &item);
 			delete[] item.pszText;
@@ -117,7 +117,6 @@ namespace NicoJKKakolog {
 		{
 			int    i = (int)lParam;
 			TCHAR  szName[256];
-			TCHAR  szBuf[256];
 			LVITEM item;
 
 			item.mask = LVIF_TEXT;
