@@ -19,6 +19,8 @@ namespace NicoJKKakolog {
 		if (IsLoggedIn())
 			return false;
 
+		this->mail = mail;
+		this->password = password;
 		try {
 			return client.request(web::http::methods::POST, "", utility::conversions::to_utf8string("mail_tel=" + mail + "&password=" + password + "&next_url="),"application/x-www-form-urlencoded").
 				then([this](web::http::http_response &response) {
@@ -31,7 +33,7 @@ namespace NicoJKKakolog {
 				utility::string_t::size_type idx = cookie->second.find(U("user_session="));
 				if (idx == utility::string_t::npos)
 					return false;
-				userSession = utility::conversions::to_utf8string( cookie->second.substr(idx, cookie->second.find(U(";"),idx) - idx));
+				this->userSession = utility::conversions::to_utf8string( cookie->second.substr(idx, cookie->second.find(U(";"),idx) - idx));
 				return true;
 
 			}).get();
@@ -48,7 +50,15 @@ namespace NicoJKKakolog {
 		web::http::http_request req(web::http::methods::GET);
 		req.headers().add(U("Cookie"), userSession.c_str());
 		client.request(req).wait();
-		userSession = "";
+		this->userSession.clear();
+	}
+
+	bool NiconicoLoginSession::Relogin()
+	{
+		if (!IsLoggedIn())
+			return false;
+		this->Logout();
+		return this->Login(this->mail, this->password);
 	}
 
 	bool NiconicoLoginSession::IsLoggedIn() const

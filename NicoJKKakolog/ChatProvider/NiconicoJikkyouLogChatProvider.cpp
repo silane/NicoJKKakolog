@@ -3,7 +3,7 @@
 #include "../NiconicoUtils/NiconicoLoginSession.h"
 
 namespace NicoJKKakolog {
-	NiconicoJikkyouLogChatProvider::NiconicoJikkyouLogChatProvider(const std::unordered_map<uint_least32_t, int> &jkidTable,const NiconicoLoginSession *login):
+	NiconicoJikkyouLogChatProvider::NiconicoJikkyouLogChatProvider(const std::unordered_map<uint_least32_t, int> &jkidTable,NiconicoLoginSession *login):
 		OnceASecondChatProvider(std::chrono::seconds(10)), client(U("http://jk.nicovideo.jp")), jkidTable(jkidTable), chatCollectTask([] {}),login(login),lastJkId(0)
 	{
 	}
@@ -62,7 +62,10 @@ namespace NicoJKKakolog {
 			//”ñ“¯ŠúŽÀs•”•ª
 			auto query = web::uri::split_query(response.extract_string().get());
 			if (query.count(U("error")))
+			{
+				this->login->Relogin();
 				return;
+			}
 			utility::string_t thread_id = query[U("thread_id")];
 			utility::string_t ms = query[U("ms")];
 			utility::string_t http_port = query[U("http_port")];
