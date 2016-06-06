@@ -1,17 +1,21 @@
 #pragma once
 #include "IChatProviderEntry.h"
-#include "IniFile.h"
+#include "../IniFile.h"
+#include "../NiconicoUtils/NiconicoLoginSession.h"
 namespace NicoJKKakolog
 {
-	class NiconicoJikkyouChatProviderEntry :
+
+	class NiconicoJikkyouLogChatProviderEntry :
 		public IChatProviderEntry
 	{
 	private:
 		std::unordered_map<uint_least32_t, int> jkIdTable;
+		NiconicoLoginSession login;
+		Utility::IniFile *iniFile;
 
 	public:
-		NiconicoJikkyouChatProviderEntry(Utility::IniFile *iniFile);
-		virtual ~NiconicoJikkyouChatProviderEntry() override;
+		NiconicoJikkyouLogChatProviderEntry(Utility::IniFile *iniFile);
+		virtual ~NiconicoJikkyouLogChatProviderEntry() override;
 
 		virtual std::string GetName() const override;
 		virtual std::string GetDescription() const override;

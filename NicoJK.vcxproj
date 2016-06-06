@@ -70,18 +70,22 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <TargetExt>.tvtp</TargetExt>
+    <IncludePath>D:\develop\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <TargetExt>.tvtp</TargetExt>
+    <IncludePath>D:\develop\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <TargetExt>.tvtp</TargetExt>
+    <IncludePath>D:\develop\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetExt>.tvtp</TargetExt>
+    <IncludePath>D:\develop\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -89,16 +93,17 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;NICOJK_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ModuleDefinitionFile>Exports.def</ModuleDefinitionFile>
       <DelayLoadDLLs>dwmapi.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
-      <AdditionalDependencies>comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>D:\develop\lib\x86\iconv.lib;D:\develop\lib\x86\libxml2_a.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /y "$(TargetDir)$(TargetFileName)" "D:\tv\tvtest録画視聴用\TVTest_0.7.23\Plugins\"</Command>
+      <Command>copy /y "$(TargetDir)$(TargetFileName)" "D:\tv\TVTest-develop_x86\Plugins"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -107,12 +112,17 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;NICOJK_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <DelayLoadDLLs>dwmapi.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <AdditionalDependencies>D:\develop\lib\x64\iconv.lib;D:\develop\lib\x64\libxml2_a.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>copy /y "$(TargetDir)$(TargetFileName)" "D:\tv\TVTest-develop_x64\Plugins"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -122,6 +132,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;NICOJK_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Optimization>MinSpace</Optimization>
+      <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -131,9 +142,10 @@
       <ModuleDefinitionFile>Exports.def</ModuleDefinitionFile>
       <AdditionalOptions>/PDBALTPATH:%_PDB% %(AdditionalOptions)</AdditionalOptions>
       <DelayLoadDLLs>dwmapi.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <AdditionalDependencies>D:\develop\lib\x86\iconv.lib;D:\develop\lib\x86\libxml2_a.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /y "$(TargetDir)$(TargetFileName)" "D:\tv\tvtest録画視聴用\TVTest_0.7.23\Plugins\"</Command>
+      <Command>copy /y "$(TargetDir)$(TargetFileName)" "D:\tv\TVTest-develop_x86\Plugins"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -144,6 +156,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;NICOJK_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Optimization>MinSpace</Optimization>
+      <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -152,84 +165,111 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalOptions>/PDBALTPATH:%_PDB% %(AdditionalOptions)</AdditionalOptions>
       <DelayLoadDLLs>dwmapi.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <AdditionalDependencies>D:\develop\lib\x64\iconv.lib;D:\develop\lib\x64\libxml2_a.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>copy /y "$(TargetDir)$(TargetFileName)" "D:\tv\TVTest-develop_x64\Plugins"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AsyncSocket.h" />
-    <ClInclude Include="ChannelInfo.h" />
-    <ClInclude Include="Chat.h" />
-    <ClInclude Include="DefaultJkIdTable.h" />
-    <ClInclude Include="IChatProvider.h" />
+    <ClInclude Include="NicoJKKakolog\ChannelInfo.h" />
+    <ClInclude Include="NicoJKKakolog\Chat.h" />
+    <ClInclude Include="NicoJKKakolog\NiconicoUtils\DefaultJkIdTable.h" />
+    <ClInclude Include="NicoJKKakolog\ChatProvider\IChatProvider.h" />
     <ClInclude Include="CommentWindow.h" />
-    <ClInclude Include="IChatProviderEntry.h" />
-    <ClInclude Include="IniFile.h" />
+    <ClInclude Include="NicoJKKakolog\ChatProviderEntry\IChatProviderEntry.h" />
+    <ClInclude Include="NicoJKKakolog\IniFile.h" />
     <ClInclude Include="JKIDNameTable.h" />
+    <ClInclude Include="MyXml\MyXml.h" />
     <ClInclude Include="NetworkServiceIDTable.h" />
-    <ClInclude Include="NicoJikkyouLogFileStreamChatProvider.h" />
+    <ClInclude Include="NicoJKKakolog\ChatProvider\NicoJikkyouLogFileStreamChatProvider.h" />
     <ClInclude Include="NicoJK.h" />
-    <ClInclude Include="NicoJKKakolog.h" />
-    <ClInclude Include="NiconicoJikkyouChatProvider.h" />
-    <ClInclude Include="NiconicoJikkyouChatProviderEntry.h" />
-    <ClInclude Include="NiconicoJikkyouLogChatProvider.h" />
-    <ClInclude Include="NiconicoJikkyouLogChatProviderEntry.h" />
-    <ClInclude Include="NiconicoJikkyouLogStreamChatProvider.h" />
-    <ClInclude Include="NiconicoJikkyouLogFileStreamChatProviderEntry.h" />
-    <ClInclude Include="NiconicoJikkyouXmlParser.h" />
-    <ClInclude Include="NiconicoLoginSession.h" />
-    <ClInclude Include="OnceASecondChatProvider.h" />
+    <ClInclude Include="NicoJKKakolog\NicoJKKakolog.h" />
+    <ClInclude Include="NicoJKKakolog\ChatProvider\NiconicoJikkyouChatProvider.h" />
+    <ClInclude Include="NicoJKKakolog\ChatProviderEntry\NiconicoJikkyouChatProviderEntry.h" />
+    <ClInclude Include="NicoJKKakolog\ChatProvider\NiconicoJikkyouLogChatProvider.h" />
+    <ClInclude Include="NicoJKKakolog\ChatProviderEntry\NiconicoJikkyouLogChatProviderEntry.h" />
+    <ClInclude Include="NicoJKKakolog\ChatProvider\NiconicoJikkyouLogStreamChatProvider.h" />
+    <ClInclude Include="NicoJKKakolog\ChatProviderEntry\NiconicoJikkyouLogFileStreamChatProviderEntry.h" />
+    <ClInclude Include="NicoJKKakolog\NiconicoUtils\NiconicoJikkyouXmlParser.h" />
+    <ClInclude Include="NicoJKKakolog\NiconicoUtils\NiconicoLoginSession.h" />
+    <ClInclude Include="NicoJKKakolog\ChatProvider\OnceASecondChatProvider.h" />
     <ClInclude Include="OsdCompositor.h" />
-    <ClInclude Include="PracticalSocket.h" />
+    <ClInclude Include="PracticalSocket\PracticalSocket.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="TestChatProvider.h" />
+    <ClInclude Include="NicoJKKakolog\ChatProvider\TestChatProvider.h" />
     <ClInclude Include="TextFileReader.h" />
     <ClInclude Include="TVTestPlugin.h" />
     <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AsyncSocket.cpp" />
-    <ClCompile Include="Chat.cpp" />
+    <ClCompile Include="NicoJKKakolog\Chat.cpp" />
     <ClCompile Include="CommentWindow.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MaxSpeed</Optimization>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="IniFile.cpp" />
-    <ClCompile Include="NicoJikkyouLogFileStreamChatProvider.cpp" />
+    <ClCompile Include="NicoJKKakolog\IniFile.cpp" />
+    <ClCompile Include="MyXml\MyXml.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </ForcedIncludeFiles>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </ForcedIncludeFiles>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ForcedIncludeFiles>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="NicoJKKakolog\ChatProvider\NicoJikkyouLogFileStreamChatProvider.cpp" />
     <ClCompile Include="NicoJK.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="NicoJKKakolog.cpp" />
-    <ClCompile Include="NiconicoJikkyouChatProvider.cpp" />
-    <ClCompile Include="NiconicoJikkyouChatProviderEntry.cpp" />
-    <ClCompile Include="NiconicoJikkyouLogChatProvider.cpp" />
-    <ClCompile Include="NiconicoJikkyouLogChatProviderEntry.cpp" />
-    <ClCompile Include="NiconicoJikkyouLogStreamChatProvider.cpp" />
-    <ClCompile Include="NiconicoJikkyouLogFileStreamChatProviderEntry.cpp" />
-    <ClCompile Include="NiconicoJikkyouXmlParser.cpp" />
-    <ClCompile Include="NiconicoLoginSession.cpp" />
-    <ClCompile Include="OnceASecondChatProvider.cpp" />
+    <ClCompile Include="NicoJKKakolog\NicoJKKakolog.cpp" />
+    <ClCompile Include="NicoJKKakolog\ChatProvider\NiconicoJikkyouChatProvider.cpp" />
+    <ClCompile Include="NicoJKKakolog\ChatProviderEntry\NiconicoJikkyouChatProviderEntry.cpp" />
+    <ClCompile Include="NicoJKKakolog\ChatProvider\NiconicoJikkyouLogChatProvider.cpp" />
+    <ClCompile Include="NicoJKKakolog\ChatProviderEntry\NiconicoJikkyouLogChatProviderEntry.cpp" />
+    <ClCompile Include="NicoJKKakolog\ChatProvider\NiconicoJikkyouLogStreamChatProvider.cpp" />
+    <ClCompile Include="NicoJKKakolog\ChatProviderEntry\NiconicoJikkyouLogFileStreamChatProviderEntry.cpp" />
+    <ClCompile Include="NicoJKKakolog\NiconicoUtils\NiconicoJikkyouXmlParser.cpp" />
+    <ClCompile Include="NicoJKKakolog\NiconicoUtils\NiconicoLoginSession.cpp" />
+    <ClCompile Include="NicoJKKakolog\ChatProvider\OnceASecondChatProvider.cpp" />
     <ClCompile Include="OsdCompositor.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MaxSpeed</Optimization>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="PracticalSocket.cpp">
+    <ClCompile Include="PracticalSocket\PracticalSocket.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </ForcedIncludeFiles>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </ForcedIncludeFiles>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ForcedIncludeFiles>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ForcedIncludeFiles>
     </ClCompile>
-    <ClCompile Include="DefaultJkIdTable.cpp" />
+    <ClCompile Include="NicoJKKakolog\NiconicoUtils\DefaultJkIdTable.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="TestChatProvider.cpp" />
+    <ClCompile Include="NicoJKKakolog\ChatProvider\TestChatProvider.cpp" />
     <ClCompile Include="TextFileReader.cpp" />
     <ClCompile Include="Util.cpp" />
   </ItemGroup>
@@ -251,6 +291,8 @@
     <Import Project="packages\cpprestsdk.v120.winxp.msvcstl.dyn.rt-dyn.2.8.0\build\native\cpprestsdk.v120.winxp.msvcstl.dyn.rt-dyn.targets" Condition="Exists('packages\cpprestsdk.v120.winxp.msvcstl.dyn.rt-dyn.2.8.0\build\native\cpprestsdk.v120.winxp.msvcstl.dyn.rt-dyn.targets')" />
     <Import Project="packages\cpprestsdk.v140.winapp.msvcstl.dyn.rt-dyn.2.8.0\build\native\cpprestsdk.v140.winapp.msvcstl.dyn.rt-dyn.targets" Condition="Exists('packages\cpprestsdk.v140.winapp.msvcstl.dyn.rt-dyn.2.8.0\build\native\cpprestsdk.v140.winapp.msvcstl.dyn.rt-dyn.targets')" />
     <Import Project="packages\cpprestsdk.v140.windesktop.msvcstl.dyn.rt-dyn.2.8.0\build\native\cpprestsdk.v140.windesktop.msvcstl.dyn.rt-dyn.targets" Condition="Exists('packages\cpprestsdk.v140.windesktop.msvcstl.dyn.rt-dyn.2.8.0\build\native\cpprestsdk.v140.windesktop.msvcstl.dyn.rt-dyn.targets')" />
+    <Import Project="packages\libxml2.redist.2.7.8.7\build\native\libxml2.redist.targets" Condition="Exists('packages\libxml2.redist.2.7.8.7\build\native\libxml2.redist.targets')" />
+    <Import Project="packages\libxml2.2.7.8.7\build\native\libxml2.targets" Condition="Exists('packages\libxml2.2.7.8.7\build\native\libxml2.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -263,5 +305,7 @@
     <Error Condition="!Exists('packages\cpprestsdk.v120.winxp.msvcstl.dyn.rt-dyn.2.8.0\build\native\cpprestsdk.v120.winxp.msvcstl.dyn.rt-dyn.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\cpprestsdk.v120.winxp.msvcstl.dyn.rt-dyn.2.8.0\build\native\cpprestsdk.v120.winxp.msvcstl.dyn.rt-dyn.targets'))" />
     <Error Condition="!Exists('packages\cpprestsdk.v140.winapp.msvcstl.dyn.rt-dyn.2.8.0\build\native\cpprestsdk.v140.winapp.msvcstl.dyn.rt-dyn.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\cpprestsdk.v140.winapp.msvcstl.dyn.rt-dyn.2.8.0\build\native\cpprestsdk.v140.winapp.msvcstl.dyn.rt-dyn.targets'))" />
     <Error Condition="!Exists('packages\cpprestsdk.v140.windesktop.msvcstl.dyn.rt-dyn.2.8.0\build\native\cpprestsdk.v140.windesktop.msvcstl.dyn.rt-dyn.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\cpprestsdk.v140.windesktop.msvcstl.dyn.rt-dyn.2.8.0\build\native\cpprestsdk.v140.windesktop.msvcstl.dyn.rt-dyn.targets'))" />
+    <Error Condition="!Exists('packages\libxml2.redist.2.7.8.7\build\native\libxml2.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\libxml2.redist.2.7.8.7\build\native\libxml2.redist.targets'))" />
+    <Error Condition="!Exists('packages\libxml2.2.7.8.7\build\native\libxml2.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\libxml2.2.7.8.7\build\native\libxml2.targets'))" />
   </Target>
 </Project>

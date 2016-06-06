@@ -1,6 +1,6 @@
 #pragma once
 #include "OnceASecondChatProvider.h"
-#include "Chat.h"
+#include "../Chat.h"
 
 namespace NicoJKKakolog
 {

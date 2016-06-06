@@ -4,8 +4,8 @@
 #include <vector>
 #include <chrono>
 
-#include "Chat.h"
-#include "ChannelInfo.h"
+#include "../Chat.h"
+#include "../ChannelInfo.h"
 
 namespace NicoJKKakolog
 {

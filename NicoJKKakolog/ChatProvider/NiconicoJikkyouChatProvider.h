@@ -1,6 +1,6 @@
 #pragma once
 #include "IChatProvider.h"
-#include "NiconicoJikkyouXmlParser.h"
+#include "../NiconicoUtils/NiconicoJikkyouXmlParser.h"
 #include <unordered_map>
 #include <cpprest\http_client.h>
 

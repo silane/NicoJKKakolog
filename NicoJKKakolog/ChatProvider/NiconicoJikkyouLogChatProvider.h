@@ -1,7 +1,7 @@
 #pragma once
 #include "OnceASecondChatProvider.h"
-#include "NiconicoLoginSession.h"
-#include "NiconicoJikkyouXmlParser.h"
+#include "../NiconicoUtils/NiconicoLoginSession.h"
+#include "../NiconicoUtils/NiconicoJikkyouXmlParser.h"
 #include <map>
 #include <unordered_map>
 #include <cpprest\http_client.h>

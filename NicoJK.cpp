@@ -16,7 +16,7 @@
 #include "NicoJK.h"
 
 //NicoJKKakoLog
-#include "NicoJKKakolog.h"
+#include "NicoJKKakolog/NicoJKKakolog.h"
 #pragma comment(lib, "comctl32.lib")
 //NicoJKKakoLog
 
@@ -1303,7 +1303,7 @@ INT_PTR CALLBACK CNicoJK::ForceDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
 	return reinterpret_cast<CNicoJK*>(GetWindowLongPtr(hwnd, DWLP_USER))->ForceDialogProcMain(hwnd, uMsg, wParam, lParam);
 }
 
-#include "IniFile.h"
+#include "NicoJKKakolog/IniFile.h"
 
 INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {

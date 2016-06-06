@@ -1,7 +1,7 @@
-#include "stdafx.h"
+#include "../../stdafx.h"
 #include "NiconicoJikkyouChatProviderEntry.h"
-#include "NiconicoJikkyouChatProvider.h"
-#include "DefaultJkIdTable.h"
+#include "../ChatProvider/NiconicoJikkyouChatProvider.h"
+#include "../NiconicoUtils/DefaultJkIdTable.h"
 
 namespace NicoJKKakolog
 {

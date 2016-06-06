@@ -1,6 +1,6 @@
 #pragma once
 #include "OnceASecondChatProvider.h"
-#include "NiconicoJikkyouXmlParser.h"
+#include "../NiconicoUtils/NiconicoJikkyouXmlParser.h"
 #include <pplx\pplxtasks.h>
 #include <unordered_map>
 #include <mutex>

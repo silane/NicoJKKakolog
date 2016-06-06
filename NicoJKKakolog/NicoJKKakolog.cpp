@@ -1,6 +1,6 @@
-#include "stdafx.h"
+#include "../stdafx.h"
 #include "NicoJKKakolog.h"
-#include "resource.h"
+#include "../resource.h"
 
 namespace NicoJKKakolog {
 

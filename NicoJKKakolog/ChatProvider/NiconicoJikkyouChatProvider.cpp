@@ -1,9 +1,9 @@
-#include "stdafx.h"
+#include "../../stdafx.h"
 #include "NiconicoJikkyouChatProvider.h"
-#include "NetworkServiceIDTable.h"
+//#include "NetworkServiceIDTable.h"
 //#include <sstream>
 #include <pplx\pplxtasks.h>
-#include "PracticalSocket.h"
+#include "../../PracticalSocket/PracticalSocket.h"
 
 namespace NicoJKKakolog
 {

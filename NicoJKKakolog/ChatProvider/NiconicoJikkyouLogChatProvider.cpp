@@ -1,6 +1,6 @@
-#include "stdafx.h"
+#include "../../stdafx.h"
 #include "NiconicoJikkyouLogChatProvider.h"
-#include "NiconicoLoginSession.h"
+#include "../NiconicoUtils/NiconicoLoginSession.h"
 
 namespace NicoJKKakolog {
 	NiconicoJikkyouLogChatProvider::NiconicoJikkyouLogChatProvider(const std::unordered_map<uint_least32_t, int> &jkidTable,const NiconicoLoginSession *login):

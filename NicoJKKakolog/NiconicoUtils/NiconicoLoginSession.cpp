@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "../../stdafx.h"
 #include "NiconicoLoginSession.h"
 #include "cpprest\http_client.h"
 

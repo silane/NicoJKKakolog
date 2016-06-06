@@ -1,11 +1,11 @@
 #pragma once
 #include <string>
 #include <codecvt>
-#include "TVTestPlugin.h"
+#include "../TVTestPlugin.h"
 #include "IniFile.h"
-#include "NiconicoJikkyouChatProviderEntry.h"
-#include "NiconicoJikkyouLogChatProviderEntry.h"
-#include "NiconicoJikkyouLogFileStreamChatProviderEntry.h"
+#include "ChatProviderEntry/NiconicoJikkyouChatProviderEntry.h"
+#include "ChatProviderEntry/NiconicoJikkyouLogChatProviderEntry.h"
+#include "ChatProviderEntry/NiconicoJikkyouLogFileStreamChatProviderEntry.h"
 
 namespace NicoJKKakolog {
 	//NicoJKÉNÉâÉXÇ™ãêëÂÇ∑Ç¨ÇÈÇÃÇ≈ï™ó£

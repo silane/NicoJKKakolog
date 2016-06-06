@@ -1,7 +1,7 @@
-#include "stdafx.h"
+#include "../../stdafx.h"
 #include "NiconicoJikkyouLogFileStreamChatProviderEntry.h"
-#include "NicoJikkyouLogFileStreamChatProvider.h"
-#include "Util.h"
+#include "../ChatProvider/NicoJikkyouLogFileStreamChatProvider.h"
+#include "../../Util.h"
 #include <locale>
 
 namespace NicoJKKakolog

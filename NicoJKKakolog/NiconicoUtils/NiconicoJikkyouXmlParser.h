@@ -1,5 +1,5 @@
 #pragma once
-#include "Chat.h"
+#include "../Chat.h"
 #include <queue>
 #include <unordered_map>
 #include <utility>

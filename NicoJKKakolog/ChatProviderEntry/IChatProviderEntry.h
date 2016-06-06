@@ -1,6 +1,6 @@
 #pragma once
 #include <memory>
-#include "IChatProvider.h"
+#include "../ChatProvider/IChatProvider.h"
 
 namespace NicoJKKakolog
 {

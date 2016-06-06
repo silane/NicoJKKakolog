@@ -1,6 +1,6 @@
 #pragma once
 
-#include "NicoJKKakolog.h"
+#include "NicoJKKakolog/NicoJKKakolog.h"
 
 // プラグインクラス
 class CNicoJK : public TVTest::CTVTestPlugin
