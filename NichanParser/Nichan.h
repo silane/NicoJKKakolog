@@ -21,4 +21,11 @@ namespace Nichan
 		std::string title;
 		std::vector<Res> res;
 	};
+
+	struct Board
+	{
+		std::string url;
+		std::string title;
+		std::vector<Thread> thread;
+	};
 }

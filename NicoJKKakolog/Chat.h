@@ -5,6 +5,7 @@
 namespace NicoJKKakolog
 {
 	typedef COLORREF Color;
+	constexpr Color ColorNone = CLR_NONE;
 
 class Chat
 {

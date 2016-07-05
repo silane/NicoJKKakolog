@@ -3,9 +3,7 @@
 #include <codecvt>
 #include "../TVTestPlugin.h"
 #include "IniFile.h"
-#include "ChatProviderEntry/NiconicoJikkyouChatProviderEntry.h"
-#include "ChatProviderEntry/NiconicoJikkyouLogChatProviderEntry.h"
-#include "ChatProviderEntry/NiconicoJikkyouLogFileStreamChatProviderEntry.h"
+#include "ChatProviderEntry\IChatProviderEntry.h"
 
 namespace NicoJKKakolog {
 	//NicoJKクラスが巨大すぎるので分離
@@ -16,6 +14,7 @@ namespace NicoJKKakolog {
 		//+３桁は他で使われてる
 		static constexpr int WM_CHECKSTATECHANGE = WM_APP + 1000;//チャット元選択のチェックボックスが変更された
 
+		HINSTANCE hInstance;
 		TVTest::CTVTestApp *tvtest;
 		Utility::IniFile iniFile;
 
@@ -33,7 +32,7 @@ namespace NicoJKKakolog {
 
 	public:
 		NicoJKKakolog();
-		void Init(TVTest::CTVTestApp *tvtest, const std::basic_string<TCHAR> &iniFileName);
+		void Init(HINSTANCE hInstance,TVTest::CTVTestApp *tvtest, const std::basic_string<TCHAR> &iniFileName);
 		void DialogInit(HWND dialog,HWND listview);
 		INT_PTR DialogProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
 		std::vector<Chat> GetChats(std::time_t);

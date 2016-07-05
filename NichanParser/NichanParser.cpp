@@ -2,20 +2,46 @@
 #include "Nichan.h"
 #include <regex>
 #include <ctime>
+#include <locale>
 
 extern "C"
 {
 	#include <libxml\HTMLparser.h>
 }
 
+namespace
+{
+	void TrimSpace(std::string &val)
+	{
+		std::string::size_type idx;
+		for (idx = 0; idx < val.size(); idx++)
+		{
+			if (!std::isspace(val[idx],std::locale()))
+				break;
+		}
+		val=val.substr(idx);
+
+		if (val.size() <= 1)
+			return;
+
+		for (idx = val.size() - 1; idx >= 0; idx--)
+		{
+			if (!std::isspace(val[idx], std::locale()))
+				break;
+		}
+		val.resize(idx + 1);
+	}
+}
+
 namespace Nichan
 {
-	std::chrono::system_clock::time_point Type1Parser::GetDate(const std::string &val)
+	std::chrono::system_clock::time_point Type1ThreadParser::GetDate(const std::string &val)
 	{
 		static const std::regex regDate(R"(^(\d+)/(\d+)/(\d+)[^ ]* (\d+):(\d+):(\d+)\.(\d+))");
 
 		std::smatch sm;
-		std::regex_search(val, sm, regDate);
+		if (!std::regex_search(val, sm, regDate))
+			return std::chrono::system_clock::time_point();
 		
 		std::tm hoge;
 		hoge.tm_year = std::stoi(sm[1].str())-1900;
@@ -29,13 +55,14 @@ namespace Nichan
 		return ret+std::chrono::milliseconds(std::stoi(sm[7].str())*10);
 	}
 
-	Thread Type1Parser::Parse(const MyXml::Doc &doc)
+	Thread Type1ThreadParser::Parse(const MyXml::Doc &doc)
 	{
 		Thread ret;
 		ret.url = (char *)doc.GetPtr()->URL;
 
 		MyXml::XPathResult fr = doc.XPath(u8"string(/html/body/h1[@class=\"title\"]/text())");
 		ret.title = fr.GetString();
+		TrimSpace(ret.title);
 
 		fr=doc.XPath(u8"/html/body/div[@class=\"thread\"]/div[@class=\"post\"]");
 		xmlNodeSetPtr nodeSet= fr.GetNodeSet();
@@ -48,13 +75,13 @@ namespace Nichan
 
 			Res res;
 			xmlChar *str=xmlGetProp(nodeSet->nodeTab[i],BAD_CAST u8"id");
-			if (str == nullptr)
+			if (str == NULL)
 				continue;
 			res.number = std::atoi((char *)str);
 			xmlFree(str);
 
 			str = xmlGetProp(nodeSet->nodeTab[i], BAD_CAST u8"data-userid");
-			if (str == nullptr)
+			if (str == NULL)
 				continue;
 			res.id.assign((char *)str+3);
 			xmlFree(str);
@@ -68,6 +95,7 @@ namespace Nichan
 			res.date = GetDate(doc.XPath(xPathDate, nodeSet->nodeTab[i]).GetString());
 
 			res.message = doc.XPath(xPathMessage, nodeSet->nodeTab[i]).GetString();
+			TrimSpace(res.message);
 
 			ret.res.push_back(std::move(res));
 		}
@@ -75,12 +103,13 @@ namespace Nichan
 		return ret;
 	}
 
-	std::chrono::system_clock::time_point Type2Parser::GetDate(const std::string &val)
+	std::chrono::system_clock::time_point Type2ThreadParser::GetDate(const std::string &val)
 	{
 		static const std::regex regDate(R"((\d+)/(\d+)/(\d+)[^ ]* (\d+):(\d+):(\d+)\.(\d+))");
 
 		std::smatch sm;
-		std::regex_search(val, sm, regDate);
+		if (!std::regex_search(val, sm, regDate))
+			return std::chrono::system_clock::time_point();
 
 		std::tm hoge;
 		hoge.tm_year = std::stoi(sm[1].str()) - 1900;
@@ -94,13 +123,14 @@ namespace Nichan
 		return ret + std::chrono::milliseconds(std::stoi(sm[7].str()) * 10);
 	}
 
-	Thread Type2Parser::Parse(const MyXml::Doc &doc)
+	Thread Type2ThreadParser::Parse(const MyXml::Doc &doc)
 	{
 		Thread ret;
 		ret.url = (char *)doc.GetPtr()->URL;
 
 		MyXml::XPathResult fr = doc.XPath(u8"string(/html/body/div/span/h1/text())");
 		ret.title = fr.GetString();
+		TrimSpace(ret.title);
 
 		fr = doc.XPath(u8"//dl[@class=\"thread\"]/dt");
 		xmlNodeSetPtr nodeSet = fr.GetNodeSet();
@@ -129,6 +159,7 @@ namespace Nichan
 			res.date = GetDate(hoge);
 
 			res.message = doc.XPath(xpathMessage, nodeSet->nodeTab[i]).GetString();
+			TrimSpace(res.message);
 
 			ret.res.push_back(std::move(res));
 		}
@@ -136,37 +167,101 @@ namespace Nichan
 		return ret;
 	}
 
-	std::unique_ptr<Parser> DetectParser(const MyXml::Doc &doc)
+	std::unique_ptr<ThreadParser> DetectThreadParser(const MyXml::Doc &doc)
 	{
 		if (doc.XPath(u8"boolean(/html/@prefix)").GetBool())
-			return std::unique_ptr<Parser>(new Type2Parser());
+			return std::unique_ptr<ThreadParser>(new Type2ThreadParser());
 		else
-			return std::unique_ptr<Parser>(new Type1Parser());
+			return std::unique_ptr<ThreadParser>(new Type1ThreadParser());
 	}
 
-	Thread ParseFromUrl(const std::string &url)
+	Board Type1BoardParser::Parse(const MyXml::Doc &doc)
 	{
-		htmlDocPtr docPtr=htmlReadFile(url.c_str(), nullptr, htmlParserOption::HTML_PARSE_RECOVER);
-		if (docPtr == nullptr)
+		static const MyXml::XPathExpr xpathTitle(u8"string(/html/head/title/text())");
+		static const MyXml::XPathExpr xpathBaseUrl(u8"string(/html/head/base/@href)");
+		static const MyXml::XPathExpr xpathThreads(u8"/html/body/div[2]/small/a");
+
+		Board ret;
+		ret.url = (char *)doc.GetPtr()->URL;
+
+		ret.title = doc.XPath(xpathTitle).GetString();
+		auto idx = ret.title.find(u8"Åó");
+		if(idx!=std::string::npos)
+			ret.title.resize(idx);
+		
+		std::string baseUrl = doc.XPath(xpathBaseUrl).GetString();
+		if (baseUrl.size() == 0)
+		{
+			baseUrl = ret.url;
+		}
+
+		MyXml::XPathResult xpathResult = doc.XPath(xpathThreads);
+		for (int i = 0; i < xpathResult.GetNodeSet()->nodeNr; i++)
+		{
+			Thread thread;
+			thread.url = baseUrl + (char *)xmlGetProp(xpathResult.GetNodeSet()->nodeTab[i], BAD_CAST "href");
+			thread.title = (char *)xpathResult.GetNodeSet()->nodeTab[i]->children->content+3;
+
+			ret.thread.push_back(std::move(thread));
+		}
+
+		return ret;
+	}
+
+	std::unique_ptr<BoardParser> DetectBoardParser(const MyXml::Doc &doc)
+	{
+		return std::unique_ptr<BoardParser>(new Type1BoardParser());
+	}
+
+	Thread ParseThreadFromUrl(const std::string &url)
+	{
+		htmlDocPtr docPtr=htmlReadFile(url.c_str(), NULL, htmlParserOption::HTML_PARSE_RECOVER);
+		if (!docPtr)
 		{
 			throw std::runtime_error("Couldn't download file or couldn't parse html");
 		}
 
 		MyXml::Doc doc(docPtr);
-		auto parser = DetectParser(doc);
+		auto parser = DetectThreadParser(doc);
 		return parser->Parse(doc);
 	}
 
-	Thread ParseFromText(const std::string &text)
+	Thread ParseThreadFromText(const std::string &text)
 	{
-		htmlDocPtr docPtr = htmlReadMemory(text.c_str(), (int)text.size(), "", nullptr, htmlParserOption::HTML_PARSE_RECOVER);
-		if (docPtr == nullptr)
+		htmlDocPtr docPtr = htmlReadMemory(text.c_str(), (int)text.size(), "", NULL, htmlParserOption::HTML_PARSE_RECOVER);
+		if (!docPtr)
 		{
 			throw std::runtime_error("Couldn't parse html");
 		}
 
 		MyXml::Doc doc(docPtr);
-		auto parser = DetectParser(doc);
+		auto parser = DetectThreadParser(doc);
+		return parser->Parse(doc);
+	}
+
+	Board ParseBoardFromUrl(std::string url)
+	{
+		htmlDocPtr docPtr = htmlReadFile(url.c_str(), NULL, htmlParserOption::HTML_PARSE_RECOVER);
+		if (!docPtr)
+		{
+			throw std::runtime_error("Couldn't download file or couldn't parse html");
+		}
+
+		MyXml::Doc doc(docPtr);
+		auto parser = DetectBoardParser(doc);
+		return parser->Parse(doc);
+	}
+
+	Board ParseBoardFromText(std::string text)
+	{
+		htmlDocPtr docPtr = htmlReadMemory(text.c_str(), (int)text.size(), "", NULL, htmlParserOption::HTML_PARSE_RECOVER);
+		if (!docPtr)
+		{
+			throw std::runtime_error("Couldn't parse html");
+		}
+
+		MyXml::Doc doc(docPtr);
+		auto parser = DetectBoardParser(doc);
 		return parser->Parse(doc);
 	}
 }

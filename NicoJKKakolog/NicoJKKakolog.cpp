@@ -1,6 +1,10 @@
 #include "../stdafx.h"
 #include "NicoJKKakolog.h"
 #include "../resource.h"
+#include "ChatProviderEntry/NiconicoJikkyouChatProviderEntry.h"
+#include "ChatProviderEntry/NiconicoJikkyouLogChatProviderEntry.h"
+#include "ChatProviderEntry/NiconicoJikkyouLogFileStreamChatProviderEntry.h"
+#include "ChatProviderEntry\NichanChatProviderEntry.h"
 
 namespace NicoJKKakolog {
 
@@ -11,8 +15,9 @@ namespace NicoJKKakolog {
 	{
 	}
 
-	void NicoJKKakolog::Init(TVTest::CTVTestApp *tvtest, const std::basic_string<TCHAR> &iniFileName)
+	void NicoJKKakolog::Init(HINSTANCE hInstance,TVTest::CTVTestApp *tvtest, const std::basic_string<TCHAR> &iniFileName)
 	{
+		this->hInstance = hInstance;
 		this->tvtest = tvtest;
 		this->iniFile.SetFilePath(iniFileName);
 
@@ -20,7 +25,8 @@ namespace NicoJKKakolog {
 		this->chatProviderEntries.insert(std::end(this->chatProviderEntries), {
 			new NiconicoJikkyouChatProviderEntry(&iniFile),
 			new NiconicoJikkyouLogChatProviderEntry(&iniFile),
-			new NiconicoJikkyouLogFileStreamChatProviderEntry()
+			new NiconicoJikkyouLogFileStreamChatProviderEntry(),
+			new NichanChatProviderEntry(hInstance,&iniFile)
 		});
 	}
 
@@ -54,7 +60,7 @@ namespace NicoJKKakolog {
 			auto &entry = chatProviderEntries.at(i);
 			LVITEM item;
 
-			std::wstring text = utf8_wide_conv.from_bytes(entry->GetName());
+			std::wstring text = entry->GetName();
 			item.mask = LVIF_TEXT;
 			item.pszText = new wchar_t[text.size() + 1];
 			text.copy(item.pszText, text.size());
@@ -64,7 +70,7 @@ namespace NicoJKKakolog {
 			ListView_InsertItem(listview, &item);
 			delete[] item.pszText;
 
-			text = utf8_wide_conv.from_bytes(entry->GetDescription());
+			text = entry->GetDescription();
 			item.mask = LVIF_TEXT;
 			item.pszText = new wchar_t[text.size() + 1];
 			text.copy(item.pszText, text.size());
@@ -154,7 +160,8 @@ namespace NicoJKKakolog {
 		TVTest::ProgramInfo pi;
 		TVTest::ServiceInfo si;
 		TVTest::ChannelInfo ci;
-		memset(&pi, 0, sizeof(pi));
+		std::memset(&pi, 0, sizeof(pi));
+		std::memset(&si, 0, sizeof(si));
 
 		int svcIdx = tvtest->GetService();
 

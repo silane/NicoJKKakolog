@@ -4,6 +4,10 @@ namespace MyXml
 {
 XPathResult::XPathResult(xmlXPathObjectPtr xpathObj) noexcept: xpathObj(xpathObj)
 {
+	if (xpathObj->type == xmlXPathObjectType::XPATH_NODESET && xpathObj->nodesetval==nullptr)
+	{
+		xpathObj->nodesetval = xmlXPathNodeSetCreate(nullptr);
+	}
 }
 
 XPathResult::XPathResult(const XPathResult &obj) noexcept: xpathObj(xmlXPathObjectCopy(obj.xpathObj))
@@ -48,17 +52,17 @@ xmlNodeSetPtr XPathResult::GetNodeSet() const noexcept
 
 int XPathResult::GetBool() const noexcept
 {
-	return xpathObj->boolval;
+	return xmlXPathCastToBoolean(xpathObj);
 }
 
 double XPathResult::GetFloat() const noexcept
 {
-	return xpathObj->floatval;
+	return xmlXPathCastToNumber(xpathObj);
 }
 
 std::string XPathResult::GetString() const
 {
-	return std::string((char *)xpathObj->stringval);
+	return std::string((char *)xmlXPathCastToString(xpathObj));
 }
 
 XPathResult::~XPathResult() noexcept

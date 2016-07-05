@@ -21,13 +21,13 @@ namespace NicoJKKakolog
 	NiconicoJikkyouChatProviderEntry::~NiconicoJikkyouChatProviderEntry()
 	{
 	}
-	std::string NiconicoJikkyouChatProviderEntry::GetName() const
+	std::wstring NiconicoJikkyouChatProviderEntry::GetName() const
 	{
-		return u8"ニコニコ実況";
+		return L"ニコニコ実況";
 	}
-	std::string NiconicoJikkyouChatProviderEntry::GetDescription() const
+	std::wstring NiconicoJikkyouChatProviderEntry::GetDescription() const
 	{
-		return u8"現在のコメントを表示";
+		return L"現在のコメントを表示";
 	}
 	IChatProvider * NiconicoJikkyouChatProviderEntry::NewProvider()
 	{

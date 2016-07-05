@@ -126,6 +126,30 @@
     <ClInclude Include="NicoJKKakolog\NiconicoUtils\NiconicoLoginSession.h">
       <Filter>ヘッダー ファイル\NiconicoJikkyouUtils</Filter>
     </ClInclude>
+    <ClInclude Include="NicoJKKakolog\ChatProvider\NichanChatProvider.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="NicoJKKakolog\ChatProviderEntry\NichanChatProviderEntry.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="NichanParser\Nichan.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="NichanParser\NichanParser.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="NicoJKKakolog\NichanUtils\INichanThreadSelector.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="NicoJKKakolog\NichanUtils\KeywordNichanThreadSelector.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="NicoJKKakolog\NichanChatProviderSettingDialog.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="NicoJKKakolog\NichanUtils\FuzzyNichanThreadSelector.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -199,6 +223,24 @@
     </ClCompile>
     <ClCompile Include="NicoJKKakolog\NiconicoUtils\NiconicoLoginSession.cpp">
       <Filter>ソース ファイル\NiconicoJikkyouUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="NicoJKKakolog\ChatProvider\NichanChatProvider.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="NicoJKKakolog\ChatProviderEntry\NichanChatProviderEntry.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="NichanParser\NichanParser.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="NicoJKKakolog\NichanUtils\KeywordNichanThreadSelector.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="NicoJKKakolog\NichanChatProviderSettingDialog.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="NicoJKKakolog\NichanUtils\FuzzyNichanThreadSelector.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -195,7 +195,7 @@ bool CNicoJK::Initialize()
 
 
 	//---NicoJKKakolog---
-	nicoJKKakolog.Init(m_pApp, szIniFileName_);
+	nicoJKKakolog.Init(g_hinstDLL,m_pApp, szIniFileName_);
 	//---NicoJKKakolog---
 	return true;
 }

@@ -14,13 +14,13 @@ namespace NicoJKKakolog
 	NiconicoJikkyouLogFileStreamChatProviderEntry::~NiconicoJikkyouLogFileStreamChatProviderEntry()
 	{
 	}
-	std::string NiconicoJikkyouLogFileStreamChatProviderEntry::GetName() const
+	std::wstring NiconicoJikkyouLogFileStreamChatProviderEntry::GetName() const
 	{
-		return u8"ニコニコ実況ファイル読み込み";
+		return L"ニコニコ実況ファイル読み込み";
 	}
-	std::string NiconicoJikkyouLogFileStreamChatProviderEntry::GetDescription() const
+	std::wstring NiconicoJikkyouLogFileStreamChatProviderEntry::GetDescription() const
 	{
-		return u8"ニコニコ実況ファイルから表示";
+		return L"ニコニコ実況ファイルから表示";
 	}
 	IChatProvider * NiconicoJikkyouLogFileStreamChatProviderEntry::NewProvider()
 	{

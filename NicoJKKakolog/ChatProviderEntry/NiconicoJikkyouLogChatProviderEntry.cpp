@@ -25,13 +25,13 @@ namespace NicoJKKakolog
 	{
 	}
 
-	std::string NiconicoJikkyouLogChatProviderEntry::GetName() const
+	std::wstring NiconicoJikkyouLogChatProviderEntry::GetName() const
 	{
-		return u8"ニコニコ実況過去ログ";
+		return L"ニコニコ実況過去ログ";
 	}
-	std::string NiconicoJikkyouLogChatProviderEntry::GetDescription() const
+	std::wstring NiconicoJikkyouLogChatProviderEntry::GetDescription() const
 	{
-		return u8"自動で過去ログを表示する";
+		return L"自動で過去ログを表示する";
 	}
 	IChatProvider * NiconicoJikkyouLogChatProviderEntry::NewProvider()
 	{

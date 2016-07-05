@@ -173,8 +173,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AsyncSocket.h" />
+    <ClInclude Include="NicoJKKakolog\NichanUtils\FuzzyNichanThreadSelector.h" />
+    <ClInclude Include="NicoJKKakolog\NichanChatProviderSettingDialog.h" />
+    <ClInclude Include="NicoJKKakolog\NichanUtils\KeywordNichanThreadSelector.h" />
+    <ClInclude Include="NicoJKKakolog\NichanUtils\INichanThreadSelector.h" />
+    <ClInclude Include="NichanParser\Nichan.h" />
+    <ClInclude Include="NichanParser\NichanParser.h" />
     <ClInclude Include="NicoJKKakolog\ChannelInfo.h" />
     <ClInclude Include="NicoJKKakolog\Chat.h" />
+    <ClInclude Include="NicoJKKakolog\ChatProviderEntry\NichanChatProviderEntry.h" />
+    <ClInclude Include="NicoJKKakolog\ChatProvider\NichanChatProvider.h" />
     <ClInclude Include="NicoJKKakolog\NiconicoUtils\DefaultJkIdTable.h" />
     <ClInclude Include="NicoJKKakolog\ChatProvider\IChatProvider.h" />
     <ClInclude Include="CommentWindow.h" />
@@ -206,6 +214,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AsyncSocket.cpp" />
+    <ClCompile Include="NicoJKKakolog\NichanUtils\FuzzyNichanThreadSelector.cpp" />
+    <ClCompile Include="NicoJKKakolog\NichanChatProviderSettingDialog.cpp" />
+    <ClCompile Include="NicoJKKakolog\NichanUtils\KeywordNichanThreadSelector.cpp" />
+    <ClCompile Include="NichanParser\NichanParser.cpp" />
     <ClCompile Include="NicoJKKakolog\Chat.cpp" />
     <ClCompile Include="CommentWindow.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
@@ -213,6 +225,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="NicoJKKakolog\ChatProviderEntry\NichanChatProviderEntry.cpp" />
+    <ClCompile Include="NicoJKKakolog\ChatProvider\NichanChatProvider.cpp" />
     <ClCompile Include="NicoJKKakolog\IniFile.cpp" />
     <ClCompile Include="MyXml\MyXml.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
@@ -291,8 +305,6 @@
     <Import Project="packages\cpprestsdk.v120.winxp.msvcstl.dyn.rt-dyn.2.8.0\build\native\cpprestsdk.v120.winxp.msvcstl.dyn.rt-dyn.targets" Condition="Exists('packages\cpprestsdk.v120.winxp.msvcstl.dyn.rt-dyn.2.8.0\build\native\cpprestsdk.v120.winxp.msvcstl.dyn.rt-dyn.targets')" />
     <Import Project="packages\cpprestsdk.v140.winapp.msvcstl.dyn.rt-dyn.2.8.0\build\native\cpprestsdk.v140.winapp.msvcstl.dyn.rt-dyn.targets" Condition="Exists('packages\cpprestsdk.v140.winapp.msvcstl.dyn.rt-dyn.2.8.0\build\native\cpprestsdk.v140.winapp.msvcstl.dyn.rt-dyn.targets')" />
     <Import Project="packages\cpprestsdk.v140.windesktop.msvcstl.dyn.rt-dyn.2.8.0\build\native\cpprestsdk.v140.windesktop.msvcstl.dyn.rt-dyn.targets" Condition="Exists('packages\cpprestsdk.v140.windesktop.msvcstl.dyn.rt-dyn.2.8.0\build\native\cpprestsdk.v140.windesktop.msvcstl.dyn.rt-dyn.targets')" />
-    <Import Project="packages\libxml2.redist.2.7.8.7\build\native\libxml2.redist.targets" Condition="Exists('packages\libxml2.redist.2.7.8.7\build\native\libxml2.redist.targets')" />
-    <Import Project="packages\libxml2.2.7.8.7\build\native\libxml2.targets" Condition="Exists('packages\libxml2.2.7.8.7\build\native\libxml2.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -305,7 +317,5 @@
     <Error Condition="!Exists('packages\cpprestsdk.v120.winxp.msvcstl.dyn.rt-dyn.2.8.0\build\native\cpprestsdk.v120.winxp.msvcstl.dyn.rt-dyn.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\cpprestsdk.v120.winxp.msvcstl.dyn.rt-dyn.2.8.0\build\native\cpprestsdk.v120.winxp.msvcstl.dyn.rt-dyn.targets'))" />
     <Error Condition="!Exists('packages\cpprestsdk.v140.winapp.msvcstl.dyn.rt-dyn.2.8.0\build\native\cpprestsdk.v140.winapp.msvcstl.dyn.rt-dyn.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\cpprestsdk.v140.winapp.msvcstl.dyn.rt-dyn.2.8.0\build\native\cpprestsdk.v140.winapp.msvcstl.dyn.rt-dyn.targets'))" />
     <Error Condition="!Exists('packages\cpprestsdk.v140.windesktop.msvcstl.dyn.rt-dyn.2.8.0\build\native\cpprestsdk.v140.windesktop.msvcstl.dyn.rt-dyn.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\cpprestsdk.v140.windesktop.msvcstl.dyn.rt-dyn.2.8.0\build\native\cpprestsdk.v140.windesktop.msvcstl.dyn.rt-dyn.targets'))" />
-    <Error Condition="!Exists('packages\libxml2.redist.2.7.8.7\build\native\libxml2.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\libxml2.redist.2.7.8.7\build\native\libxml2.redist.targets'))" />
-    <Error Condition="!Exists('packages\libxml2.2.7.8.7\build\native\libxml2.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\libxml2.2.7.8.7\build\native\libxml2.targets'))" />
   </Target>
 </Project>
