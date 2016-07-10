@@ -18,13 +18,20 @@ namespace NicoJKKakolog {
 		std::vector<Chat> ret;
 
 		int jkID;
-		try {
-			uint_least16_t nid = channel.NetworkId;
-			jkID = jkidTable.at(((uint_least32_t)(channel.ServiceId) << 16) | ((nid == 0) ? 0xF : nid));
+		decltype(this->jkidTable)::const_iterator itr;
+		uint_least16_t nid = channel.NetworkId;
+
+		if (nid != 0)//録画ファイルのNIDは取得できてない(0になってる)可能性がある
+			itr = this->jkidTable.find(((uint_least32_t)channel.ServiceId << 16) | nid);
+		else
+		{
+			itr = this->jkidTable.find(((uint_least32_t)(channel.ServiceId << 16)) | 0xF);//地上波にないか検索
+			if (itr == std::end(this->jkidTable))
+				itr = this->jkidTable.find(((uint_least32_t)channel.ServiceId << 16) | 0x4);//BSにないか検索
 		}
-		catch (std::out_of_range) {
+		if (itr == std::end(this->jkidTable))
 			return{};
-		}
+		jkID = itr->second;
 
 		{
 			std::lock_guard<std::mutex> lock(this->chatsMutex);
@@ -39,7 +46,8 @@ namespace NicoJKKakolog {
 			}
 		}
 
-		if (t - lastGetTime < std::chrono::seconds(10) && lastGetTime - t < std::chrono::seconds(10) && lastJkId==jkID)
+		if ((t - lastGetTime < std::chrono::seconds(10) && lastGetTime - t < std::chrono::seconds(10) && lastJkId == jkID) ||
+			!this->chatCollectTask.is_done())
 			return ret;
 
 		//10秒に一回かチャンネルが変わったら取得する
