@@ -49,7 +49,11 @@ namespace NicoJKKakolog
 		if (!selector)
 			return nullptr;
 
-		return new NichanChatProvider(color,std::chrono::milliseconds(iniFile->GetInt(_T("NicoJKKakolog"), _T("ResCollectInterval"), 1000)) ,
+
+		auto resCollectInterval = std::chrono::milliseconds(iniFile->GetInt(_T("NicoJKKakolog"), _T("ResCollectInterval"), 1000));
+		if (resCollectInterval < std::chrono::milliseconds(1000))
+			resCollectInterval = std::chrono::milliseconds(1000);
+		return new NichanChatProvider(color,resCollectInterval ,
 			std::chrono::milliseconds(iniFile->GetInt(_T("NicoJKKakolog"), _T("ThreSearchInterval"), 60000)),
 			selector.release());
 	}
