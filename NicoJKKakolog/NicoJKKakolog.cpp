@@ -5,6 +5,7 @@
 #include "ChatProviderEntry/NiconicoJikkyouLogChatProviderEntry.h"
 #include "ChatProviderEntry/NiconicoJikkyouLogFileStreamChatProviderEntry.h"
 #include "ChatProviderEntry\NichanChatProviderEntry.h"
+#include "SimpleArgumentParser.h"
 
 namespace NicoJKKakolog {
 
@@ -53,6 +54,22 @@ namespace NicoJKKakolog {
 
 		ListView_SetExtendedListViewStyle(listview, ListView_GetExtendedListViewStyle(listview) | LVS_EX_CHECKBOXES | LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT);
 
+		//コマンドライン引数処理
+		Utility::SimpleArgumentParser argparser;
+		std::wstring commentSource=argparser.GetOptionArgument(L"jkchatsrc");
+		std::vector<std::wstring> defaultOnProviderNames;
+		if (commentSource.size()>0)
+		{
+			std::wstring::size_type start,end;
+			for (start=0,end=commentSource.find(L',');end != std::wstring::npos; start=end+1,end = commentSource.find(L',',end+1))
+			{
+				defaultOnProviderNames.push_back(commentSource.substr(start, end-start));
+			}
+			defaultOnProviderNames.push_back(commentSource.substr(start));
+		}
+
+		chatProviders.resize(chatProviderEntries.size(), nullptr);
+
 		//GUIのチャット元リストを作成
 		for (size_t i = 0; i<chatProviderEntries.size(); i++)
 			//for(const auto &entry : chatProviderEntries)
@@ -79,9 +96,13 @@ namespace NicoJKKakolog {
 			item.iSubItem = 1;
 			ListView_SetItem(listview, &item);
 			delete[] item.pszText;
-		}
 
-		chatProviders.resize(chatProviderEntries.size(), nullptr);
+			if (std::find(std::begin(defaultOnProviderNames), std::end(defaultOnProviderNames), entry->GetName()) != std::end(defaultOnProviderNames))
+			{
+				ListView_SetCheckState(listview, i, TRUE);
+				SendMessage(dialog, WM_CHECKSTATECHANGE, 0, (LPARAM)i);
+			}
+		}
 
 		ShowWindow(listview, SW_HIDE);
 

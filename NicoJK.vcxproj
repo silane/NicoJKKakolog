@@ -206,6 +206,7 @@
     <ClInclude Include="OsdCompositor.h" />
     <ClInclude Include="PracticalSocket\PracticalSocket.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="NicoJKKakolog\SimpleArgumentParser.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="NicoJKKakolog\ChatProvider\TestChatProvider.h" />
     <ClInclude Include="TextFileReader.h" />
@@ -277,6 +278,7 @@
       </ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="NicoJKKakolog\NiconicoUtils\DefaultJkIdTable.cpp" />
+    <ClCompile Include="NicoJKKakolog\SimpleArgumentParser.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
