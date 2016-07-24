@@ -25,8 +25,4 @@ namespace NicoJKKakolog
 
 		return ret;
 	}
-
-	OnceASecondChatProvider::~OnceASecondChatProvider()
-	{
-	}
 }

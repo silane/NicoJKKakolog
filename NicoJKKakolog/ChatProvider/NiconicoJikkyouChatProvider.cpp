@@ -95,7 +95,7 @@ namespace NicoJKKakolog
 		return{};
 	}
 
-	NiconicoJikkyouChatProvider::~NiconicoJikkyouChatProvider()
+	NiconicoJikkyouChatProvider::~NiconicoJikkyouChatProvider() noexcept
 	{
 		try {
 			this->cancelSource.cancel();

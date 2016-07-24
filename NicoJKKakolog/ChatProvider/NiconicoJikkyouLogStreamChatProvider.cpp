@@ -15,7 +15,7 @@ namespace NicoJKKakolog
 		SetStream(input);
 	}
 
-	NiconicoJikkyouLogStreamChatProvider::~NiconicoJikkyouLogStreamChatProvider()
+	NiconicoJikkyouLogStreamChatProvider::~NiconicoJikkyouLogStreamChatProvider() noexcept
 	{
 		try {
 			this->fileReadTask.wait();

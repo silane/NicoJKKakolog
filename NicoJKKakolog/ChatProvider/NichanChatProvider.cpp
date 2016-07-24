@@ -9,11 +9,14 @@ namespace NicoJKKakolog
 		thCollectRes = std::thread(CollectRes, this);
 	}
 
-	NichanChatProvider::~NichanChatProvider()
+	NichanChatProvider::~NichanChatProvider() noexcept
 	{
-		this->stop = true;
-		this->thCollectRes.join();
-		delete this->threadSelector;
+		try
+		{
+			this->stop = true;
+			this->thCollectRes.join();
+			delete this->threadSelector;
+		}catch(...){}
 	}
 
 	void NichanChatProvider::CollectRes(NichanChatProvider *this_)

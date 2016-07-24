@@ -12,7 +12,7 @@ namespace NicoJKKakolog
 
 	public:
 		NicoJikkyouLogFileStreamChatProvider(const std::string &path);
-		virtual ~NicoJikkyouLogFileStreamChatProvider() override;
+		virtual ~NicoJikkyouLogFileStreamChatProvider() noexcept override=default;
 	};
 
 }

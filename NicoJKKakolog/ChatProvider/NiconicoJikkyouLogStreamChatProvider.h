@@ -23,7 +23,7 @@ namespace NicoJKKakolog
 	public:
 		NiconicoJikkyouLogStreamChatProvider();
 		NiconicoJikkyouLogStreamChatProvider(std::istream &input);
-		virtual ~NiconicoJikkyouLogStreamChatProvider() override;
+		virtual ~NiconicoJikkyouLogStreamChatProvider() noexcept override;
 
 		virtual void SetStream(std::istream &input);
 

@@ -16,7 +16,7 @@ namespace NicoJKKakolog
 		OnceASecondChatProvider(const std::chrono::seconds &continuousCallLimit=std::chrono::seconds(10));
 		virtual std::vector<Chat> Get(const ChannelInfo &channel, std::chrono::system_clock::time_point t) override;
 		virtual std::vector<Chat> GetOnceASecond(const ChannelInfo &channel, std::chrono::system_clock::time_point t)=0;
-		virtual ~OnceASecondChatProvider();
+		virtual ~OnceASecondChatProvider() noexcept override=default;
 	};
 }
 

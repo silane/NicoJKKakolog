@@ -8,9 +8,4 @@ namespace NicoJKKakolog
 	{
 		SetStream(ifs);
 	}
-
-
-	NicoJikkyouLogFileStreamChatProvider::~NicoJikkyouLogFileStreamChatProvider()
-	{
-	}
 }

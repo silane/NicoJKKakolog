@@ -32,7 +32,7 @@ namespace NicoJKKakolog
 		static void CollectRes(NichanChatProvider *this_);
 	public:
 		NichanChatProvider(const Color &chatColor,const std::chrono::milliseconds &resCollectInterval, const std::chrono::milliseconds &threSearchInterval, INichanThreadSelector *threadSelector);
-		virtual ~NichanChatProvider();
+		virtual ~NichanChatProvider() noexcept override;
 
 		virtual std::vector<Chat> GetOnceASecond(const ChannelInfo &channel, std::chrono::system_clock::time_point t) override;
 	};
