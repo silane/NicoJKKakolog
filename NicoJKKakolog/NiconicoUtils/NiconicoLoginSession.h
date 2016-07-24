@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 namespace NicoJKKakolog
 {
@@ -8,8 +9,6 @@ namespace NicoJKKakolog
 		std::string mail;
 		std::string password;
 		std::string userSession;
-
-		void DoLogout();
 
 	public:
 		NiconicoLoginSession();
