@@ -83,7 +83,7 @@ namespace NicoJKKakolog
 			if (this->chatColor != ColorNone)
 				chat.color = this->chatColor;
 			else
-				chat.color = ColorHLSToRGB(std::rand() % 360, 255*0.7, 255);
+				chat.color = ColorHLSToRGB(std::rand() % 360, (WORD)(255*0.7), 255);
 			ret.push_back(std::move(chat));
 		}
 		this->chats.clear();
