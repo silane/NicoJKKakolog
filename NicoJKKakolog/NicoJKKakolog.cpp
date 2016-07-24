@@ -100,7 +100,7 @@ namespace NicoJKKakolog {
 			if (std::find(std::begin(defaultOnProviderNames), std::end(defaultOnProviderNames), entry->GetName()) != std::end(defaultOnProviderNames))
 			{
 				ListView_SetCheckState(listview, i, TRUE);
-				SendMessage(dialog, WM_CHECKSTATECHANGE, 0, (LPARAM)i);
+				PostMessage(dialog, WM_CHECKSTATECHANGE, 0, (LPARAM)i);
 			}
 		}
 
@@ -212,13 +212,24 @@ namespace NicoJKKakolog {
 		chin.Duration = std::chrono::seconds(pi.Duration);
 
 		std::vector<Chat> ret;
-		for (IChatProvider *provider : chatProviders)
+		int i = 0;
+		for (IChatProvider *&provider : chatProviders)
 		{
-			if (provider == nullptr)
-				continue;
-
-			auto hoge = provider->Get(chin, std::chrono::system_clock::from_time_t(t)+timelag);
-			ret.insert(std::end(ret), std::begin(hoge), std::end(hoge));
+			if (provider != nullptr)
+			{
+				try
+				{
+					auto hoge = provider->Get(chin, std::chrono::system_clock::from_time_t(t) + timelag);
+					ret.insert(std::end(ret), std::begin(hoge), std::end(hoge));
+				}
+				catch (const ChatProviderError &e) {
+					MessageBoxA(this->dialog, e.what(), "チャット取得エラー", 0);
+					//TODO: ChatProviderとChatProviderEntryが１対１に対応している前提のコードになっちゃってる
+					ListView_SetCheckState(listview, i, FALSE);
+					SendMessage(dialog, WM_CHECKSTATECHANGE, 0, (LPARAM)i);
+				}
+			}
+			i++;
 		}
 
 		return ret;

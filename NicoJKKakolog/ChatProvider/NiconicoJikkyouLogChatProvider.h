@@ -28,7 +28,7 @@ namespace NicoJKKakolog {
 
 	public:
 		NiconicoJikkyouLogChatProvider(const std::unordered_map<uint_least32_t, int> &jkidTable,NiconicoLoginSession *login);
-		virtual ~NiconicoJikkyouLogChatProvider() override;
+		virtual ~NiconicoJikkyouLogChatProvider() noexcept override;
 
 		virtual std::vector<Chat> GetOnceASecond(const ChannelInfo & channel, std::chrono::system_clock::time_point t) override;
 	};

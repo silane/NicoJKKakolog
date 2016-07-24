@@ -8,9 +8,12 @@ namespace NicoJKKakolog {
 	{
 	}
 
-	NiconicoJikkyouLogChatProvider::~NiconicoJikkyouLogChatProvider()
+	NiconicoJikkyouLogChatProvider::~NiconicoJikkyouLogChatProvider() noexcept
 	{
-		this->chatCollectTask.wait();
+		try
+		{
+			this->chatCollectTask.wait();
+		}catch(...){}
 	}
 
 	std::vector<Chat> NiconicoJikkyouLogChatProvider::GetOnceASecond(const ChannelInfo & channel, std::chrono::system_clock::time_point t)
@@ -58,7 +61,14 @@ namespace NicoJKKakolog {
 		std::time_t startTime = std::chrono::system_clock::to_time_t(t);
 		std::time_t endTime = std::chrono::system_clock::to_time_t(std::chrono::seconds(10) + t);
 
-		this->chatCollectTask.wait();//this->loginへ同時アクセス防止のためこの位置
+		try
+		{
+			this->chatCollectTask.wait();//this->loginへ同時アクセス防止のためこの位置
+		}
+		catch (const std::exception &e)
+		{
+			throw ChatProviderError("ニコニコ実況過去ログのコメントの取得に失敗しました。このエラーはサーバー混雑時にも起こり得ます。");
+		}
 
 		web::http::http_request req;
 		req.headers().add(U("Cookie"), login->GetUserSessionCookie().c_str());
