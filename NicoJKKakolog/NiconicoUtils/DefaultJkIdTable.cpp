@@ -5,6 +5,7 @@ namespace NicoJKKakolog
 {
 	std::unordered_map<uint_least32_t, int> GetDefaultJkIdTable()
 	{
+		//ÉLÅ[ÇÕnid | (sid << 16)ÇΩÇæÇµínè„îgÇÕnid=0x000f
 		return{
 			{0x00650004, 101},
 			{0x00660004, 101},
