@@ -17,7 +17,8 @@ namespace NicoJKKakolog
 		int jkID;
 		try	{
 			uint_least16_t nid = channel.NetworkId;
-			jkID = jkidTable.at(((uint_least32_t)(channel.ServiceId) << 16) | ((nid == 0) ? 0xF : nid));
+			//nid‚ª’nã”g‚Ì”ÍˆÍ‚È‚çnid=0xf‚É‚µ‚ÄŽæ“¾
+			jkID = jkidTable.at(((uint_least32_t)(channel.ServiceId) << 16) | ((0x7880<=nid && nid<=0x7fe8) ? 0xf : nid));
 		}catch (std::out_of_range) {
 			return{};
 		}
@@ -61,7 +62,7 @@ namespace NicoJKKakolog
 				std::string body("<thread res_from=\"-10\" version=\"20061206\" thread=\"" + utility::conversions::to_utf8string(thread_id) + "\" />");
 				body.push_back('\0');
 				TCPSocket socket(utility::conversions::to_utf8string( ms),(unsigned short)std::stoi( utility::conversions::to_utf8string( ms_port)));
-				socket.send(body.c_str(), body.size());
+				socket.send(body.c_str(), (int)body.size());
 
 				if (ct.is_canceled())
 					return;
@@ -85,10 +86,10 @@ namespace NicoJKKakolog
 				}
 			});
 		}
-		catch (const web::http::http_exception &e) {
+		catch (web::http::http_exception) {
 			//const char *m = e.what();
 		}
-		catch (const SocketException &e) {
+		catch (SocketException) {
 			//const char *m = e.what();
 		}
 

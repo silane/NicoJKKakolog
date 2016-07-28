@@ -1656,6 +1656,18 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 							(chat.position == NicoJKKakolog::Chat::Position::Default) ? CCommentWindow::CHAT_POS_DEFAULT : (chat.position == NicoJKKakolog::Chat::Position::Down) ? CCommentWindow::CHAT_POS_SHITA : CCommentWindow::CHAT_POS_UE,
 							(chat.size == NicoJKKakolog::Chat::Size::Default) ? CCommentWindow::CHAT_SIZE_DEFAULT : CCommentWindow::CHAT_SIZE_SMALL);
 
+						// リストボックスのログ表示キューに追加
+						LOG_ELEM e;
+						FILETIME localft;
+						FileTimeToLocalFileTime(&ft, &localft);
+						FileTimeToSystemTime(&localft, &e.st);
+						e.no = chat.number;
+						std::wstring wstr= NicoJKKakolog::NicoJKKakolog::utf8_wide_conv.from_bytes(chat.text);
+						e.text[wstr.copy(e.text, CCommentWindow::CHAT_TEXT_MAX - 1)] = '\0';
+						wstr = NicoJKKakolog::NicoJKKakolog::utf8_wide_conv.from_bytes(chat.userId);
+						e.marker[wstr.copy(e.marker, 28 - 1)] = '\0';
+						logList_.push_back(e);
+
 						bRead = true;
 					}
 					
