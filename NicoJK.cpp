@@ -142,9 +142,9 @@ bool CNicoJK::GetPluginInfo(TVTest::PluginInfo *pInfo)
 	// プラグインの情報を返す
 	pInfo->Type           = TVTest::PLUGIN_TYPE_NORMAL;
 	pInfo->Flags          = 0;
-	pInfo->pszPluginName  = L"NicoJK";
-	pInfo->pszCopyright   = L"Public Domain";
-	pInfo->pszDescription = L"ニコニコ実況をSDKで表示(再生対応改造版)";
+	pInfo->pszPluginName  = L"NicoJKKakolog";
+	pInfo->pszCopyright   = L"(c) 2016 silane";
+	pInfo->pszDescription = L"ニコニコ,2ch実況を表示";
 	return true;
 }
 
