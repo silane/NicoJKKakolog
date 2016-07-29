@@ -16,7 +16,7 @@ namespace NicoJKKakolog
 				serviceId = serviceId >> 16 | serviceId << 16;//‚È‚º‚©‹t‚É‚È‚Á‚Ä‚¢‚é‚ç‚µ‚¢
 				jkIdTable[serviceId] = std::stoi(pair.second);
 			}
-			catch (const std::invalid_argument &e) {}
+			catch (std::invalid_argument) {}
 		}
 	}
 

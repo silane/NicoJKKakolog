@@ -65,7 +65,7 @@ namespace NicoJKKakolog {
 		{
 			this->chatCollectTask.wait();//this->loginへ同時アクセス防止のためこの位置
 		}
-		catch (const std::exception &e)
+		catch (std::exception)
 		{
 			throw ChatProviderError("ニコニコ実況過去ログのコメントの取得に失敗しました。このエラーはサーバー混雑時にも起こり得ます。");
 		}
