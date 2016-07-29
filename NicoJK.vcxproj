@@ -71,21 +71,25 @@
     <LinkIncremental>true</LinkIncremental>
     <TargetExt>.tvtp</TargetExt>
     <IncludePath>D:\develop\include;$(IncludePath)</IncludePath>
+    <TargetName>NicoJKKakolog</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <TargetExt>.tvtp</TargetExt>
     <IncludePath>D:\develop\include;$(IncludePath)</IncludePath>
+    <TargetName>NicoJKKakolog</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <TargetExt>.tvtp</TargetExt>
     <IncludePath>D:\develop\include;$(IncludePath)</IncludePath>
+    <TargetName>NicoJKKakolog</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetExt>.tvtp</TargetExt>
     <IncludePath>D:\develop\include;$(IncludePath)</IncludePath>
+    <TargetName>NicoJKKakolog</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
