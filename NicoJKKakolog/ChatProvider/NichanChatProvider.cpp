@@ -1,5 +1,6 @@
 #include "../../stdafx.h"
 #include "NichanChatProvider.h"
+#include <codecvt>
 
 namespace NicoJKKakolog
 {
@@ -55,6 +56,10 @@ namespace NicoJKKakolog
 
 						{
 							std::lock_guard<std::mutex> lock(this_->mtxChats);
+
+							static std::wstring_convert<std::codecvt_utf8<wchar_t>,wchar_t> cvt;
+							OutputDebugStringW((cvt.from_bytes(pair.first)+L": "+ cvt.from_bytes(itr->message)+L'\n').c_str());
+
 							this_->chats.push_back(std::move(*itr));
 						}
 					}
@@ -76,10 +81,11 @@ namespace NicoJKKakolog
 		std::lock_guard<std::mutex> lock(this->mtxChats);
 		for (const auto &res : this->chats)
 		{
-			if (t - res.date > std::chrono::seconds(10))
+			if (t - res.date > std::chrono::seconds(120))
 					continue;
 			Chat chat;
 			chat.text = res.message;
+			chat.userId = res.id;
 			if (this->chatColor != ColorNone)
 				chat.color = this->chatColor;
 			else
