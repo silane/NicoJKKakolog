@@ -8,10 +8,11 @@ namespace NicoJKKakolog
 	{
 	private:
 		HINSTANCE hInstance;
+		HWND hWnd;
 		Utility::IniFile *iniFile;
 
 	public:
-		NichanChatProviderEntry(HINSTANCE hInstance,Utility::IniFile *iniFile);
+		NichanChatProviderEntry(HINSTANCE hInstance,HWND hWnd,Utility::IniFile *iniFile);
 		virtual ~NichanChatProviderEntry()=default;
 
 		virtual std::wstring GetName() const override;

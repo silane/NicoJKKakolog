@@ -21,20 +21,20 @@ namespace NicoJKKakolog {
 		this->hInstance = hInstance;
 		this->tvtest = tvtest;
 		this->iniFile.SetFilePath(iniFileName);
-
-		//ChatProviderEntry‚ð“o˜^
-		this->chatProviderEntries.insert(std::end(this->chatProviderEntries), {
-			new NiconicoJikkyouChatProviderEntry(&iniFile),
-			new NiconicoJikkyouLogChatProviderEntry(&iniFile),
-			new NiconicoJikkyouLogFileStreamChatProviderEntry(),
-			new NichanChatProviderEntry(hInstance,&iniFile)
-		});
 	}
 
 	void NicoJKKakolog::DialogInit(HWND dialog,HWND listview)
 	{
 		this->dialog = dialog;
 		this->listview = listview;
+		
+		//ChatProviderEntry‚ð“o˜^
+		this->chatProviderEntries.insert(std::end(this->chatProviderEntries), {
+			new NiconicoJikkyouChatProviderEntry(&this->iniFile),
+			new NiconicoJikkyouLogChatProviderEntry(&this->iniFile),
+			new NiconicoJikkyouLogFileStreamChatProviderEntry(),
+			new NichanChatProviderEntry(this->hInstance,dialog,&this->iniFile)
+		});
 
 		INITCOMMONCONTROLSEX initCommonCtrl;
 		initCommonCtrl.dwSize = 8;

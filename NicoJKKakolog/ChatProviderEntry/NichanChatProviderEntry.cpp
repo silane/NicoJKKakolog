@@ -6,8 +6,8 @@
 
 namespace NicoJKKakolog
 {
-	NichanChatProviderEntry::NichanChatProviderEntry(HINSTANCE hInstance,Utility::IniFile *iniFile):
-		hInstance(hInstance),iniFile(iniFile)
+	NichanChatProviderEntry::NichanChatProviderEntry(HINSTANCE hInstance,HWND hWnd,Utility::IniFile *iniFile):
+		hInstance(hInstance),hWnd(hWnd),iniFile(iniFile)
 	{
 	}
 
@@ -45,7 +45,7 @@ namespace NicoJKKakolog
 		}
 
 		NichanChatProviderSettingDialog dialog(hInstance, iniFile->GetSectionContent(L"2chBoards"));
-		std::unique_ptr<INichanThreadSelector> selector=dialog.Show();
+		std::unique_ptr<INichanThreadSelector> selector=dialog.Show(this->hWnd);
 		if (!selector)
 			return nullptr;
 
