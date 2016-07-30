@@ -15,10 +15,10 @@
 #include "JKIDNameTable.h"
 #include "NicoJK.h"
 
-//NicoJKKakoLog
+#pragma region NicoJKKaklog
 #include "NicoJKKakolog/NicoJKKakolog.h"
 #pragma comment(lib, "comctl32.lib")
-//NicoJKKakoLog
+#pragma endregion
 
 
 #ifdef _DEBUG
@@ -155,6 +155,23 @@ bool CNicoJK::Initialize()
 	    !PathRenameExtension(szIniFileName_, TEXT(".ini"))) {
 		szIniFileName_[0] = TEXT('\0');
 	}
+
+#pragma region NicoJKKakolog
+	//NicoJKKaklog.iniがない場合NicoJK.iniがないか探す
+	if (!::PathFileExists(szIniFileName_))
+	{
+		TCHAR tmp_filename[MAX_PATH];
+		TCHAR *filename=::PathFindFileName(szIniFileName_);
+		lstrcpy(tmp_filename,filename);
+		lstrcpy(filename,TEXT("NicoJK.ini"));
+
+		if (!::PathFileExists(szIniFileName_))
+		{
+			lstrcpy(filename, tmp_filename);
+		}
+	}
+#pragma endregion
+
 	tmpSpecFileName_[0] = TEXT('\0');
 	TCHAR path[MAX_PATH + 32];
 	if (GetLongModuleFileName(g_hinstDLL, path, MAX_PATH)) {
@@ -194,9 +211,10 @@ bool CNicoJK::Initialize()
 	m_pApp->SetEventCallback(EventCallback, this);
 
 
-	//---NicoJKKakolog---
+#pragma region NicoJKKakolog
 	nicoJKKakolog.Init(g_hinstDLL,m_pApp, szIniFileName_);
-	//---NicoJKKakolog---
+#pragma endregion
+
 	return true;
 }
 
@@ -1303,15 +1321,13 @@ INT_PTR CALLBACK CNicoJK::ForceDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
 	return reinterpret_cast<CNicoJK*>(GetWindowLongPtr(hwnd, DWLP_USER))->ForceDialogProcMain(hwnd, uMsg, wParam, lParam);
 }
 
-#include "NicoJKKakolog/IniFile.h"
-
 INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	//---NicoJKKakolog---
+#pragma region NicoJKKakolog
 	if(uMsg!=WM_INITDIALOG)
 		if (nicoJKKakolog.DialogProc(uMsg, wParam, lParam))
 			return TRUE;
-	//---NicoJKKakolog---
+#pragma endregion
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -1384,9 +1400,9 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 			SetTimer(hwnd, TIMER_DONE_SIZE, 500, NULL);
 
 
-			//---NicoJKKakoLog---
+#pragma region NicoJKKakoLog
 			nicoJKKakolog.DialogInit(hwnd, GetDlgItem(hwnd, IDC_LISTVIEW));
-			//---NicoJKKakoLog---
+#pragma endregion
 		}
 		return TRUE;
 	case WM_DESTROY:
@@ -1438,23 +1454,23 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 		switch (LOWORD(wParam)) {
 		case IDC_RADIO_FORCE:
 		case IDC_RADIO_LOG:
-			//---NicoJKKakolog---
+#pragma region NicoJKKakolog
 			nicoJKKakolog.showingListView = false;
 			ShowWindow(GetDlgItem(hwnd,IDC_LISTVIEW), SW_HIDE);
 			ShowWindow(GetDlgItem(hwnd,IDC_FORCELIST), SW_SHOW);
-			//---NicoJKKakolog---
+#pragma endregion
 
 			bDisplayLogList_ = SendDlgItemMessage(hwnd, IDC_RADIO_LOG, BM_GETCHECK, 0, 0 ) == BST_CHECKED;
 			SendMessage(hwnd, WM_UPDATE_LIST, TRUE, 0);
 			PostMessage(hwnd, WM_TIMER, TIMER_UPDATE, 0);
 			break;
-		//---NicoJKKakolog---
+#pragma region NicoJKKakolog
 		case IDC_RADIO_CHATSELECT:
 			nicoJKKakolog.showingListView = true;
 			ShowWindow(GetDlgItem(hwnd, IDC_LISTVIEW), SW_SHOW);
 			ShowWindow(GetDlgItem(hwnd, IDC_FORCELIST), SW_HIDE);
 			break;
-			//---NicoJKKakolog---
+#pragma endregion
 		case IDC_CHECK_SPECFILE:
 			if (bSpecFile_ != (SendDlgItemMessage(hwnd, IDC_CHECK_SPECFILE, BM_GETCHECK, 0, 0) == BST_CHECKED)) {
 				if (bSpecFile_) {
@@ -1643,7 +1659,7 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 					unsigned int tm = FileTimeToUnixTime(ft);
 					tm = forwardOffset_ < 0 ? tm - (-forwardOffset_ / 1000) : tm + forwardOffset_ / 1000;
 
-					//---NicoJKKakoLog---
+#pragma region NicoJKKakolog
 
 					/*while (ReadFromLogfile(bSpecFile_ ? 0 : currentJKToGet_, text, _countof(text), tm)) {
 						ProcessChatTag(text);
@@ -1671,7 +1687,7 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 						bRead = true;
 					}
 					
-					//---NicoJKKakoLog---
+#pragma endregion
 
 					if (bRead) {
 						// date属性値は秒精度しかないのでコメント表示が団子にならないよう適当にごまかす
@@ -2118,11 +2134,11 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 			MapWindowPoints(NULL, hwnd, reinterpret_cast<LPPOINT>(&rc), 2);
 			SetWindowPos(hItem, NULL, 0, 0, rcParent.right-rc.left*2, rcParent.bottom-rc.top-padding, SWP_NOMOVE | SWP_NOZORDER);
 
-			//---NicoJKKakoLog---
+#pragma region NicoJKKakoLog
 			GetWindowRect(GetDlgItem(hwnd,IDC_LISTVIEW), &rc);
 			MapWindowPoints(NULL, hwnd, reinterpret_cast<LPPOINT>(&rc), 2);
 			SetWindowPos(GetDlgItem(hwnd, IDC_LISTVIEW), NULL, 0, 0, rcParent.right - rc.left * 2, rcParent.bottom - rc.top - padding, SWP_NOMOVE | SWP_NOZORDER);
-			//---NicoJKKakoLog---
+#pragma endregion
 		}
 		break;
 	}
