@@ -23,10 +23,10 @@ namespace NicoJKKakolog {
 		this->iniFile.SetFilePath(iniFileName);
 	}
 
-	void NicoJKKakolog::DialogInit(HWND dialog,HWND listview)
+	void NicoJKKakolog::DialogInit(HWND dialog)
 	{
 		this->dialog = dialog;
-		this->listview = listview;
+		//this->listview = listview;
 		
 		//ChatProviderEntryを登録
 		this->chatProviderEntries.insert(std::end(this->chatProviderEntries), {
@@ -46,16 +46,17 @@ namespace NicoJKKakolog {
 		lvcol.fmt = LVCFMT_LEFT;
 		lvcol.cx = 160;             // 表示位置
 		lvcol.pszText = _T("チャット取得元");  // 見出し
-		ListView_InsertColumn(listview, 0, &lvcol);
+		ListView_InsertColumn(GetDlgItem(dialog,IDC_LISTVIEW), 0, &lvcol);
 
 		lvcol.cx = 320;             // 表示位置
 		lvcol.pszText = _T("説明");  // 見出し
-		ListView_InsertColumn(listview, 1, &lvcol);
+		ListView_InsertColumn(GetDlgItem(dialog, IDC_LISTVIEW), 1, &lvcol);
 
-		ListView_SetExtendedListViewStyle(listview, ListView_GetExtendedListViewStyle(listview) | LVS_EX_CHECKBOXES | LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT);
+		ListView_SetExtendedListViewStyle(GetDlgItem(dialog, IDC_LISTVIEW), ListView_GetExtendedListViewStyle(GetDlgItem(dialog, IDC_LISTVIEW)) | LVS_EX_CHECKBOXES | LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT);
 
 		//コマンドライン引数処理
 		Utility::SimpleArgumentParser argparser;
+		//    デフォルトでオンにするチャット元
 		std::wstring commentSource=argparser.GetOptionArgument(L"jkchatsrc");
 		std::vector<std::wstring> defaultOnProviderNames;
 		if (commentSource.size()>0)
@@ -67,7 +68,30 @@ namespace NicoJKKakolog {
 			}
 			defaultOnProviderNames.push_back(commentSource.substr(start));
 		}
-
+		//    ダイアログでデフォルトで何を表示するか
+		std::wstring defaultView = argparser.GetOptionArgument(L"jkdlgview");
+		if (defaultView == L"trend")
+		{
+			SendDlgItemMessage(dialog, IDC_RADIO_FORCE, BM_SETCHECK, BST_CHECKED, 0);
+			SendDlgItemMessage(dialog, IDC_RADIO_LOG, BM_SETCHECK, BST_UNCHECKED, 0);
+			SendDlgItemMessage(dialog, IDC_RADIO_CHATSELECT, BM_SETCHECK, BST_UNCHECKED, 0);
+			PostMessage(dialog, WM_COMMAND, (WPARAM)IDC_RADIO_FORCE,0);
+		}
+		else if (defaultView == L"log")
+		{
+			SendDlgItemMessage(dialog, IDC_RADIO_FORCE, BM_SETCHECK, BST_UNCHECKED, 0);
+			SendDlgItemMessage(dialog, IDC_RADIO_LOG, BM_SETCHECK, BST_CHECKED, 0);
+			SendDlgItemMessage(dialog, IDC_RADIO_CHATSELECT, BM_SETCHECK, BST_UNCHECKED, 0);
+			PostMessage(dialog, WM_COMMAND, (WPARAM)IDC_RADIO_LOG, 0);
+		}
+		else if (defaultView == L"chatselect")
+		{
+			SendDlgItemMessage(dialog, IDC_RADIO_FORCE, BM_SETCHECK, BST_UNCHECKED, 0);
+			SendDlgItemMessage(dialog, IDC_RADIO_LOG, BM_SETCHECK, BST_UNCHECKED, 0);
+			SendDlgItemMessage(dialog, IDC_RADIO_CHATSELECT, BM_SETCHECK, BST_CHECKED, 0);
+			PostMessage(dialog, WM_COMMAND, (WPARAM)IDC_RADIO_CHATSELECT, 0);
+		}
+		
 		chatProviders.resize(chatProviderEntries.size(), nullptr);
 
 		//GUIのチャット元リストを作成
@@ -84,7 +108,7 @@ namespace NicoJKKakolog {
 			item.pszText[text.size()] = L'\0';
 			item.iItem = (int)i;
 			item.iSubItem = 0;
-			ListView_InsertItem(listview, &item);
+			ListView_InsertItem(GetDlgItem(dialog, IDC_LISTVIEW), &item);
 			delete[] item.pszText;
 
 			text = entry->GetDescription();
@@ -94,17 +118,17 @@ namespace NicoJKKakolog {
 			item.pszText[text.size()] = L'\0';
 			item.iItem = (int)i;
 			item.iSubItem = 1;
-			ListView_SetItem(listview, &item);
+			ListView_SetItem(GetDlgItem(dialog, IDC_LISTVIEW), &item);
 			delete[] item.pszText;
 
 			if (std::find(std::begin(defaultOnProviderNames), std::end(defaultOnProviderNames), entry->GetName()) != std::end(defaultOnProviderNames))
 			{
-				ListView_SetCheckState(listview, i, TRUE);
+				ListView_SetCheckState(GetDlgItem(dialog, IDC_LISTVIEW), i, TRUE);
 				PostMessage(dialog, WM_CHECKSTATECHANGE, 0, (LPARAM)i);
 			}
 		}
 
-		ShowWindow(listview, SW_HIDE);
+		ShowWindow(GetDlgItem(dialog, IDC_LISTVIEW), SW_HIDE);
 
 		SendMessage(dialog, WM_SIZE, 0, 0);
 	}
@@ -151,16 +175,16 @@ namespace NicoJKKakolog {
 			item.iSubItem = 0;
 			item.pszText = szName;
 			item.cchTextMax = sizeof(szName) / sizeof(TCHAR);
-			ListView_GetItem(listview, &item);
+			ListView_GetItem(GetDlgItem(dialog, IDC_LISTVIEW), &item);
 
-			if (ListView_GetCheckState(listview, i)) {
+			if (ListView_GetCheckState(GetDlgItem(dialog, IDC_LISTVIEW), i)) {
 				if (chatProviders.at(i) == nullptr)
 				{
 					IChatProvider *provider = chatProviderEntries.at(i)->NewProvider();
 					if (provider)
 						chatProviders.at(i) = provider;
 					else
-						ListView_SetCheckState(listview, i, false);
+						ListView_SetCheckState(GetDlgItem(dialog, IDC_LISTVIEW), i, false);
 				}
 			}
 			else {
@@ -225,7 +249,7 @@ namespace NicoJKKakolog {
 				catch (const ChatProviderError &e) {
 					MessageBoxA(this->dialog, e.what(), "チャット取得エラー", 0);
 					//TODO: ChatProviderとChatProviderEntryが１対１に対応している前提のコードになっちゃってる
-					ListView_SetCheckState(listview, i, FALSE);
+					ListView_SetCheckState(GetDlgItem(dialog, IDC_LISTVIEW), i, FALSE);
 					SendMessage(dialog, WM_CHECKSTATECHANGE, 0, (LPARAM)i);
 				}
 			}

@@ -18,7 +18,7 @@ namespace NicoJKKakolog {
 		TVTest::CTVTestApp *tvtest;
 		Utility::IniFile iniFile;
 
-		HWND listview;
+		//HWND listview;
 		HWND dialog;
 		
 		std::vector<IChatProviderEntry*> chatProviderEntries;
@@ -33,7 +33,7 @@ namespace NicoJKKakolog {
 	public:
 		NicoJKKakolog();
 		void Init(HINSTANCE hInstance,TVTest::CTVTestApp *tvtest, const std::basic_string<TCHAR> &iniFileName);
-		void DialogInit(HWND dialog,HWND listview);
+		void DialogInit(HWND dialog);
 		INT_PTR DialogProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
 		std::vector<Chat> GetChats(std::time_t);
 		~NicoJKKakolog();

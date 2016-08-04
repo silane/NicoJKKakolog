@@ -1401,7 +1401,7 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 
 
 #pragma region NicoJKKakoLog
-			nicoJKKakolog.DialogInit(hwnd, GetDlgItem(hwnd, IDC_LISTVIEW));
+			nicoJKKakolog.DialogInit(hwnd);
 #pragma endregion
 		}
 		return TRUE;
