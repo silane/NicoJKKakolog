@@ -104,6 +104,7 @@ private:
 	HWND GetFullscreenWindow();
 	HWND FindVideoContainer();
 	DWORD GetCurrentNetworkServiceID();
+	bool CNicoJK::GetChannelNetworkServiceID(int tuningSpace, int channelIndex, DWORD *pNtsID);
 	bool GetCurrentTot(FILETIME *pft);
 	bool IsMatchDriverName(LPCTSTR drivers);
 	void WriteToLogfile(int jkID, const char *text = NULL);

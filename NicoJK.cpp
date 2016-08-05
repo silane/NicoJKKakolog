@@ -666,6 +666,26 @@ DWORD CNicoJK::GetCurrentNetworkServiceID()
 	return 0;
 }
 
+// 指定チャンネルのネットワーク/サービスIDを取得する
+bool CNicoJK::GetChannelNetworkServiceID(int tuningSpace, int channelIndex, DWORD *pNtsID)
+{
+	TVTest::ChannelInfo ci;
+	if (m_pApp->GetChannelInfo(tuningSpace, channelIndex, &ci)) {
+		if (ci.NetworkID && ci.ServiceID) {
+			if (0x7880 <= ci.NetworkID && ci.NetworkID <= 0x7FEF) {
+				// 地上波のサービス種別とサービス番号はマスクする
+				*pNtsID = (static_cast<DWORD>(ci.ServiceID&~0x0187) << 16) | 0x000F;
+				return true;
+			}
+			*pNtsID = (static_cast<DWORD>(ci.ServiceID) << 16) | ci.NetworkID;
+			return true;
+		}
+		*pNtsID = 0;
+		return true;
+	}
+	return false;
+}
+
 // 再生中のストリームのTOT時刻(取得からの経過時間で補正済み)をUTCで取得する
 bool CNicoJK::GetCurrentTot(FILETIME *pft)
 {
@@ -1507,6 +1527,28 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 						jkSocket_.Shutdown();
 						commentWindow_.ClearChat();
 						SetTimer(hwnd, TIMER_JK_WATCHDOG, 1000, NULL);
+					}
+
+					if (!bUsingLogfileDriver_ && !bRecording_ && jkID > 0) {
+						// 本体のチャンネル切り替えをする
+						int currentTuning = m_pApp->GetTuningSpace();
+						//for (int stage = 0; stage < 2; ++stage) {
+							NETWORK_SERVICE_ID_ELEM e = { 0 };
+							for (int i = 0; GetChannelNetworkServiceID(currentTuning, i, &e.ntsID); ++i) {
+								std::vector<NETWORK_SERVICE_ID_ELEM>::const_iterator it =
+									std::lower_bound(ntsIDList_.begin(), ntsIDList_.end(), e, NETWORK_SERVICE_ID_ELEM::COMPARE());
+								int chJK = it != ntsIDList_.end() && it->ntsID == e.ntsID ? it->jkID : -1;
+								// 実況IDが一致するチャンネルに切替
+								if (jkID == chJK) {
+									// すでに表示中なら切り替えない
+									if (e.ntsID != GetCurrentNetworkServiceID()) {
+										m_pApp->SetChannel(currentTuning, i, e.ntsID >> 16);
+									}
+									//stage = 2;
+									break;
+								}
+							}
+						//}
 					}
 				}
 			} else if (HIWORD(wParam) == LBN_DBLCLK) {
