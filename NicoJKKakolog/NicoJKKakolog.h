@@ -7,7 +7,7 @@
 
 namespace NicoJKKakolog {
 	//NicoJKクラスが巨大すぎるので分離
-	//追加の処理はすべてこっちに書いているというわけではない
+	//追加の処理の一部はNicoJKクラス内にもある
 	class NicoJKKakolog
 	{
 	private:
@@ -26,6 +26,9 @@ namespace NicoJKKakolog {
 
 		std::chrono::milliseconds timelag;
 
+	private:
+		static std::time_t FileTimeToUnixTime(const FILETIME &ft);
+
 	public:
 		static std::wstring_convert < std::codecvt_utf8<WCHAR>, WCHAR > utf8_wide_conv;
 		bool showingListView = false;
@@ -37,8 +40,6 @@ namespace NicoJKKakolog {
 		INT_PTR DialogProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
 		std::vector<Chat> GetChats(std::time_t);
 		~NicoJKKakolog();
-
-		static std::time_t NicoJKKakolog::FileTimeToUnixTime(const FILETIME &ft);
 	};
 
 }
