@@ -21,6 +21,11 @@ namespace NicoJKKakolog {
 		this->hInstance = hInstance;
 		this->tvtest = tvtest;
 		this->iniFile.SetFilePath(iniFileName);
+
+		INITCOMMONCONTROLSEX initCommonCtrl;
+		initCommonCtrl.dwSize = 8;
+		initCommonCtrl.dwICC = ICC_LISTVIEW_CLASSES;
+		InitCommonControlsEx(&initCommonCtrl);
 	}
 
 	void NicoJKKakolog::DialogInit(HWND dialog)
@@ -29,17 +34,13 @@ namespace NicoJKKakolog {
 		//this->listview = listview;
 		
 		//ChatProviderEntry‚ð“o˜^
+		//this->chatProviderEntries.clear();
 		this->chatProviderEntries.insert(std::end(this->chatProviderEntries), {
 			new NiconicoJikkyouChatProviderEntry(&this->iniFile),
 			new NiconicoJikkyouLogChatProviderEntry(&this->iniFile),
 			new NiconicoJikkyouLogFileStreamChatProviderEntry(),
 			new NichanChatProviderEntry(this->hInstance,dialog,&this->iniFile)
 		});
-
-		INITCOMMONCONTROLSEX initCommonCtrl;
-		initCommonCtrl.dwSize = 8;
-		initCommonCtrl.dwICC = ICC_LISTVIEW_CLASSES;
-		InitCommonControlsEx(&initCommonCtrl);
 
 		LVCOLUMN lvcol;
 		lvcol.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT;

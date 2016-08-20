@@ -210,10 +210,7 @@ bool CNicoJK::Initialize()
 	// イベントコールバック関数を登録
 	m_pApp->SetEventCallback(EventCallback, this);
 
-
-#pragma region NicoJKKakolog
-	nicoJKKakolog.Init(g_hinstDLL,m_pApp, szIniFileName_);
-#pragma endregion
+	//nicoJKKakolog.Init(g_hinstDLL, m_pApp, szIniFileName_);
 
 	return true;
 }
@@ -285,6 +282,12 @@ bool CNicoJK::TogglePlugin(bool bEnabled)
 					}
 				}
 			}
+
+#pragma region NicoJKKakolog
+			this->nicoJKKakolog.reset(new NicoJKKakolog::NicoJKKakolog());
+			this->nicoJKKakolog->Init(g_hinstDLL, m_pApp, szIniFileName_);
+#pragma endregion
+
 			// 勢い窓作成
 			hForce_ = CreateDialogParam(g_hinstDLL, MAKEINTRESOURCE(IDD_FORCE), NULL,
 			                            ForceDialogProc, reinterpret_cast<LPARAM>(this));
@@ -321,6 +324,11 @@ bool CNicoJK::TogglePlugin(bool bEnabled)
 		return hForce_ != NULL;
 	} else {
 		if (hForce_) {
+#pragma region NicoJKKakolog
+			delete nicoJKKakolog.release();
+#pragma endregion
+
+
 			if (hSyncThread_) {
 				bQuitSyncThread_ = true;
 				WaitForSingleObject(hSyncThread_, INFINITE);
@@ -1345,7 +1353,7 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 {
 #pragma region NicoJKKakolog
 	if(uMsg!=WM_INITDIALOG)
-		if (nicoJKKakolog.DialogProc(uMsg, wParam, lParam))
+		if (this && nicoJKKakolog->DialogProc(uMsg, wParam, lParam))
 			return TRUE;
 #pragma endregion
 
@@ -1421,7 +1429,7 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 
 
 #pragma region NicoJKKakoLog
-			nicoJKKakolog.DialogInit(hwnd);
+			nicoJKKakolog->DialogInit(hwnd);
 #pragma endregion
 		}
 		return TRUE;
@@ -1475,7 +1483,7 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 		case IDC_RADIO_FORCE:
 		case IDC_RADIO_LOG:
 #pragma region NicoJKKakolog
-			nicoJKKakolog.showingListView = false;
+			nicoJKKakolog->showingListView = false;
 			ShowWindow(GetDlgItem(hwnd,IDC_LISTVIEW), SW_HIDE);
 			ShowWindow(GetDlgItem(hwnd,IDC_FORCELIST), SW_SHOW);
 #pragma endregion
@@ -1486,7 +1494,7 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 			break;
 #pragma region NicoJKKakolog
 		case IDC_RADIO_CHATSELECT:
-			nicoJKKakolog.showingListView = true;
+			nicoJKKakolog->showingListView = true;
 			ShowWindow(GetDlgItem(hwnd, IDC_LISTVIEW), SW_SHOW);
 			ShowWindow(GetDlgItem(hwnd, IDC_FORCELIST), SW_HIDE);
 			break;
@@ -1708,7 +1716,7 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 						bRead = true;
 					}*/
 					
-					for (const NicoJKKakolog::Chat &chat : nicoJKKakolog.GetChats(tm))
+					for (const NicoJKKakolog::Chat &chat : nicoJKKakolog->GetChats(tm))
 					{
 						commentWindow_.AddChat(NicoJKKakolog::NicoJKKakolog::utf8_wide_conv.from_bytes(chat.text).c_str(), chat.color,
 							(chat.position == NicoJKKakolog::Chat::Position::Default) ? CCommentWindow::CHAT_POS_DEFAULT : (chat.position == NicoJKKakolog::Chat::Position::Down) ? CCommentWindow::CHAT_POS_SHITA : CCommentWindow::CHAT_POS_UE,

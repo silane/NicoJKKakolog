@@ -1,6 +1,7 @@
 #pragma once
 
 #include "NicoJKKakolog/NicoJKKakolog.h"
+#include <memory>
 
 // プラグインクラス
 class CNicoJK : public TVTest::CTVTestPlugin
@@ -104,7 +105,7 @@ private:
 	HWND GetFullscreenWindow();
 	HWND FindVideoContainer();
 	DWORD GetCurrentNetworkServiceID();
-	bool CNicoJK::GetChannelNetworkServiceID(int tuningSpace, int channelIndex, DWORD *pNtsID);
+	bool GetChannelNetworkServiceID(int tuningSpace, int channelIndex, DWORD *pNtsID);
 	bool GetCurrentTot(FILETIME *pft);
 	bool IsMatchDriverName(LPCTSTR drivers);
 	void WriteToLogfile(int jkID, const char *text = NULL);
@@ -195,6 +196,7 @@ private:
 
 
 
-	//---NicoJKKakolog---
-	NicoJKKakolog::NicoJKKakolog nicoJKKakolog;
+#pragma region NicoJKKakolog
+	std::unique_ptr<NicoJKKakolog::NicoJKKakolog> nicoJKKakolog;
+#pragma endregion
 };
