@@ -11,6 +11,7 @@ namespace NicoJKKakolog
 		std::string threadTitle;
 		
 		static int LevenshteinDistance(const std::string &str1, const std::string &str2);
+		static void NormalizeThreadTitle(std::string &text);
 
 	public:
 		FuzzyNichanThreadSelector(const std::string &boardUrl,const std::string &threadTitle);

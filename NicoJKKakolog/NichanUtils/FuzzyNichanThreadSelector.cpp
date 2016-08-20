@@ -1,11 +1,11 @@
-#include "../../stdafx.h"
+﻿#include "../../stdafx.h"
 #include "FuzzyNichanThreadSelector.h"
 #include "../../NichanParser/NichanParser.h"
-#include <limits>
 #include <algorithm>
 #include <utility>
+#include <regex>
 
-#undef min//win32API�̃}�N�����
+#undef min//win32APIのマクロ回避
 #undef max
 
 namespace NicoJKKakolog
@@ -32,9 +32,35 @@ namespace NicoJKKakolog
 		return d[str1.size()][str2.size()];
 	}
 
+	void FuzzyNichanThreadSelector::NormalizeThreadTitle(std::string &text)
+	{
+		static const std::regex reResNum(u8R"(\(%d+\)$)");
+		static const std::regex reBracket(u8R"((【.*】))");
+		text = std::regex_replace(text, reResNum, u8"");
+		text = std::regex_replace(text, reBracket, u8"");
+
+		const char mudantensai[] = u8"無断転載禁止";
+		const char copyright[] = u8"©";
+		const char nichandotnet[] = u8"2ch.net";
+		const char copyright2[] = u8"&#169;";
+		std::string::size_type idx = text.find(mudantensai);
+		if (idx != std::string::npos)
+			text = text.replace(idx, sizeof(mudantensai) - 1, u8"");
+		idx = text.find(copyright);
+		if (idx != std::string::npos)
+			text = text.replace(idx, sizeof(copyright) - 1, u8"");
+		idx = text.find(nichandotnet);
+		if (idx != std::string::npos)
+			text = text.replace(idx, sizeof(nichandotnet) - 1, u8"");
+		idx = text.find(copyright2);
+		if (idx != std::string::npos)
+			text = text.replace(idx, sizeof(copyright2) - 1, u8"");
+	}
+
 	FuzzyNichanThreadSelector::FuzzyNichanThreadSelector(const std::string &boardUrl, const std::string &threadTitle):
 		boardUrl(boardUrl),threadTitle(threadTitle)
 	{
+		NormalizeThreadTitle(this->threadTitle);
 	}
 
 
@@ -42,18 +68,25 @@ namespace NicoJKKakolog
 	{
 		auto board = Nichan::ParseBoardFromUrl(this->boardUrl);
 
-		//1000�܂Ŗ��܂��Ă���X�������O
-		for (auto itr = std::begin(board.thread); itr != std::end(board.thread); ++itr)
+		//1000まで埋まっているスレを除外
+		for (auto itr = std::begin(board.thread); itr != std::end(board.thread);)
 		{
 			if (itr->title.compare(itr->title.size() - 6, 6, u8"(1001)") == 0)
-				itr=board.thread.erase(itr);
+				itr = board.thread.erase(itr);
+			else
+				++itr;
 		}
 
 		typedef std::pair<Nichan::Thread *, int> item_type;
 		std::vector<item_type> distances(board.thread.size());
 
+		//レーベンシュタイン距離をそれぞれ計算
 		std::transform(std::begin(board.thread), std::end(board.thread), std::begin(distances),
-			[this](Nichan::Thread &th) {return item_type(&th, LevenshteinDistance(th.title, this->threadTitle)); });
+			[this](Nichan::Thread &th) {
+
+			NormalizeThreadTitle(th.title);//boardの内容を変更してるので注意！
+			return item_type(&th, LevenshteinDistance(th.title, this->threadTitle)); 
+		});
 
 		std::sort(std::begin(distances), std::end(distances),
 			[](const item_type &item1, const item_type &item2) {return item1.second < item2.second; });
@@ -62,6 +95,7 @@ namespace NicoJKKakolog
 		if (distances.size() == 0)
 			return{};
 
+		//レーベンシュタイン距離の最小値から距離30以内のものを選択
 		std::vector<std::string> ret;
 		int min_distance = distances[0].second;
 		for (const auto &item : distances)
