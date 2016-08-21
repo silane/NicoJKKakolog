@@ -27,12 +27,12 @@ NicoJKKakolog
 
 ■導入方法
 0)入ってなければMicrosoft Visual C++ 2015 再頒布可能パッケージをインストールする
-1)NicoJK.tvtp、NicoJK.iniをTVTestのPluginフォルダにいれる
-2)cpprest140d_2_8.dllをTVTest.exeのあるフォルダにいれる（←#########重要！###########）
-3)過去ログ表示をしたい場合はNicoJK.iniにニコニコのアカウント情報を入れる
+1)NicoJKKakolog.tvtp、NicoJKKakolog.iniをTVTestのPluginフォルダにいれる
+2)cpprest140_2_8.dllをTVTest.exeのあるフォルダにいれる（←#########重要！###########）
+3)過去ログ表示をしたい場合はNicoJKKakolog.iniにニコニコのアカウント情報を入れる
 
 
-■NicoJK.iniについて
+■NicoJKKakolog.iniについて
 ・改造元のNicoJKPlayModの設定は使えるものもありますが、描画系以外の割と多くの項目が機能を果たさなくなっていますのであしからず。
 
 
@@ -103,6 +103,12 @@ rev 2.1 (2016-7-11)
     2chのスレ取得の間隔を1秒未満にできないようにした
 
 rev 2.2 (2016-7-23)
-    http://www1.axfc.net/u/3696556
     コマンドライン引数でデフォルトでオンにするチャット元を指定できるようにした
     自動過去ログ取得でサーバーが約10秒以内に応答しないとクラッシュしたりする問題を修正（今度こそ）
+
+rev 2.3 (2016-7-30)
+    http://www1.axfc.net/u/3698417
+    プラグイン名、ファイル名、設定ファイル名をNicoJKKakologに変更
+        設定ファイルは従来のNicoJK.iniでも動きます
+    rev1で消したログ一覧を追加
+    2chの類似スレ選択が間違っていたのを修正
