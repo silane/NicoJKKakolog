@@ -19,6 +19,7 @@ public:
 	Position position=Position::Default;
 	Size size=Size::Default;
 	Color color=0;
+	bool ng=false;
 	
 	Chat() = default;
 	Chat( int number,const std::string &text,const std::string &userId, Color color, Position position=Position::Default,Size size=Size::Default) noexcept;

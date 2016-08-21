@@ -1,6 +1,6 @@
-/*
+ï»¿/*
 	NicoJK
-		TVTest ƒjƒRƒjƒRÀ‹µƒvƒ‰ƒOƒCƒ“
+		TVTest ãƒ‹ã‚³ãƒ‹ã‚³å®Ÿæ³ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
 */
 
 #include "stdafx.h"
@@ -17,6 +17,7 @@
 
 #pragma region NicoJKKaklog
 #include "NicoJKKakolog/NicoJKKakolog.h"
+#include "NicoJKKakolog\ChatModRule\IdNgChatModRule.h"
 #pragma comment(lib, "comctl32.lib")
 #pragma endregion
 
@@ -37,7 +38,7 @@ inline void dprintf_real( const _TCHAR * fmt, ... )
 #  define dprintf __noop
 #endif
 
-// ’ÊM—p
+// é€šä¿¡ç”¨
 #define WMS_FORCE (WM_APP + 101)
 #define WMS_JK (WM_APP + 102)
 #define WMS_POST (WM_APP + 103)
@@ -132,32 +133,32 @@ CNicoJK::CNicoJK()
 	tmpSpecFileName_[0] = TEXT('\0');
 	dropFileName_[0] = TEXT('\0');
 	memset(&s_, 0, sizeof(s_));
-	// TOT‚ğæ“¾‚Å‚«‚Ä‚¢‚È‚¢‚±‚Æ‚ğ•\‚·
+	// TOTã‚’å–å¾—ã§ãã¦ã„ãªã„ã“ã¨ã‚’è¡¨ã™
 	ftTot_[0].dwHighDateTime = 0xFFFFFFFF;
 	pcrPids_[0] = -1;
 }
 
 bool CNicoJK::GetPluginInfo(TVTest::PluginInfo *pInfo)
 {
-	// ƒvƒ‰ƒOƒCƒ“‚Ìî•ñ‚ğ•Ô‚·
+	// ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®æƒ…å ±ã‚’è¿”ã™
 	pInfo->Type           = TVTest::PLUGIN_TYPE_NORMAL;
 	pInfo->Flags          = 0;
 	pInfo->pszPluginName  = L"NicoJKKakolog";
 	pInfo->pszCopyright   = L"(c) 2016 silane";
-	pInfo->pszDescription = L"ƒjƒRƒjƒR,2chÀ‹µ‚ğ•\¦";
+	pInfo->pszDescription = L"ãƒ‹ã‚³ãƒ‹ã‚³,2chå®Ÿæ³ã‚’è¡¨ç¤º";
 	return true;
 }
 
 bool CNicoJK::Initialize()
 {
-	// ‰Šú‰»ˆ—
+	// åˆæœŸåŒ–å‡¦ç†
 	if (!GetLongModuleFileName(g_hinstDLL, szIniFileName_, _countof(szIniFileName_)) ||
 	    !PathRenameExtension(szIniFileName_, TEXT(".ini"))) {
 		szIniFileName_[0] = TEXT('\0');
 	}
 
 #pragma region NicoJKKakolog
-	//NicoJKKaklog.ini‚ª‚È‚¢ê‡NicoJK.ini‚ª‚È‚¢‚©’T‚·
+	//NicoJKKaklog.iniãŒãªã„å ´åˆNicoJK.iniãŒãªã„ã‹æ¢ã™
 	if (!::PathFileExists(szIniFileName_))
 	{
 		TCHAR tmp_filename[MAX_PATH];
@@ -185,29 +186,29 @@ bool CNicoJK::Initialize()
 	if (WSAStartup(MAKEWORD(2, 0), &wsaData) != 0) {
 		return false;
 	}
-	// OsdCompositor‚Í‘¼ƒvƒ‰ƒOƒCƒ“‚Æ‹¤—p‚·‚é‚±‚Æ‚ª‚ ‚é‚Ì‚ÅA—LŒø‚É‚·‚é‚È‚çFinalize()‚Ü‚Å”jŠü‚µ‚È‚¢
+	// OsdCompositorã¯ä»–ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã¨å…±ç”¨ã™ã‚‹ã“ã¨ãŒã‚ã‚‹ã®ã§ã€æœ‰åŠ¹ã«ã™ã‚‹ãªã‚‰Finalize()ã¾ã§ç ´æ£„ã—ãªã„
 	bool bEnableOsdCompositor = GetPrivateProfileInt(TEXT("Setting"), TEXT("enableOsdCompositor"), 0, szIniFileName_) != 0;
 	if (!commentWindow_.Initialize(g_hinstDLL, &bEnableOsdCompositor)) {
 		WSACleanup();
 		return false;
 	}
 	if (bEnableOsdCompositor) {
-		m_pApp->AddLog(L"OsdCompositor‚ğ‰Šú‰»‚µ‚Ü‚µ‚½B");
+		m_pApp->AddLog(L"OsdCompositorã‚’åˆæœŸåŒ–ã—ã¾ã—ãŸã€‚");
 	}
-	// ƒRƒ}ƒ“ƒh‚ğ“o˜^
-	m_pApp->RegisterCommand(COMMAND_HIDE_FORCE, L"HideForce", L"¨‚¢ƒEƒBƒ“ƒhƒE‚Ì•\¦Ø‘Ö");
-	m_pApp->RegisterCommand(COMMAND_HIDE_COMMENT, L"HideComment", L"À‹µƒRƒƒ“ƒg‚Ì•\¦Ø‘Ö");
+	// ã‚³ãƒãƒ³ãƒ‰ã‚’ç™»éŒ²
+	m_pApp->RegisterCommand(COMMAND_HIDE_FORCE, L"HideForce", L"å‹¢ã„ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®è¡¨ç¤ºåˆ‡æ›¿");
+	m_pApp->RegisterCommand(COMMAND_HIDE_COMMENT, L"HideComment", L"å®Ÿæ³ã‚³ãƒ¡ãƒ³ãƒˆã®è¡¨ç¤ºåˆ‡æ›¿");
 	memset(s_.forwardList, 0, sizeof(s_.forwardList));
 	for (int i = 0; i < _countof(s_.forwardList); ++i) {
 		TCHAR key[16], name[32];
 		wsprintf(key, TEXT("Forward%c"), TEXT('A') + i);
-		wsprintf(name, TEXT("À‹µƒRƒƒ“ƒg‚Ì‘Oi:%c"), TEXT('A') + i);
+		wsprintf(name, TEXT("å®Ÿæ³ã‚³ãƒ¡ãƒ³ãƒˆã®å‰é€²:%c"), TEXT('A') + i);
 		if ((s_.forwardList[i] = GetPrivateProfileInt(TEXT("Setting"), key, INT_MAX, szIniFileName_)) == INT_MAX) {
 			break;
 		}
 		m_pApp->RegisterCommand(COMMAND_FORWARD_A + i, key, name);
 	}
-	// ƒCƒxƒ“ƒgƒR[ƒ‹ƒoƒbƒNŠÖ”‚ğ“o˜^
+	// ã‚¤ãƒ™ãƒ³ãƒˆã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ã‚’ç™»éŒ²
 	m_pApp->SetEventCallback(EventCallback, this);
 
 	//nicoJKKakolog.Init(g_hinstDLL, m_pApp, szIniFileName_);
@@ -217,11 +218,11 @@ bool CNicoJK::Initialize()
 
 bool CNicoJK::Finalize()
 {
-	// I—¹ˆ—
+	// çµ‚äº†å‡¦ç†
 	if (m_pApp->IsPluginEnabled()) {
 		TogglePlugin(false);
 	}
-	// –{‘Ì‚â‘¼ƒvƒ‰ƒOƒCƒ“‚Æ‚ÌŠ±Â‚ğ–h‚®‚½‚ßAˆê’U—LŒø‚É‚µ‚½D&D‚ÍÅŒã‚Ü‚ÅˆÛ‚·‚é
+	// æœ¬ä½“ã‚„ä»–ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã¨ã®å¹²æ¸‰ã‚’é˜²ããŸã‚ã€ä¸€æ—¦æœ‰åŠ¹ã«ã—ãŸD&Dã¯æœ€å¾Œã¾ã§ç¶­æŒã™ã‚‹
 	if (bDragAcceptFiles_) {
 		DragAcceptFiles(m_pApp->GetAppWindow(), FALSE);
 		bDragAcceptFiles_ = false;
@@ -236,7 +237,7 @@ bool CNicoJK::TogglePlugin(bool bEnabled)
 	if (bEnabled) {
 		if (!hForce_) {
 			LoadFromIni();
-			// ƒlƒbƒgƒ[ƒN–¢Ú‘±‚Å‚àƒƒOƒtƒHƒ‹ƒ_‚É‚ ‚éƒ`ƒƒƒ“ƒlƒ‹‚ğ¨‚¢‘‹‚É•\¦‚Å‚«‚é‚æ‚¤‚É‚·‚é‚½‚ß
+			// ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯æœªæ¥ç¶šã§ã‚‚ãƒ­ã‚°ãƒ•ã‚©ãƒ«ãƒ€ã«ã‚ã‚‹ãƒãƒ£ãƒ³ãƒãƒ«ã‚’å‹¢ã„çª“ã«è¡¨ç¤ºã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹ãŸã‚
 			forceList_.clear();
 			if (s_.logfileFolder[0]) {
 				std::vector<WIN32_FIND_DATA> findList;
@@ -246,7 +247,7 @@ bool CNicoJK::TogglePlugin(bool bEnabled)
 				for (size_t i = 0; i < findList.size(); ++i) {
 					FORCE_ELEM e;
 					if (!StrCmpNI(findList[i].cFileName, TEXT("jk"), 2) && (e.jkID = StrToInt(&findList[i].cFileName[2])) > 0) {
-						// ‚Æ‚è‚ ‚¦‚¸‘g‚İ‚İ‚Ìƒ`ƒƒƒ“ƒlƒ‹–¼‚ğİ’è‚µ‚Ä‚¨‚­
+						// ã¨ã‚Šã‚ãˆãšçµ„ã¿è¾¼ã¿ã®ãƒãƒ£ãƒ³ãƒãƒ«åã‚’è¨­å®šã—ã¦ãŠã
 						JKID_NAME_ELEM f;
 						f.jkID = e.jkID;
 						f.name = TEXT("");
@@ -264,15 +265,15 @@ bool CNicoJK::TogglePlugin(bool bEnabled)
 					}
 				}
 			}
-			// •K—v‚È‚çƒT[ƒo‚É“n‚·Cookie‚ğæ“¾
+			// å¿…è¦ãªã‚‰ã‚µãƒ¼ãƒã«æ¸¡ã™Cookieã‚’å–å¾—
 			cookie_[0] = '\0';
 			TCHAR currDir[MAX_PATH];
 			if (s_.execGetCookie[0] && GetLongModuleFileName(NULL, currDir, _countof(currDir)) && PathRemoveFileSpec(currDir)) {
 				if (!GetProcessOutput(s_.execGetCookie, currDir, cookie_, _countof(cookie_), 10000)) {
 					cookie_[0] = '\0';
-					m_pApp->AddLog(L"execGetCookie‚ÌÀs‚É¸”s‚µ‚Ü‚µ‚½B");
+					m_pApp->AddLog(L"execGetCookieã®å®Ÿè¡Œã«å¤±æ•—ã—ã¾ã—ãŸã€‚");
 				} else {
-					// ‰üs->';'
+					// æ”¹è¡Œ->';'
 					StrTrimA(cookie_, " \t\n\r");
 					for (char *p = cookie_; *p; ++p) {
 						if (*p == '\n' || *p == '\r') {
@@ -288,17 +289,17 @@ bool CNicoJK::TogglePlugin(bool bEnabled)
 			this->nicoJKKakolog->Init(g_hinstDLL, m_pApp, szIniFileName_);
 #pragma endregion
 
-			// ¨‚¢‘‹ì¬
+			// å‹¢ã„çª“ä½œæˆ
 			hForce_ = CreateDialogParam(g_hinstDLL, MAKEINTRESOURCE(IDD_FORCE), NULL,
 			                            ForceDialogProc, reinterpret_cast<LPARAM>(this));
 			if (hForce_) {
-				// ƒEƒBƒ“ƒhƒEƒR[ƒ‹ƒoƒbƒNŠÖ”‚ğ“o˜^
+				// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ã‚’ç™»éŒ²
 				m_pApp->SetWindowMessageCallback(WindowMsgCallback, this);
-				// ƒXƒgƒŠ[ƒ€ƒR[ƒ‹ƒoƒbƒNŠÖ”‚ğ“o˜^(w’èƒtƒ@ƒCƒ‹Ä¶‹@”\‚Ì‚½‚ß‚Éí‚É“o˜^)
+				// ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ã‚’ç™»éŒ²(æŒ‡å®šãƒ•ã‚¡ã‚¤ãƒ«å†ç”Ÿæ©Ÿèƒ½ã®ãŸã‚ã«å¸¸ã«ç™»éŒ²)
 				ToggleStreamCallback(true);
-				// ƒL[ƒ{[ƒhƒtƒbƒN‚ğ“o˜^
+				// ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ãƒ•ãƒƒã‚¯ã‚’ç™»éŒ²
 				hKeyboardHook_ = SetWindowsHookEx(WH_KEYBOARD, KeyboardProc, g_hinstDLL, GetCurrentThreadId());
-				// DWM‚ÌXVƒ^ƒCƒ~ƒ“ƒO‚ÅTIMER_FORWARD‚ğŒÄ‚ÔƒXƒŒƒbƒh‚ğŠJn(VistaˆÈ~)
+				// DWMã®æ›´æ–°ã‚¿ã‚¤ãƒŸãƒ³ã‚°ã§TIMER_FORWARDã‚’å‘¼ã¶ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’é–‹å§‹(Vistaä»¥é™)
 				if (s_.timerInterval < 0) {
 					OSVERSIONINFO vi;
 					vi.dwOSVersionInfoSize = sizeof(vi);
@@ -311,7 +312,7 @@ bool CNicoJK::TogglePlugin(bool bEnabled)
 						}
 					}
 					if (!hSyncThread_) {
-						m_pApp->AddLog(L"Aero‚ª–³Œø‚Ì‚½‚ßİ’ètimerInterval‚ÌƒŠƒtƒŒƒbƒVƒ…“¯Šú‹@”\‚ÍƒIƒt‚É‚È‚è‚Ü‚·B");
+						m_pApp->AddLog(L"AeroãŒç„¡åŠ¹ã®ãŸã‚è¨­å®štimerIntervalã®ãƒªãƒ•ãƒ¬ãƒƒã‚·ãƒ¥åŒæœŸæ©Ÿèƒ½ã¯ã‚ªãƒ•ã«ãªã‚Šã¾ã™ã€‚");
 						SetTimer(hForce_, TIMER_FORWARD, 166667 / -s_.timerInterval, NULL);
 					}
 				}
@@ -351,12 +352,12 @@ bool CNicoJK::TogglePlugin(bool bEnabled)
 
 LRESULT CALLBACK CNicoJK::KeyboardProc(int code, WPARAM wParam, LPARAM lParam)
 {
-	// EnterƒL[‰Ÿ‰º
+	// Enterã‚­ãƒ¼æŠ¼ä¸‹
 	if (code == HC_ACTION && wParam == VK_RETURN && !(lParam & 0x40000000)) {
 		CNicoJK *pThis = dynamic_cast<CNicoJK*>(g_pPlugin);
-		// ƒtƒH[ƒJƒX‚ªƒRƒƒ“ƒg“ü—Í—“‚É‚ ‚ê‚ÎƒtƒbƒN
+		// ãƒ•ã‚©ãƒ¼ã‚«ã‚¹ãŒã‚³ãƒ¡ãƒ³ãƒˆå…¥åŠ›æ¬„ã«ã‚ã‚Œã°ãƒ•ãƒƒã‚¯
 		if (pThis && IsChild(GetDlgItem(pThis->hForce_, IDC_CB_POST), GetFocus())) {
-			// IME‚Å‚ÌEnter‚ğ–³‹‚·‚é(Ql: https://github.com/rutice/chapter.auf )
+			// IMEã§ã®Enterã‚’ç„¡è¦–ã™ã‚‹(å‚è€ƒ: https://github.com/rutice/chapter.auf )
 			HIMC hImc = ImmGetContext(pThis->hForce_);
 			bool bActive = ImmGetOpenStatus(hImc) && ImmGetCompositionString(hImc, GCS_COMPSTR, NULL, 0) > 0;
 			ImmReleaseContext(pThis->hForce_, hImc);
@@ -366,16 +367,16 @@ LRESULT CALLBACK CNicoJK::KeyboardProc(int code, WPARAM wParam, LPARAM lParam)
 			}
 		}
 	}
-	// Ctrl+'V'ƒL[‰Ÿ‰º
+	// Ctrl+'V'ã‚­ãƒ¼æŠ¼ä¸‹
 	else if (code == HC_ACTION && wParam == 'V' && GetKeyState(VK_CONTROL) < 0) {
 		CNicoJK *pThis = dynamic_cast<CNicoJK*>(g_pPlugin);
-		// ƒtƒH[ƒJƒX‚ªƒRƒƒ“ƒg“ü—Í—“‚É‚ ‚ê‚ÎƒtƒbƒN
+		// ãƒ•ã‚©ãƒ¼ã‚«ã‚¹ãŒã‚³ãƒ¡ãƒ³ãƒˆå…¥åŠ›æ¬„ã«ã‚ã‚Œã°ãƒ•ãƒƒã‚¯
 		if (pThis && IsChild(GetDlgItem(pThis->hForce_, IDC_CB_POST), GetFocus())) {
 			int len = GetWindowTextLength(GetDlgItem(pThis->hForce_, IDC_CB_POST));
 			LONG selRange = static_cast<LONG>(SendDlgItemMessage(pThis->hForce_, IDC_CB_POST, CB_GETEDITSEL, NULL, NULL));
-			// “ü—Í—“‚ª‹ó‚É‚È‚é‚Æ‚«‚¾‚¯ƒtƒbƒN
+			// å…¥åŠ›æ¬„ãŒç©ºã«ãªã‚‹ã¨ãã ã‘ãƒ•ãƒƒã‚¯
 			if (len == 0 || MAKELONG(0, len) == selRange) {
-				// ƒNƒŠƒbƒvƒ{[ƒh‚ğæ“¾
+				// ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã‚’å–å¾—
 				TCHAR clip[512];
 				clip[0] = TEXT('\0');
 				if (OpenClipboard(NULL)) {
@@ -389,7 +390,7 @@ LRESULT CALLBACK CNicoJK::KeyboardProc(int code, WPARAM wParam, LPARAM lParam)
 					}
 					CloseClipboard();
 				}
-				// ‰üs->ƒŒƒR[ƒhƒZƒpƒŒ[ƒ^
+				// æ”¹è¡Œ->ãƒ¬ã‚³ãƒ¼ãƒ‰ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿
 				LPTSTR q = clip;
 				bool bLF = false;
 				bool bMultiLine = false;
@@ -403,7 +404,7 @@ LRESULT CALLBACK CNicoJK::KeyboardProc(int code, WPARAM wParam, LPARAM lParam)
 					}
 				}
 				*q = TEXT('\0');
-				// ƒtƒbƒN‚ª•K—v‚È‚Ì‚Í•¡”s‚Ìƒy[ƒXƒg‚¾‚¯
+				// ãƒ•ãƒƒã‚¯ãŒå¿…è¦ãªã®ã¯è¤‡æ•°è¡Œã®ãƒšãƒ¼ã‚¹ãƒˆã ã‘
 				if (bMultiLine) {
 					SetDlgItemText(pThis->hForce_, IDC_CB_POST, clip);
 					SendMessage(pThis->hForce_, WM_COMMAND, MAKEWPARAM(IDC_CB_POST, CBN_EDITCHANGE), 0);
@@ -412,7 +413,7 @@ LRESULT CALLBACK CNicoJK::KeyboardProc(int code, WPARAM wParam, LPARAM lParam)
 			}
 		}
 	}
-	// ‘æ1ˆø”‚Í–³‹‚³‚ê‚é‚Æ‚Ì‚±‚Æ
+	// ç¬¬1å¼•æ•°ã¯ç„¡è¦–ã•ã‚Œã‚‹ã¨ã®ã“ã¨
 	return CallNextHookEx(NULL, code, wParam, lParam);
 }
 
@@ -423,11 +424,11 @@ unsigned int __stdcall CNicoJK::SyncThread(void *pParam)
 	int timeout = 0;
 	while (!pThis->bQuitSyncThread_) {
 		if (FAILED(DwmFlush())) {
-			// ƒrƒW[‚ÉŠ×‚ç‚È‚¢‚æ‚¤‚É
+			// ãƒ“ã‚¸ãƒ¼ã«é™¥ã‚‰ãªã„ã‚ˆã†ã«
 			Sleep(500);
 		}
 		if (count >= 10000) {
-			// J‚«Ø‚ê‚È‚¢—Ê‚ÌƒƒbƒZ[ƒW‚ğ‘—‚ç‚È‚¢
+			// æŒãåˆ‡ã‚Œãªã„é‡ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’é€ã‚‰ãªã„
 			if (pThis->bPendingTimerForward_ && --timeout >= 0) {
 				continue;
 			}
@@ -469,8 +470,8 @@ void CNicoJK::LoadFromIni()
 	s_.commentSize			= GetBufferedProfileInt(pBuf, TEXT("commentSize"), 100);
 	s_.commentSizeMin		= GetBufferedProfileInt(pBuf, TEXT("commentSizeMin"), 16);
 	s_.commentSizeMax		= GetBufferedProfileInt(pBuf, TEXT("commentSizeMax"), 9999);
-	GetBufferedProfileString(pBuf, TEXT("commentFontName"), TEXT("‚l‚r ‚oƒSƒVƒbƒN"), s_.commentFontName, _countof(s_.commentFontName));
-	GetBufferedProfileString(pBuf, TEXT("commentFontNameMulti"), TEXT("‚l‚r ‚oƒSƒVƒbƒN"), s_.commentFontNameMulti, _countof(s_.commentFontNameMulti));
+	GetBufferedProfileString(pBuf, TEXT("commentFontName"), TEXT("ï¼­ï¼³ ï¼°ã‚´ã‚·ãƒƒã‚¯"), s_.commentFontName, _countof(s_.commentFontName));
+	GetBufferedProfileString(pBuf, TEXT("commentFontNameMulti"), TEXT("ï¼­ï¼³ ï¼°ã‚´ã‚·ãƒƒã‚¯"), s_.commentFontNameMulti, _countof(s_.commentFontNameMulti));
 	s_.bCommentFontBold		= GetBufferedProfileInt(pBuf, TEXT("commentFontBold"), 1) != 0;
 	s_.bCommentFontAntiAlias = GetBufferedProfileInt(pBuf, TEXT("commentFontAntiAlias"), 1) != 0;
 	s_.commentDuration		= GetBufferedProfileInt(pBuf, TEXT("commentDuration"), CCommentWindow::DISPLAY_DURATION);
@@ -494,7 +495,7 @@ void CNicoJK::LoadFromIni()
 	s_.maxAutoReplace		= GetBufferedProfileInt(pBuf, TEXT("maxAutoReplace"), 20);
 	GetBufferedProfileString(pBuf, TEXT("abone"), TEXT("### NG ### &"), s_.abone, _countof(s_.abone));
 	s_.dropLogfileMode		= GetBufferedProfileInt(pBuf, TEXT("dropLogfileMode"), 0);
-	// À‹µƒƒOƒtƒHƒ‹ƒ_‚ÌƒpƒX‚ğì¬
+	// å®Ÿæ³ãƒ­ã‚°ãƒ•ã‚©ãƒ«ãƒ€ã®ãƒ‘ã‚¹ã‚’ä½œæˆ
 	TCHAR path[MAX_PATH], dir[MAX_PATH];
 	GetBufferedProfileString(pBuf, TEXT("logfileFolder"), TEXT("Plugins\\NicoJK"), path, _countof(path));
 	if (path[0] && PathIsRelative(path)) {
@@ -525,12 +526,12 @@ void CNicoJK::LoadFromIni()
 		NETWORK_SERVICE_ID_ELEM e = {DEFAULT_NTSID_TABLE[i]&~0xFFF0, DEFAULT_NTSID_TABLE[i]>>4&0xFFF};
 		ntsIDList_.push_back(e);
 	}
-	// İ’èƒtƒ@ƒCƒ‹‚Ìƒlƒbƒgƒ[ƒN/ƒT[ƒrƒXID-À‹µID‘ÎÆ•\‚ğAƒ\[ƒg‚ğˆÛ‚µ‚È‚ª‚çƒ}[ƒW
+	// è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯/ã‚µãƒ¼ãƒ“ã‚¹ID-å®Ÿæ³IDå¯¾ç…§è¡¨ã‚’ã€ã‚½ãƒ¼ãƒˆã‚’ç¶­æŒã—ãªãŒã‚‰ãƒãƒ¼ã‚¸
 	pBuf = NewGetPrivateProfileSection(TEXT("Channels"), szIniFileName_);
 	for (LPCTSTR p = pBuf; *p; p += lstrlen(p) + 1) {
 		NETWORK_SERVICE_ID_ELEM e;
 		if (_stscanf_s(p, TEXT("0x%x=%d"), &e.ntsID, &e.jkID) == 2) {
-			// İ’èƒtƒ@ƒCƒ‹‚Ì’è‹`‚Å‚ÍãˆÊ‚Æ‰ºˆÊ‚ğ‚Ğ‚Á‚­‚è•Ô‚µ‚Ä‚¢‚é‚Ì‚Å•â³
+			// è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã®å®šç¾©ã§ã¯ä¸Šä½ã¨ä¸‹ä½ã‚’ã²ã£ãã‚Šè¿”ã—ã¦ã„ã‚‹ã®ã§è£œæ­£
 			e.ntsID = (e.ntsID<<16) | (e.ntsID>>16);
 			std::vector<NETWORK_SERVICE_ID_ELEM>::iterator it =
 				std::lower_bound(ntsIDList_.begin(), ntsIDList_.end(), e, NETWORK_SERVICE_ID_ELEM::COMPARE());
@@ -574,7 +575,7 @@ void CNicoJK::LoadRplListFromIni(LPCTSTR section, std::vector<RPL_ELEM> *pRplLis
 			GetBufferedProfileString(pBuf, key, TEXT(""), e.pattern, _countof(e.pattern));
 			if (!e.AssignFromPattern()) {
 				TCHAR text[64];
-				wsprintf(text, TEXT("%s‚Ì³‹K•\Œ»‚ªˆÙí‚Å‚·B"), key);
+				wsprintf(text, TEXT("%sã®æ­£è¦è¡¨ç¾ãŒç•°å¸¸ã§ã™ã€‚"), key);
 				m_pApp->AddLog(text);
 			} else {
 				pRplList->push_back(e);
@@ -625,14 +626,14 @@ static BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
 	void **params = reinterpret_cast<void**>(lParam);
 	TCHAR className[64];
 	if (GetClassName(hwnd, className, _countof(className)) && !lstrcmp(className, static_cast<LPCTSTR>(params[1]))) {
-		// Œ©‚Â‚©‚Á‚½
+		// è¦‹ã¤ã‹ã£ãŸ
 		*static_cast<HWND*>(params[0]) = hwnd;
 		return FALSE;
 	}
 	return TRUE;
 }
 
-// TVTest‚ÌVideo ContainerƒEƒBƒ“ƒhƒE‚ğ’T‚·
+// TVTestã®Video Containerã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’æ¢ã™
 HWND CNicoJK::FindVideoContainer()
 {
 	HWND hwndFound = NULL;
@@ -649,7 +650,7 @@ HWND CNicoJK::FindVideoContainer()
 	return hwndFound;
 }
 
-// Ä¶’†‚ÌƒXƒgƒŠ[ƒ€‚Ìƒlƒbƒgƒ[ƒN/ƒT[ƒrƒXID‚ğæ“¾‚·‚é
+// å†ç”Ÿä¸­ã®ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯/ã‚µãƒ¼ãƒ“ã‚¹IDã‚’å–å¾—ã™ã‚‹
 DWORD CNicoJK::GetCurrentNetworkServiceID()
 {
 	TVTest::ServiceInfo si;
@@ -659,14 +660,14 @@ DWORD CNicoJK::GetCurrentNetworkServiceID()
 		
 		if (m_pApp->GetCurrentChannelInfo(&ci) && ci.NetworkID) {
 			if (0x7880 <= ci.NetworkID && ci.NetworkID <= 0x7FEF) {
-				// ’nã”g‚ÌƒT[ƒrƒXí•Ê‚ÆƒT[ƒrƒX”Ô†‚Íƒ}ƒXƒN‚·‚é
+				// åœ°ä¸Šæ³¢ã®ã‚µãƒ¼ãƒ“ã‚¹ç¨®åˆ¥ã¨ã‚µãƒ¼ãƒ“ã‚¹ç•ªå·ã¯ãƒã‚¹ã‚¯ã™ã‚‹
 				return (static_cast<DWORD>(si.ServiceID&~0x0187) << 16) | 0x000F;
 			}
 			return (static_cast<DWORD>(si.ServiceID) << 16) | ci.NetworkID;
 		}
-		// ƒ`ƒƒƒ“ƒlƒ‹ƒXƒLƒƒƒ“‚µ‚Ä‚¢‚È‚¢‚ÆGetCurrentChannelInfo()‚àƒlƒbƒgƒ[ƒNID‚Ìæ“¾‚É¸”s‚·‚é‚æ‚¤
+		// ãƒãƒ£ãƒ³ãƒãƒ«ã‚¹ã‚­ãƒ£ãƒ³ã—ã¦ã„ãªã„ã¨GetCurrentChannelInfo()ã‚‚ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯IDã®å–å¾—ã«å¤±æ•—ã™ã‚‹ã‚ˆã†
 		if (si.ServiceID >= 0x0400) {
-			// ’nã”g‚Á‚Û‚¢‚Ì‚Åƒ}ƒXƒN‚·‚é
+			// åœ°ä¸Šæ³¢ã£ã½ã„ã®ã§ãƒã‚¹ã‚¯ã™ã‚‹
 			return (static_cast<DWORD>(si.ServiceID&~0x0187) << 16) | 0;
 		}
 		return (static_cast<DWORD>(si.ServiceID) << 16) | 0;
@@ -674,14 +675,14 @@ DWORD CNicoJK::GetCurrentNetworkServiceID()
 	return 0;
 }
 
-// w’èƒ`ƒƒƒ“ƒlƒ‹‚Ìƒlƒbƒgƒ[ƒN/ƒT[ƒrƒXID‚ğæ“¾‚·‚é
+// æŒ‡å®šãƒãƒ£ãƒ³ãƒãƒ«ã®ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯/ã‚µãƒ¼ãƒ“ã‚¹IDã‚’å–å¾—ã™ã‚‹
 bool CNicoJK::GetChannelNetworkServiceID(int tuningSpace, int channelIndex, DWORD *pNtsID)
 {
 	TVTest::ChannelInfo ci;
 	if (m_pApp->GetChannelInfo(tuningSpace, channelIndex, &ci)) {
 		if (ci.NetworkID && ci.ServiceID) {
 			if (0x7880 <= ci.NetworkID && ci.NetworkID <= 0x7FEF) {
-				// ’nã”g‚ÌƒT[ƒrƒXí•Ê‚ÆƒT[ƒrƒX”Ô†‚Íƒ}ƒXƒN‚·‚é
+				// åœ°ä¸Šæ³¢ã®ã‚µãƒ¼ãƒ“ã‚¹ç¨®åˆ¥ã¨ã‚µãƒ¼ãƒ“ã‚¹ç•ªå·ã¯ãƒã‚¹ã‚¯ã™ã‚‹
 				*pNtsID = (static_cast<DWORD>(ci.ServiceID&~0x0187) << 16) | 0x000F;
 				return true;
 			}
@@ -694,26 +695,26 @@ bool CNicoJK::GetChannelNetworkServiceID(int tuningSpace, int channelIndex, DWOR
 	return false;
 }
 
-// Ä¶’†‚ÌƒXƒgƒŠ[ƒ€‚ÌTOT(æ“¾‚©‚ç‚ÌŒo‰ßŠÔ‚Å•â³Ï‚İ)‚ğUTC‚Åæ“¾‚·‚é
+// å†ç”Ÿä¸­ã®ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®TOTæ™‚åˆ»(å–å¾—ã‹ã‚‰ã®çµŒéæ™‚é–“ã§è£œæ­£æ¸ˆã¿)ã‚’UTCã§å–å¾—ã™ã‚‹
 bool CNicoJK::GetCurrentTot(FILETIME *pft)
 {
 	CBlockLock lock(&streamLock_);
 	DWORD tick = GetTickCount();
 	if (ftTot_[0].dwHighDateTime == 0xFFFFFFFF) {
-		// TOT‚ğæ“¾‚Å‚«‚Ä‚¢‚È‚¢
+		// TOTã‚’å–å¾—ã§ãã¦ã„ãªã„
 		return false;
 	} else if (tick - pcrTick_ >= 2000) {
-		// 2•bˆÈãPCR‚ğæ“¾‚Å‚«‚Ä‚¢‚È‚¢¨ƒ|[ƒY’†?
+		// 2ç§’ä»¥ä¸ŠPCRã‚’å–å¾—ã§ãã¦ã„ãªã„â†’ãƒãƒ¼ã‚ºä¸­?
 		*pft = ftTot_[0];
 		return true;
 	} else if (ftTot_[1].dwHighDateTime == 0xFFFFFFFF) {
-		// Ä¶‘¬“x‚Í•ª‚©‚ç‚È‚¢
+		// å†ç”Ÿé€Ÿåº¦ã¯åˆ†ã‹ã‚‰ãªã„
 		*pft = ftTot_[0];
 		*pft += (tick - totTick_[0]) * FILETIME_MILLISECOND;
 		return true;
 	} else {
 		DWORD delta = totTick_[0] - totTick_[1];
-		// Ä¶‘¬“x(10%`1000%)
+		// å†ç”Ÿé€Ÿåº¦(10%ï½1000%)
 		LONGLONG speed = !delta ? FILETIME_MILLISECOND : (ftTot_[0] - ftTot_[1]) / delta;
 		speed = min(max(speed, FILETIME_MILLISECOND / 10), FILETIME_MILLISECOND * 10);
 		*pft = ftTot_[0];
@@ -722,7 +723,7 @@ bool CNicoJK::GetCurrentTot(FILETIME *pft)
 	}
 }
 
-// Œ»İ‚ÌBonDriver‚ª':'‹æØ‚è‚ÌƒŠƒXƒg‚ÉŠÜ‚Ü‚ê‚é‚©‚Ç‚¤‚©’²‚×‚é
+// ç¾åœ¨ã®BonDriverãŒ':'åŒºåˆ‡ã‚Šã®ãƒªã‚¹ãƒˆã«å«ã¾ã‚Œã‚‹ã‹ã©ã†ã‹èª¿ã¹ã‚‹
 bool CNicoJK::IsMatchDriverName(LPCTSTR drivers)
 {
 	TCHAR path[MAX_PATH];
@@ -739,41 +740,41 @@ bool CNicoJK::IsMatchDriverName(LPCTSTR drivers)
 	return false;
 }
 
-// w’è‚µ‚½À‹µID‚ÌƒƒOƒtƒ@ƒCƒ‹‚É‘‚«‚Ş
-// jkID‚ª•‰’l‚Ì‚Æ‚«‚ÍƒƒOƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚é
+// æŒ‡å®šã—ãŸå®Ÿæ³IDã®ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãè¾¼ã‚€
+// jkIDãŒè² å€¤ã®ã¨ãã¯ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‰ã˜ã‚‹
 void CNicoJK::WriteToLogfile(int jkID, const char *text)
 {
 	if (!s_.logfileFolder[0] || s_.logfileMode == 0 || s_.logfileMode == 1 && !bRecording_) {
-		// ƒƒO‚ğ‹L˜^‚µ‚È‚¢
+		// ãƒ­ã‚°ã‚’è¨˜éŒ²ã—ãªã„
 		jkID = -1;
 	}
 	if (currentLogfileJK_ >= 0 && currentLogfileJK_ != jkID) {
-		// •Â‚¶‚é
+		// é–‰ã˜ã‚‹
 		CloseHandle(hLogfile_);
 		CloseHandle(hLogfileLock_);
-		// ƒƒbƒNƒtƒ@ƒCƒ‹‚ğíœ
+		// ãƒ­ãƒƒã‚¯ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‰Šé™¤
 		TCHAR lockPath[_countof(s_.logfileFolder) + 32];
 		wsprintf(lockPath, TEXT("%s\\jk%d\\lockfile"), s_.logfileFolder, currentLogfileJK_);
 		DeleteFile(lockPath);
 		currentLogfileJK_ = -1;
-		OutputMessageLog(TEXT("ƒƒOƒtƒ@ƒCƒ‹‚Ì‘‚«‚İ‚ğI—¹‚µ‚Ü‚µ‚½B"));
+		OutputMessageLog(TEXT("ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã®æ›¸ãè¾¼ã¿ã‚’çµ‚äº†ã—ã¾ã—ãŸã€‚"));
 	}
 	if (currentLogfileJK_ < 0 && jkID >= 0) {
 		unsigned int tm;
 		TCHAR dir[_countof(s_.logfileFolder) + 32];
 		wsprintf(dir, TEXT("%s\\jk%d"), s_.logfileFolder, jkID);
 		if (GetChatDate(&tm, text) && (PathFileExists(dir) || CreateDirectory(dir, NULL))) {
-			// ƒƒbƒNƒtƒ@ƒCƒ‹‚ğŠJ‚­
+			// ãƒ­ãƒƒã‚¯ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã
 			TCHAR lockPath[_countof(dir) + 32];
 			wsprintf(lockPath, TEXT("%s\\lockfile"), dir);
 			hLogfileLock_ = CreateFile(lockPath, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 			if (hLogfileLock_ != INVALID_HANDLE_VALUE) {
-				// ŠJ‚­
+				// é–‹ã
 				TCHAR path[_countof(dir) + 32];
 				wsprintf(path, TEXT("%s\\%010u.txt"), dir, tm);
 				hLogfile_ = CreateFile(path, FILE_APPEND_DATA, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 				if (hLogfile_ != INVALID_HANDLE_VALUE) {
-					// ƒwƒbƒ_‚ğ‘‚«‚Ş(•Ê‚É–³‚­‚Ä‚à‚¢‚¢)
+					// ãƒ˜ãƒƒãƒ€ã‚’æ›¸ãè¾¼ã‚€(åˆ¥ã«ç„¡ãã¦ã‚‚ã„ã„)
 					FILETIME ftUtc, ft;
 					UnixTimeToFileTime(tm, &ftUtc);
 					FileTimeToLocalFileTime(&ftUtc, &ft);
@@ -787,7 +788,7 @@ void CNicoJK::WriteToLogfile(int jkID, const char *text)
 					currentLogfileJK_ = jkID;
 
 					TCHAR debug[_countof(path) + 64];
-					wsprintf(debug, TEXT("ƒƒOƒtƒ@ƒCƒ‹\"%s\"‚Ì‘‚«‚İ‚ğŠJn‚µ‚Ü‚µ‚½B"),
+					wsprintf(debug, TEXT("ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«\"%s\"ã®æ›¸ãè¾¼ã¿ã‚’é–‹å§‹ã—ã¾ã—ãŸã€‚"),
 					         StrRChr(path, StrRChr(path, NULL, TEXT('\\')), TEXT('\\')) + 1);
 					OutputMessageLog(debug);
 				} else {
@@ -797,7 +798,7 @@ void CNicoJK::WriteToLogfile(int jkID, const char *text)
 			}
 		}
 	}
-	// ŠJ‚¢‚Ä‚½‚ç‘‚«‚Ş
+	// é–‹ã„ã¦ãŸã‚‰æ›¸ãè¾¼ã‚€
 	if (currentLogfileJK_ >= 0) {
 		DWORD written;
 		WriteFile(hLogfile_, text, lstrlenA(text), &written, NULL);
@@ -807,45 +808,45 @@ void CNicoJK::WriteToLogfile(int jkID, const char *text)
 
 #define DWORD_MSB(x) ((x) & 0x80000000)
 
-// w’è‚µ‚½À‹µID‚Ìw’è‚ÌƒƒO1s‚ğ“Ç‚İ‚Ş
-// jkID‚ª•‰’l‚Ì‚Æ‚«‚ÍƒƒOƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚é
-// jkID==0‚Íw’èƒtƒ@ƒCƒ‹Ä¶(tmpSpecFileName_)‚ğ•\‚·“Áê‚ÈÀ‹µID‚Æ‚·‚é
+// æŒ‡å®šã—ãŸå®Ÿæ³IDã®æŒ‡å®šæ™‚åˆ»ã®ãƒ­ã‚°1è¡Œã‚’èª­ã¿è¾¼ã‚€
+// jkIDãŒè² å€¤ã®ã¨ãã¯ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‰ã˜ã‚‹
+// jkID==0ã¯æŒ‡å®šãƒ•ã‚¡ã‚¤ãƒ«å†ç”Ÿ(tmpSpecFileName_)ã‚’è¡¨ã™ç‰¹æ®Šãªå®Ÿæ³IDã¨ã™ã‚‹
 bool CNicoJK::ReadFromLogfile(int jkID, char *text, int textMax, unsigned int tmToRead)
 {
 	if (jkID != 0 && (!s_.logfileFolder[0] || !bUsingLogfileDriver_)) {
-		// ƒƒO‚ğ“Ç‚Ü‚È‚¢
+		// ãƒ­ã‚°ã‚’èª­ã¾ãªã„
 		jkID = -1;
 	}
 	DWORD tick = GetTickCount();
 	if (currentReadLogfileJK_ >= 0 && currentReadLogfileJK_ != jkID) {
-		// •Â‚¶‚é
+		// é–‰ã˜ã‚‹
 		readLogfile_.Close();
 		readLogfileTick_ = tick;
 		currentReadLogfileJK_ = -1;
-		OutputMessageLog(TEXT("ƒƒOƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ‚ğI—¹‚µ‚Ü‚µ‚½B"));
+		OutputMessageLog(TEXT("ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿ã‚’çµ‚äº†ã—ã¾ã—ãŸã€‚"));
 	}
 	if (!DWORD_MSB(tick - readLogfileTick_) && currentReadLogfileJK_ < 0 && jkID >= 0) {
-		// ƒtƒ@ƒCƒ‹ƒ`ƒFƒbƒN‚ğ‘å—Ê‚ÉŒJ‚è‚©‚¦‚·‚Ì‚ğ–h‚®
+		// ãƒ•ã‚¡ã‚¤ãƒ«ãƒã‚§ãƒƒã‚¯ã‚’å¤§é‡ã«ç¹°ã‚Šã‹ãˆã™ã®ã‚’é˜²ã
 		readLogfileTick_ = tick + READ_LOG_FOLDER_INTERVAL;
 		TCHAR path[_countof(s_.logfileFolder) + 64];
 		path[0] = TEXT('\0');
 		if (jkID == 0) {
-			// w’èƒtƒ@ƒCƒ‹Ä¶
+			// æŒ‡å®šãƒ•ã‚¡ã‚¤ãƒ«å†ç”Ÿ
 			lstrcpyn(path, tmpSpecFileName_, _countof(path));
 		} else {
-			// jkID‚ÌƒƒOƒtƒ@ƒCƒ‹ˆê——‚ğ–¼‘O‡‚Å“¾‚é
+			// jkIDã®ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§ã‚’åå‰é †ã§å¾—ã‚‹
 			std::vector<WIN32_FIND_DATA> findList;
 			std::vector<LPWIN32_FIND_DATA> sortedList;
 			TCHAR pattern[_countof(s_.logfileFolder) + 64];
 			wsprintf(pattern, TEXT("%s\\jk%d\\??????????.txt"), s_.logfileFolder, jkID);
 			GetFindFileList(pattern, &findList, &sortedList);
-			// tmToReadˆÈ‘O‚Å‚à‚Á‚Æ‚àV‚µ‚¢ƒƒOƒtƒ@ƒCƒ‹‚ğ’T‚·
+			// tmToReadä»¥å‰ã§ã‚‚ã£ã¨ã‚‚æ–°ã—ã„ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ¢ã™
 			WIN32_FIND_DATA findData;
 			wsprintf(findData.cFileName, TEXT("%010u.txt"), tmToRead + (READ_LOG_FOLDER_INTERVAL / 1000 + 2));
 			std::vector<LPWIN32_FIND_DATA>::const_iterator it =
 				std::lower_bound(sortedList.begin(), sortedList.end(), &findData, LPWIN32_FIND_DATA_COMPARE());
 			if (it != sortedList.begin()) {
-				// Œ©‚Â‚©‚Á‚½
+				// è¦‹ã¤ã‹ã£ãŸ
 				wsprintf(path, TEXT("%s\\jk%d\\%.14s"), s_.logfileFolder, jkID, (*(--it))->cFileName);
 			}
 		}
@@ -853,12 +854,12 @@ bool CNicoJK::ReadFromLogfile(int jkID, char *text, int textMax, unsigned int tm
 			if (readLogfile_.Open(path, FILE_SHARE_READ | FILE_SHARE_WRITE, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN)) {
 				char last[CHAT_TAG_MAX];
 				unsigned int tmLast;
-				// ÅIs‚ªtmToRead‚æ‚è‰ß‹‚È‚ç“Ç‚Ş‰¿’l–³‚µ
+				// æœ€çµ‚è¡ŒãŒtmToReadã‚ˆã‚Šéå»ãªã‚‰èª­ã‚€ä¾¡å€¤ç„¡ã—
 				if (!readLogfile_.ReadLastLine(last, _countof(last)) || !GetChatDate(&tmLast, last) || tmLast < tmToRead) {
-					// •Â‚¶‚é
+					// é–‰ã˜ã‚‹
 					readLogfile_.Close();
 				} else {
-					// ‚Ü‚¸2•ª’Tõ
+					// ã¾ãš2åˆ†æ¢ç´¢
 					for (int scale = 2; ; scale *= 2) {
 						char middle[CHAT_TAG_MAX];
 						int sign = 0;
@@ -872,34 +873,34 @@ bool CNicoJK::ReadFromLogfile(int jkID, char *text, int textMax, unsigned int tm
 								break;
 							}
 						}
-						// s‚Ì‚ª“¾‚ç‚ê‚È‚¢‚©Å‰‚Ìs‚ª‚·‚Å‚É–¢—ˆ‚È‚çƒŠƒZƒbƒg
+						// è¡Œã®æ™‚åˆ»ãŒå¾—ã‚‰ã‚Œãªã„ã‹æœ€åˆã®è¡ŒãŒã™ã§ã«æœªæ¥ãªã‚‰ãƒªã‚»ãƒƒãƒˆ
 						if (sign == 0 || sign < 0 && scale == 2) {
 							readLogfile_.ResetPointer();
 							break;
 						}
 						int moveSize = readLogfile_.Seek(sign * scale);
 						dprintf(TEXT("CNicoJK::ReadFromLogfile() moveSize=%d\n"), moveSize); // DEBUG
-						// ˆÚ“®—Ê‚ª¬‚³‚­‚È‚ê‚Î‘Å‚¿Ø‚è
+						// ç§»å‹•é‡ãŒå°ã•ããªã‚Œã°æ‰“ã¡åˆ‡ã‚Š
 						if (-32 * 1024 < moveSize && moveSize < 32 * 1024) {
-							// tmToRead‚æ‚è‚àŠmÀ‚É‰ß‹‚É‚È‚éˆÊ’u‚Ü‚Å–ß‚·
+							// tmToReadã‚ˆã‚Šã‚‚ç¢ºå®Ÿã«éå»ã«ãªã‚‹ä½ç½®ã¾ã§æˆ»ã™
 							readLogfile_.Seek(-scale);
-							// ƒV[ƒN’¼Œã‚Ì’†“r”¼’[‚È1s‚ğ“Ç‚İ”ò‚Î‚·
+							// ã‚·ãƒ¼ã‚¯ç›´å¾Œã®ä¸­é€”åŠç«¯ãª1è¡Œã‚’èª­ã¿é£›ã°ã™
 							readLogfile_.ReadLine(middle, 1);
 							break;
 						}
 						readLogfile_.ReadLine(middle, 1);
 					}
-					// tmToRead‚æ‚è‰ß‹‚Ìs‚ğ“Ç‚İ”ò‚Î‚·
+					// tmToReadã‚ˆã‚Šéå»ã®è¡Œã‚’èª­ã¿é£›ã°ã™
 					for (;;) {
 						if (!readLogfile_.ReadLine(readLogText_, _countof(readLogText_))) {
-							// •Â‚¶‚é
+							// é–‰ã˜ã‚‹
 							readLogfile_.Close();
 							break;
-						} else if (GetChatDate(&tmReadLogText_, readLogText_) && tmReadLogText_ > tmToRead/*>=‚Íƒ_ƒ*/) {
+						} else if (GetChatDate(&tmReadLogText_, readLogText_) && tmReadLogText_ > tmToRead/*>=ã¯ãƒ€ãƒ¡*/) {
 							currentReadLogfileJK_ = jkID;
 
 							TCHAR debug[_countof(path) + 64];
-							wsprintf(debug, TEXT("ƒƒOƒtƒ@ƒCƒ‹\"jk%d\\%s\"‚Ì“Ç‚İ‚İ‚ğŠJn‚µ‚Ü‚µ‚½B"), jkID, PathFindFileName(path));
+							wsprintf(debug, TEXT("ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«\"jk%d\\%s\"ã®èª­ã¿è¾¼ã¿ã‚’é–‹å§‹ã—ã¾ã—ãŸã€‚"), jkID, PathFindFileName(path));
 							OutputMessageLog(debug);
 							break;
 						}
@@ -909,7 +910,7 @@ bool CNicoJK::ReadFromLogfile(int jkID, char *text, int textMax, unsigned int tm
 		}
 	}
 	bool bRet = false;
-	// ŠJ‚¢‚Ä‚½‚ç“Ç‚İ‚Ş
+	// é–‹ã„ã¦ãŸã‚‰èª­ã¿è¾¼ã‚€
 	if (currentReadLogfileJK_ >= 0) {
 		if (readLogText_[0] && tmReadLogText_ <= tmToRead) {
 			lstrcpynA(text, readLogText_, textMax);
@@ -919,11 +920,11 @@ bool CNicoJK::ReadFromLogfile(int jkID, char *text, int textMax, unsigned int tm
 		if (!readLogText_[0]) {
 			for (;;) {
 				if (!readLogfile_.ReadLine(readLogText_, _countof(readLogText_))) {
-					// •Â‚¶‚é
+					// é–‰ã˜ã‚‹
 					readLogfile_.Close();
 					readLogfileTick_ = tick;
 					currentReadLogfileJK_ = -1;
-					OutputMessageLog(TEXT("ƒƒOƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ‚ğI—¹‚µ‚Ü‚µ‚½B"));
+					OutputMessageLog(TEXT("ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿ã‚’çµ‚äº†ã—ã¾ã—ãŸã€‚"));
 					break;
 				} else if (GetChatDate(&tmReadLogText_, readLogText_)) {
 					break;
@@ -940,37 +941,37 @@ static int GetWindowHeight(HWND hwnd)
 	return hwnd && GetWindowRect(hwnd, &rc) ? rc.bottom - rc.top : 0;
 }
 
-// ƒCƒxƒ“ƒgƒR[ƒ‹ƒoƒbƒNŠÖ”
-// ‰½‚©ƒCƒxƒ“ƒg‚ª‹N‚«‚é‚ÆŒÄ‚Î‚ê‚é
+// ã‚¤ãƒ™ãƒ³ãƒˆã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
+// ä½•ã‹ã‚¤ãƒ™ãƒ³ãƒˆãŒèµ·ãã‚‹ã¨å‘¼ã°ã‚Œã‚‹
 LRESULT CALLBACK CNicoJK::EventCallback(UINT Event, LPARAM lParam1, LPARAM lParam2, void *pClientData)
 {
 	CNicoJK *pThis = static_cast<CNicoJK*>(pClientData);
 	switch (Event) {
 	case TVTest::EVENT_PLUGINENABLE:
-		// ƒvƒ‰ƒOƒCƒ“‚Ì—LŒøó‘Ô‚ª•Ï‰»‚µ‚½
+		// ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®æœ‰åŠ¹çŠ¶æ…‹ãŒå¤‰åŒ–ã—ãŸ
 		return pThis->TogglePlugin(lParam1 != 0);
 	case TVTest::EVENT_RECORDSTATUSCHANGE:
-		// ˜^‰æó‘Ô‚ª•Ï‰»‚µ‚½
+		// éŒ²ç”»çŠ¶æ…‹ãŒå¤‰åŒ–ã—ãŸ
 		pThis->bRecording_ = lParam1 != TVTest::RECORD_STATUS_NOTRECORDING;
 		break;
 	case TVTest::EVENT_FULLSCREENCHANGE:
-		// ‘S‰æ–Ê•\¦ó‘Ô‚ª•Ï‰»‚µ‚½
+		// å…¨ç”»é¢è¡¨ç¤ºçŠ¶æ…‹ãŒå¤‰åŒ–ã—ãŸ
 		if (pThis->m_pApp->IsPluginEnabled()) {
-			// ƒI[ƒi[‚ª•Ï‚í‚é‚Ì‚ÅƒRƒƒ“ƒgƒEƒBƒ“ƒhƒE‚ğì‚è‚È‚¨‚·
+			// ã‚ªãƒ¼ãƒŠãƒ¼ãŒå¤‰ã‚ã‚‹ã®ã§ã‚³ãƒ¡ãƒ³ãƒˆã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’ä½œã‚ŠãªãŠã™
 			pThis->commentWindow_.Destroy();
 			if (pThis->commentWindow_.GetOpacity() != 0 && pThis->m_pApp->GetPreview()) {
 				HWND hwnd = pThis->FindVideoContainer();
 				pThis->commentWindow_.Create(hwnd);
 				pThis->bHalfSkip_ = GetWindowHeight(hwnd) >= pThis->s_.halfSkipThreshold;
 			}
-			// ‘S‰æ–Ê‘JˆÚ‚Í‰B‚ê‚½‚Ù‚¤‚ªg‚¢Ÿè‚ª‚¢‚¢‚Ì‚ÅŒÄ‚Î‚È‚¢
+			// å…¨ç”»é¢é·ç§»æ™‚ã¯éš ã‚ŒãŸã»ã†ãŒä½¿ã„å‹æ‰‹ãŒã„ã„ã®ã§å‘¼ã°ãªã„
 			if (!lParam1) {
 				SendMessage(pThis->hForce_, WM_SET_ZORDER, 0, 0);
 			}
 		}
 		break;
 	case TVTest::EVENT_PREVIEWCHANGE:
-		// ƒvƒŒƒrƒ…[•\¦ó‘Ô‚ª•Ï‰»‚µ‚½
+		// ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼è¡¨ç¤ºçŠ¶æ…‹ãŒå¤‰åŒ–ã—ãŸ
 		if (pThis->m_pApp->IsPluginEnabled()) {
 			if (pThis->commentWindow_.GetOpacity() != 0 && lParam1 != 0) {
 				HWND hwnd = pThis->FindVideoContainer();
@@ -983,36 +984,36 @@ LRESULT CALLBACK CNicoJK::EventCallback(UINT Event, LPARAM lParam1, LPARAM lPara
 		}
 		break;
 	case TVTest::EVENT_DRIVERCHANGE:
-		// ƒhƒ‰ƒCƒo‚ª•ÏX‚³‚ê‚½
+		// ãƒ‰ãƒ©ã‚¤ãƒãŒå¤‰æ›´ã•ã‚ŒãŸ
 		if (pThis->m_pApp->IsPluginEnabled()) {
 			pThis->bUsingLogfileDriver_ = pThis->IsMatchDriverName(pThis->s_.logfileDrivers);
 		}
 		// FALL THROUGH!
 	case TVTest::EVENT_CHANNELCHANGE:
-		// ƒ`ƒƒƒ“ƒlƒ‹‚ª•ÏX‚³‚ê‚½
+		// ãƒãƒ£ãƒ³ãƒãƒ«ãŒå¤‰æ›´ã•ã‚ŒãŸ
 		if (pThis->m_pApp->IsPluginEnabled()) {
 			PostMessage(pThis->hForce_, WM_RESET_STREAM, 0, 0);
 		}
 		// FALL THROUGH!
 	case TVTest::EVENT_SERVICECHANGE:
-		// ƒT[ƒrƒX‚ª•ÏX‚³‚ê‚½
+		// ã‚µãƒ¼ãƒ“ã‚¹ãŒå¤‰æ›´ã•ã‚ŒãŸ
 		if (pThis->m_pApp->IsPluginEnabled()) {
-			// d•¡‚âƒUƒbƒsƒ“ƒO‘Îô‚Ì‚½‚ßƒ^ƒCƒ}‚ÅŒÄ‚Ô
+			// é‡è¤‡ã‚„ã‚¶ãƒƒãƒ”ãƒ³ã‚°å¯¾ç­–ã®ãŸã‚ã‚¿ã‚¤ãƒã§å‘¼ã¶
 			SetTimer(pThis->hForce_, TIMER_SETUP_CURJK, SETUP_CURJK_DELAY, NULL);
 		}
 		break;
 	case TVTest::EVENT_SERVICEUPDATE:
-		// ƒT[ƒrƒX‚Ì\¬‚ª•Ï‰»‚µ‚½(Ä¶ƒtƒ@ƒCƒ‹‚ğØ‚è‘Ö‚¦‚½‚Æ‚«‚È‚Ç)
+		// ã‚µãƒ¼ãƒ“ã‚¹ã®æ§‹æˆãŒå¤‰åŒ–ã—ãŸ(å†ç”Ÿãƒ•ã‚¡ã‚¤ãƒ«ã‚’åˆ‡ã‚Šæ›¿ãˆãŸã¨ããªã©)
 		if (pThis->m_pApp->IsPluginEnabled()) {
-			// ƒ†[ƒU‚Ì©”­“I‚Èƒ`ƒƒƒ“ƒlƒ‹•ÏX(EVENT_CHANNELCHANGE)‚ğ‘¨‚¦‚é‚Ì‚ªŒ´‘¥‚¾‚ª
-			// ”ñƒ`ƒ…[ƒiŒn‚ÌBonDriver‚¾‚Æ‚±‚ê‚Å‚Í•s\•ª‚È‚½‚ß
+			// ãƒ¦ãƒ¼ã‚¶ã®è‡ªç™ºçš„ãªãƒãƒ£ãƒ³ãƒãƒ«å¤‰æ›´(EVENT_CHANNELCHANGE)ã‚’æ‰ãˆã‚‹ã®ãŒåŸå‰‡ã ãŒ
+			// éãƒãƒ¥ãƒ¼ãƒŠç³»ã®BonDriverã ã¨ã“ã‚Œã§ã¯ä¸ååˆ†ãªãŸã‚
 			if (pThis->IsMatchDriverName(pThis->s_.nonTunerDrivers)) {
 				SetTimer(pThis->hForce_, TIMER_SETUP_CURJK, SETUP_CURJK_DELAY, NULL);
 			}
 		}
 		break;
 	case TVTest::EVENT_COMMAND:
-		// ƒRƒ}ƒ“ƒh‚ª‘I‘ğ‚³‚ê‚½
+		// ã‚³ãƒãƒ³ãƒ‰ãŒé¸æŠã•ã‚ŒãŸ
 		if (pThis->m_pApp->IsPluginEnabled()) {
 			switch (lParam1) {
 			case COMMAND_HIDE_FORCE:
@@ -1032,12 +1033,12 @@ LRESULT CALLBACK CNicoJK::EventCallback(UINT Event, LPARAM lParam1, LPARAM lPara
 						pThis->commentWindow_.Create(hwnd);
 						pThis->bHalfSkip_ = GetWindowHeight(hwnd) >= pThis->s_.halfSkipThreshold;
 						pThis->commentWindow_.AddChat(TEXT("(Comment ON)"), RGB(0x00,0xFF,0xFF), CCommentWindow::CHAT_POS_UE);
-						// ”ñ•\¦‘O‚Ì•s“§–¾“x‚ğ•œŒ³‚·‚é
+						// éè¡¨ç¤ºå‰ã®ä¸é€æ˜åº¦ã‚’å¾©å…ƒã™ã‚‹
 						BYTE newOpacity = static_cast<BYTE>(pThis->s_.commentOpacity>>8);
 						pThis->commentWindow_.SetOpacity(newOpacity == 0 ? 255 : newOpacity);
 					} else {
 						pThis->commentWindow_.Destroy();
-						// 8-15bit‚É”ñ•\¦‘O‚Ì•s“§–¾“x‚ğ‹L‰¯‚µ‚Ä‚¨‚­
+						// 8-15bitã«éè¡¨ç¤ºå‰ã®ä¸é€æ˜åº¦ã‚’è¨˜æ†¶ã—ã¦ãŠã
 						pThis->s_.commentOpacity = (pThis->s_.commentOpacity&~0xFF00) | (pThis->commentWindow_.GetOpacity()<<8);
 						pThis->commentWindow_.SetOpacity(0);
 					}
@@ -1070,7 +1071,7 @@ BOOL CALLBACK CNicoJK::WindowMsgCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LP
 		}
 		break;
 	case WM_WINDOWPOSCHANGED:
-		// WM_ACTIVATE‚³‚ê‚È‚¢ZƒI[ƒ_[‚Ì•Ï‰»‚ğ‘¨‚¦‚éBƒtƒ‹ƒXƒNƒŠ[ƒ“‚Å‚à‚È‚º‚©‘—‚ç‚ê‚Ä‚­‚é‚Ì‚Å’ˆÓ
+		// WM_ACTIVATEã•ã‚Œãªã„Zã‚ªãƒ¼ãƒ€ãƒ¼ã®å¤‰åŒ–ã‚’æ‰ãˆã‚‹ã€‚ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã§ã‚‚ãªãœã‹é€ã‚‰ã‚Œã¦ãã‚‹ã®ã§æ³¨æ„
 		SetTimer(pThis->hForce_, TIMER_DONE_POSCHANGE, 1000, NULL);
 		break;
 	case WM_MOVE:
@@ -1086,13 +1087,13 @@ BOOL CALLBACK CNicoJK::WindowMsgCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LP
 			break;
 		}
 		if (pThis->m_pApp->GetFullscreen()) {
-			// ƒtƒ@ƒCƒ‹ƒ_ƒCƒAƒƒO“™‚Å‚ÌD&D‚ğ–³‹‚·‚é‚½‚ß(ŠmÀ‚Å‚Í‚È‚¢)
+			// ãƒ•ã‚¡ã‚¤ãƒ«ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ç­‰ã§ã®D&Dã‚’ç„¡è¦–ã™ã‚‹ãŸã‚(ç¢ºå®Ÿã§ã¯ãªã„)
 			HWND hwndActive = GetActiveWindow();
 			if (hwndActive && (GetWindowLong(GetAncestor(hwndActive, GA_ROOT), GWL_EXSTYLE) & WS_EX_DLGMODALFRAME) != 0) {
 				break;
 			}
 		}
-		// “Ç‚İ‚İ‰Â”\‚ÈŠg’£q‚ğ‚à‚ÂÅ‰‚É‚İ‚Â‚©‚Á‚½ƒtƒ@ƒCƒ‹‚ğŠJ‚­
+		// èª­ã¿è¾¼ã¿å¯èƒ½ãªæ‹¡å¼µå­ã‚’ã‚‚ã¤æœ€åˆã«ã¿ã¤ã‹ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã
 		pThis->dropFileTimeout_ = 0;
 		for (UINT i = DragQueryFile(reinterpret_cast<HDROP>(wParam), 0xFFFFFFFF, NULL, 0); i != 0; --i) {
 			if (DragQueryFile(reinterpret_cast<HDROP>(wParam), i - 1, pThis->dropFileName_, _countof(pThis->dropFileName_))) {
@@ -1105,7 +1106,7 @@ BOOL CALLBACK CNicoJK::WindowMsgCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LP
 					}
 					SendDlgItemMessage(pThis->hForce_, IDC_CHECK_SPECFILE, BM_SETCHECK, BST_UNCHECKED, 0);
 					if (pThis->s_.dropLogfileMode == 2) {
-						// ƒEƒBƒ“ƒhƒE‚Ì¶‰E‚Ç‚¿‚ç‚ÉD&D‚³‚ê‚½‚©‚ÅRelƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚ğ•Ï‚¦‚é
+						// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®å·¦å³ã©ã¡ã‚‰ã«D&Dã•ã‚ŒãŸã‹ã§Relãƒã‚§ãƒƒã‚¯ãƒœãƒƒã‚¯ã‚¹ã‚’å¤‰ãˆã‚‹
 						RECT rc;
 						HWND hwndFull = pThis->GetFullscreenWindow();
 						GetClientRect(hwndFull ? hwndFull : pThis->m_pApp->GetAppWindow(), &rc);
@@ -1120,13 +1121,13 @@ BOOL CALLBACK CNicoJK::WindowMsgCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LP
 				}
 			}
 		}
-		// DragFinish()‚¹‚¸‚É–{‘Ì‚ÌƒfƒtƒHƒ‹ƒgƒvƒƒV[ƒWƒƒ‚É”C‚¹‚é
+		// DragFinish()ã›ãšã«æœ¬ä½“ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ã«ä»»ã›ã‚‹
 		break;
 	}
 	return FALSE;
 }
 
-// ƒRƒƒ“ƒg(chatƒ^ƒO)1s‚ğ‰ğß‚µ‚ÄƒRƒƒ“ƒgƒEƒBƒ“ƒhƒE‚É‘—‚é
+// ã‚³ãƒ¡ãƒ³ãƒˆ(chatã‚¿ã‚°)1è¡Œã‚’è§£é‡ˆã—ã¦ã‚³ãƒ¡ãƒ³ãƒˆã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«é€ã‚‹
 bool CNicoJK::ProcessChatTag(const char *tag, bool bShow, int showDelay)
 {
 	static const std::regex reChat("<chat(?= )(.*)>(.*?)</chat>");
@@ -1137,7 +1138,7 @@ bool CNicoJK::ProcessChatTag(const char *tag, bool bShow, int showDelay)
 	static const std::regex reAlign(" align=\"(left|right)");
 	static const std::regex reUserID(" user_id=\"([0-9A-Za-z\\-_]{0,27})");
 	static const std::regex reNo(" no=\"(\\d+)\"");
-	// ’uŠ·
+	// ç½®æ›
 	std::string rpl[2];
 	if (!rplList_.empty()) {
 		rpl[1] = tag;
@@ -1147,7 +1148,7 @@ bool CNicoJK::ProcessChatTag(const char *tag, bool bShow, int showDelay)
 				try {
 					rpl[i % 2] = std::regex_replace(rpl[(i + 1) % 2], it->re, it->fmt);
 				} catch (std::regex_error&) {
-					// ’uŠ·ƒtƒH[ƒ}ƒbƒgˆÙí‚Ì‚½‚ß–³‹‚·‚é
+					// ç½®æ›ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆç•°å¸¸ã®ãŸã‚ç„¡è¦–ã™ã‚‹
 					continue;
 				}
 				tag = rpl[i++ % 2].c_str();
@@ -1161,19 +1162,19 @@ bool CNicoJK::ProcessChatTag(const char *tag, bool bShow, int showDelay)
 		int len = MultiByteToWideChar(CP_UTF8, 0, m[2].first, static_cast<int>(m[2].length()), text, _countof(text) - 1);
 		text[len] = TEXT('\0');
 		DecodeEntityReference(text);
-		// mail‘®«‚Í–³‚¢‚Æ‚«‚à‚ ‚é
+		// mailå±æ€§ã¯ç„¡ã„ã¨ãã‚‚ã‚ã‚‹
 		char mail[256];
 		mail[0] = '\0';
 		if (std::regex_search(m[1].first, m[1].second, mm, reMail)) {
 			lstrcpynA(mail, mm[1].first, min(static_cast<int>(mm[1].length()) + 1, _countof(mail)));
 		}
-		// abone‘®«(ƒ[ƒJƒ‹Šg’£)
+		// aboneå±æ€§(ãƒ­ãƒ¼ã‚«ãƒ«æ‹¡å¼µ)
 		bool bAbone = std::regex_search(m[1].first, m[1].second, reAbone);
 		if (bShow && !bAbone) {
 			bool bYourpost = std::regex_search(m[1].first, m[1].second, reYourpost);
-			// insert_at‘®«(ƒ[ƒJƒ‹Šg’£)
+			// insert_atå±æ€§(ãƒ­ãƒ¼ã‚«ãƒ«æ‹¡å¼µ)
 			bool bInsertLast = std::regex_search(m[1].first, m[1].second, reInsertAt);
-			// align‘®«(ƒ[ƒJƒ‹Šg’£)
+			// alignå±æ€§(ãƒ­ãƒ¼ã‚«ãƒ«æ‹¡å¼µ)
 			CCommentWindow::CHAT_ALIGN align = CCommentWindow::CHAT_ALIGN_CENTER;
 			if (std::regex_search(m[1].first, m[1].second, mm, reAlign)) {
 				align = mm[1].first[0] == 'l' ? CCommentWindow::CHAT_ALIGN_LEFT : CCommentWindow::CHAT_ALIGN_RIGHT;
@@ -1184,7 +1185,7 @@ bool CNicoJK::ProcessChatTag(const char *tag, bool bShow, int showDelay)
 			                       align, bInsertLast, bYourpost ? 160 : 0, showDelay);
 		}
 
-		// ƒŠƒXƒgƒ{ƒbƒNƒX‚ÌƒƒO•\¦ƒLƒ…[‚É’Ç‰Á
+		// ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®ãƒ­ã‚°è¡¨ç¤ºã‚­ãƒ¥ãƒ¼ã«è¿½åŠ 
 		LOG_ELEM e;
 		FILETIME ftUtc, ft;
 		UnixTimeToFileTime(tm, &ftUtc);
@@ -1216,10 +1217,10 @@ bool CNicoJK::ProcessChatTag(const char *tag, bool bShow, int showDelay)
 	return false;
 }
 
-// ƒƒOƒEƒBƒ“ƒhƒE‚Éƒ†[ƒU‚Ö‚ÌƒƒbƒZ[ƒWƒƒO‚ğo‚·
+// ãƒ­ã‚°ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«ãƒ¦ãƒ¼ã‚¶ã¸ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ­ã‚°ã‚’å‡ºã™
 void CNicoJK::OutputMessageLog(LPCTSTR text)
 {
-	// ƒŠƒXƒgƒ{ƒbƒNƒX‚ÌƒƒO•\¦ƒLƒ…[‚É’Ç‰Á
+	// ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®ãƒ­ã‚°è¡¨ç¤ºã‚­ãƒ¥ãƒ¼ã«è¿½åŠ 
 	LOG_ELEM e;
 	GetLocalTime(&e.st);
 	e.no = 0;
@@ -1231,7 +1232,7 @@ void CNicoJK::OutputMessageLog(LPCTSTR text)
 	}
 }
 
-// ƒRƒƒ“ƒg“Še—“‚Ì•¶š—ñ‚ğæ“¾‚·‚é
+// ã‚³ãƒ¡ãƒ³ãƒˆæŠ•ç¨¿æ¬„ã®æ–‡å­—åˆ—ã‚’å–å¾—ã™ã‚‹
 void CNicoJK::GetPostComboBoxText(LPTSTR comm, int commSize, LPTSTR mail, int mailSize)
 {
 	TCHAR text[512];
@@ -1241,7 +1242,7 @@ void CNicoJK::GetPostComboBoxText(LPTSTR comm, int commSize, LPTSTR mail, int ma
 	if (mail) {
 		mail[0] = TEXT('\0');
 	}
-	// []‚ÅˆÍ‚í‚ê‚½•”•ª‚Ímail‘®«’l‚Æ‚·‚é
+	// []ã§å›²ã‚ã‚ŒãŸéƒ¨åˆ†ã¯mailå±æ€§å€¤ã¨ã™ã‚‹
 	LPCTSTR p = text;
 	if (*p == '[') {
 		p += StrCSpn(p, TEXT("]"));
@@ -1255,10 +1256,10 @@ void CNicoJK::GetPostComboBoxText(LPTSTR comm, int commSize, LPTSTR mail, int ma
 	lstrcpyn(comm, p, commSize);
 }
 
-// ƒRƒƒ“ƒg“Še—“‚Ìƒ[ƒJƒ‹ƒRƒ}ƒ“ƒh‚ğˆ—‚·‚é
+// ã‚³ãƒ¡ãƒ³ãƒˆæŠ•ç¨¿æ¬„ã®ãƒ­ãƒ¼ã‚«ãƒ«ã‚³ãƒãƒ³ãƒ‰ã‚’å‡¦ç†ã™ã‚‹
 void CNicoJK::ProcessLocalPost(LPCTSTR comm)
 {
-	// ƒpƒ‰ƒ[ƒ^•ªŠ„
+	// ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿åˆ†å‰²
 	TCHAR cmd[16];
 	int cmdLen = StrCSpn(comm, TEXT(" "));
 	lstrcpyn(cmd, comm, min(cmdLen + 1, _countof(cmd)));
@@ -1269,17 +1270,17 @@ void CNicoJK::ProcessLocalPost(LPCTSTR comm)
 	}
 	if (!lstrcmpi(cmd, TEXT("help"))) {
 		static const TCHAR text[] =
-			TEXT("@help\tƒwƒ‹ƒv‚ğ•\¦")
-			TEXT("\n@fopa N\t¨‚¢‘‹‚Ì“§‰ßƒŒƒxƒ‹1`10(N‚ğÈ—ª‚·‚é‚Æ10)B")
-			TEXT("\n@fwd N\tƒRƒƒ“ƒg‚Ì‘Oi")
-			TEXT("\n@size N\tƒRƒƒ“ƒg‚Ì•¶šƒTƒCƒY‚ğN%‚É‚·‚é(N‚ğÈ—ª‚·‚é‚Æ100%)B")
-			TEXT("\n@speed N\tƒRƒƒ“ƒg‚Ì‘¬“x‚ğN%‚É‚·‚é(N‚ğÈ—ª‚·‚é‚Æ100%)B")
-			TEXT("\n@rl\t’uŠ·ƒŠƒXƒg‚Ì‚·‚×‚Ä‚ÌComment‚ğƒŠƒXƒg‚·‚é")
-			TEXT("\n@rr\t’uŠ·ƒŠƒXƒg‚ğİ’èƒtƒ@ƒCƒ‹‚©‚çÄ“Ç‚İ‚İ‚·‚é")
-			TEXT("\n@ra N\tPatternN0`N9‚ğ—LŒø‚É‚·‚é")
-			TEXT("\n@rm N\tPatternN0`N9‚ğ–³Œø‚É‚·‚é")
-			TEXT("\n@debug N\tƒfƒoƒbƒO0`15");
-		MessageBox(hForce_, text, TEXT("NicoJK - ƒ[ƒJƒ‹ƒRƒ}ƒ“ƒh"), MB_OK);
+			TEXT("@help\tãƒ˜ãƒ«ãƒ—ã‚’è¡¨ç¤º")
+			TEXT("\n@fopa N\tå‹¢ã„çª“ã®é€éãƒ¬ãƒ™ãƒ«1ï½10(Nã‚’çœç•¥ã™ã‚‹ã¨10)ã€‚")
+			TEXT("\n@fwd N\tã‚³ãƒ¡ãƒ³ãƒˆã®å‰é€²")
+			TEXT("\n@size N\tã‚³ãƒ¡ãƒ³ãƒˆã®æ–‡å­—ã‚µã‚¤ã‚ºã‚’N%ã«ã™ã‚‹(Nã‚’çœç•¥ã™ã‚‹ã¨100%)ã€‚")
+			TEXT("\n@speed N\tã‚³ãƒ¡ãƒ³ãƒˆã®é€Ÿåº¦ã‚’N%ã«ã™ã‚‹(Nã‚’çœç•¥ã™ã‚‹ã¨100%)ã€‚")
+			TEXT("\n@rl\tç½®æ›ãƒªã‚¹ãƒˆã®ã™ã¹ã¦ã®Commentã‚’ãƒªã‚¹ãƒˆã™ã‚‹")
+			TEXT("\n@rr\tç½®æ›ãƒªã‚¹ãƒˆã‚’è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰å†èª­ã¿è¾¼ã¿ã™ã‚‹")
+			TEXT("\n@ra N\tPatternN0ï½N9ã‚’æœ‰åŠ¹ã«ã™ã‚‹")
+			TEXT("\n@rm N\tPatternN0ï½N9ã‚’ç„¡åŠ¹ã«ã™ã‚‹")
+			TEXT("\n@debug N\tãƒ‡ãƒãƒƒã‚°0ï½15");
+		MessageBox(hForce_, text, TEXT("NicoJK - ãƒ­ãƒ¼ã‚«ãƒ«ã‚³ãƒãƒ³ãƒ‰"), MB_OK);
 	} else if (!lstrcmpi(cmd, TEXT("fopa"))) {
 		s_.forceOpacity = 0 < nArg && nArg < 10 ? nArg * 255 / 10 : 255;
 		LONG style = GetWindowLong(hForce_, GWL_EXSTYLE);
@@ -1295,12 +1296,12 @@ void CNicoJK::ProcessLocalPost(LPCTSTR comm)
 		int rate = min(max(nArg == INT_MAX ? 100 : nArg, 10), 1000);
 		commentWindow_.SetCommentSize(s_.commentSize * rate / 100, s_.commentSizeMin, s_.commentSizeMax, s_.commentLineMargin);
 		TCHAR text[64];
-		wsprintf(text, TEXT("Œ»İ‚ÌƒRƒƒ“ƒg‚Ì•¶šƒTƒCƒY‚Í%d%%‚Å‚·B"), rate);
+		wsprintf(text, TEXT("ç¾åœ¨ã®ã‚³ãƒ¡ãƒ³ãƒˆã®æ–‡å­—ã‚µã‚¤ã‚ºã¯%d%%ã§ã™ã€‚"), rate);
 		OutputMessageLog(text);
 	} else if (!lstrcmpi(cmd, TEXT("speed"))) {
 		commentWindow_.SetDisplayDuration(s_.commentDuration * 100 / (nArg <= 0 || nArg == INT_MAX ? 100 : nArg));
 		TCHAR text[64];
-		wsprintf(text, TEXT("Œ»İ‚ÌƒRƒƒ“ƒg‚Ì•\¦ŠúŠÔ‚Í%dmsec‚Å‚·B"), commentWindow_.GetDisplayDuration());
+		wsprintf(text, TEXT("ç¾åœ¨ã®ã‚³ãƒ¡ãƒ³ãƒˆã®è¡¨ç¤ºæœŸé–“ã¯%dmsecã§ã™ã€‚"), commentWindow_.GetDisplayDuration());
 		OutputMessageLog(text);
 	} else if (!lstrcmpi(cmd, TEXT("rl"))) {
 		TCHAR text[2048];
@@ -1311,12 +1312,12 @@ void CNicoJK::ProcessLocalPost(LPCTSTR comm)
 				len += wsprintf(&text[len], TEXT("%sPattern%d=%s\n"), it->IsEnabled() ? TEXT("") : TEXT("#"), it->key, it->comment);
 			}
 		}
-		MessageBox(hForce_, text, TEXT("NicoJK - ƒ[ƒJƒ‹ƒRƒ}ƒ“ƒh"), MB_OK);
+		MessageBox(hForce_, text, TEXT("NicoJK - ãƒ­ãƒ¼ã‚«ãƒ«ã‚³ãƒãƒ³ãƒ‰"), MB_OK);
 	} else if (!lstrcmpi(cmd, TEXT("rr"))) {
 		rplList_.clear();
 		LoadRplListFromIni(TEXT("AutoReplace"), &rplList_);
 		LoadRplListFromIni(TEXT("CustomReplace"), &rplList_);
-		OutputMessageLog(TEXT("’uŠ·ƒŠƒXƒg‚ğÄ“Ç‚İ‚İ‚µ‚Ü‚µ‚½B"));
+		OutputMessageLog(TEXT("ç½®æ›ãƒªã‚¹ãƒˆã‚’å†èª­ã¿è¾¼ã¿ã—ã¾ã—ãŸã€‚"));
 	} else if (!lstrcmpi(cmd, TEXT("ra")) || !lstrcmpi(cmd, TEXT("rm"))) {
 		bool bFound = false;
 		std::vector<RPL_ELEM>::iterator it = rplList_.begin();
@@ -1325,19 +1326,19 @@ void CNicoJK::ProcessLocalPost(LPCTSTR comm)
 				bFound = true;
 				it->SetEnabled(cmd[1] == TEXT('a'));
 				TCHAR text[_countof(it->comment) + 64];
-				wsprintf(text, TEXT("Pattern%d(%s)‚ğ%cŒø‚É‚µ‚Ü‚µ‚½B"), it->key, it->comment, it->IsEnabled() ? TEXT('—L') : TEXT('–³'));
+				wsprintf(text, TEXT("Pattern%d(%s)ã‚’%cåŠ¹ã«ã—ã¾ã—ãŸã€‚"), it->key, it->comment, it->IsEnabled() ? TEXT('æœ‰') : TEXT('ç„¡'));
 				OutputMessageLog(text);
 			}
 		}
 		if (bFound) {
 			SaveRplListToIni(TEXT("CustomReplace"), rplList_, false);
 		} else {
-			OutputMessageLog(TEXT("Error:ƒpƒ^[ƒ“‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB"));
+			OutputMessageLog(TEXT("Error:ãƒ‘ã‚¿ãƒ¼ãƒ³ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚"));
 		}
 	} else if (!lstrcmpi(cmd, TEXT("debug"))) {
 		commentWindow_.SetDebugFlags(nArg);
 	} else {
-		OutputMessageLog(TEXT("Error:•s–¾‚Èƒ[ƒJƒ‹ƒRƒ}ƒ“ƒh‚Å‚·B"));
+		OutputMessageLog(TEXT("Error:ä¸æ˜ãªãƒ­ãƒ¼ã‚«ãƒ«ã‚³ãƒãƒ³ãƒ‰ã§ã™ã€‚"));
 	}
 }
 
@@ -1404,7 +1405,7 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 			SetTimer(hwnd, TIMER_SETUP_CURJK, SETUP_CURJK_DELAY, NULL);
 			PostMessage(hwnd, WM_TIMER, TIMER_UPDATE, 0);
 			PostMessage(hwnd, WM_TIMER, TIMER_JK_WATCHDOG, 0);
-			// ˆÊ’u‚ğ•œŒ³
+			// ä½ç½®ã‚’å¾©å…ƒ
 			HMONITOR hMon = MonitorFromRect(&s_.rcForce, MONITOR_DEFAULTTONEAREST);
 			MONITORINFO mi;
 			mi.cbSize = sizeof(MONITORINFO);
@@ -1415,7 +1416,7 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 			}
 			MoveWindow(hwnd, 0, 0, 64, 64, FALSE);
 			MoveWindow(hwnd, s_.rcForce.left, s_.rcForce.top, s_.rcForce.right - s_.rcForce.left, s_.rcForce.bottom - s_.rcForce.top, FALSE);
-			// •s“§–¾“x‚ğ•œŒ³
+			// ä¸é€æ˜åº¦ã‚’å¾©å…ƒ
 			LONG style = GetWindowLong(hwnd, GWL_EXSTYLE);
 			SetWindowLong(hwnd, GWL_EXSTYLE, s_.forceOpacity == 255 ? style & ~WS_EX_LAYERED : style | WS_EX_LAYERED);
 			SetLayeredWindowAttributes(hwnd, 0, static_cast<BYTE>(s_.forceOpacity), LWA_ALPHA);
@@ -1424,7 +1425,7 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 				ShowWindow(hwnd, SW_SHOWNA);
 				SendMessage(hwnd, WM_SET_ZORDER, 0, 0);
 			}
-			// TVTest‹N“®’¼Œã‚ÍVideo ContainerƒEƒBƒ“ƒhƒE‚Ì”z’u‚ª’è‚Ü‚Á‚Ä‚¢‚È‚¢‚æ‚¤‚È‚Ì‚ÅÄ“x®‚¦‚é
+			// TVTestèµ·å‹•ç›´å¾Œã¯Video Containerã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®é…ç½®ãŒå®šã¾ã£ã¦ã„ãªã„ã‚ˆã†ãªã®ã§å†åº¦æ•´ãˆã‚‹
 			SetTimer(hwnd, TIMER_DONE_SIZE, 500, NULL);
 
 
@@ -1435,11 +1436,11 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 		return TRUE;
 	case WM_DESTROY:
 		{
-			// ˆÊ’u‚ğ•Û‘¶
+			// ä½ç½®ã‚’ä¿å­˜
 			GetWindowRect(hwnd, &s_.rcForce);
 			s_.commentOpacity = (s_.commentOpacity&~0xFF) | commentWindow_.GetOpacity();
 			s_.bSetRelative = SendDlgItemMessage(hwnd, IDC_CHECK_RELATIVE, BM_GETCHECK, 0, 0) == BST_CHECKED;
-			// ƒƒOƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚é
+			// ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‰ã˜ã‚‹
 			WriteToLogfile(-1);
 			ReadFromLogfile(-1);
 			if (bSpecFile_) {
@@ -1509,9 +1510,9 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 					FILETIME ft;
 					TCHAR path[MAX_PATH];
 					bool bRel = SendDlgItemMessage(hwnd, IDC_CHECK_RELATIVE, BM_GETCHECK, 0, 0) == BST_CHECKED;
-					// ƒ_ƒCƒAƒƒO‚ğŠJ‚¢‚Ä‚¢‚éŠÔ‚ÉD&D‚³‚ê‚é‚©‚à‚µ‚ê‚È‚¢
+					// ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’é–‹ã„ã¦ã„ã‚‹é–“ã«D&Dã•ã‚Œã‚‹ã‹ã‚‚ã—ã‚Œãªã„
 					if ((!bRel || GetCurrentTot(&ft)) &&
-					    FileOpenDialog(hwnd, TEXT("À‹µƒƒO(*.jkl;*.xml)\0*.jkl;*.xml\0‚·‚×‚Ä‚Ìƒtƒ@ƒCƒ‹\0*.*\0"), path, _countof(path)) &&
+					    FileOpenDialog(hwnd, TEXT("å®Ÿæ³ãƒ­ã‚°(*.jkl;*.xml)\0*.jkl;*.xml\0ã™ã¹ã¦ã®ãƒ•ã‚¡ã‚¤ãƒ«\0*.*\0"), path, _countof(path)) &&
 					    !bSpecFile_ && ImportLogfile(path, tmpSpecFileName_, bRel ? FileTimeToUnixTime(ft) + 2 : 0))
 					{
 						readLogfileTick_ = GetTickCount();
@@ -1524,7 +1525,7 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 		case IDC_FORCELIST:
 			if (HIWORD(wParam) == LBN_SELCHANGE) {
 				if (!bDisplayLogList_) {
-					// ¨‚¢ƒŠƒXƒg•\¦’†
+					// å‹¢ã„ãƒªã‚¹ãƒˆè¡¨ç¤ºä¸­
 					int index = ListBox_GetCurSel((HWND)lParam);
 					int jkID = -1;
 					if (0 <= index && index < (int)forceList_.size()) {
@@ -1538,7 +1539,7 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 					}
 
 					if (!bUsingLogfileDriver_ && !bRecording_ && jkID > 0) {
-						// –{‘Ì‚Ìƒ`ƒƒƒ“ƒlƒ‹Ø‚è‘Ö‚¦‚ğ‚·‚é
+						// æœ¬ä½“ã®ãƒãƒ£ãƒ³ãƒãƒ«åˆ‡ã‚Šæ›¿ãˆã‚’ã™ã‚‹
 						int currentTuning = m_pApp->GetTuningSpace();
 						//for (int stage = 0; stage < 2; ++stage) {
 							NETWORK_SERVICE_ID_ELEM e = { 0 };
@@ -1546,9 +1547,9 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 								std::vector<NETWORK_SERVICE_ID_ELEM>::const_iterator it =
 									std::lower_bound(ntsIDList_.begin(), ntsIDList_.end(), e, NETWORK_SERVICE_ID_ELEM::COMPARE());
 								int chJK = it != ntsIDList_.end() && it->ntsID == e.ntsID ? it->jkID : -1;
-								// À‹µID‚ªˆê’v‚·‚éƒ`ƒƒƒ“ƒlƒ‹‚ÉØ‘Ö
+								// å®Ÿæ³IDãŒä¸€è‡´ã™ã‚‹ãƒãƒ£ãƒ³ãƒãƒ«ã«åˆ‡æ›¿
 								if (jkID == chJK) {
-									// ‚·‚Å‚É•\¦’†‚È‚çØ‚è‘Ö‚¦‚È‚¢
+									// ã™ã§ã«è¡¨ç¤ºä¸­ãªã‚‰åˆ‡ã‚Šæ›¿ãˆãªã„
 									if (e.ntsID != GetCurrentNetworkServiceID()) {
 										m_pApp->SetChannel(currentTuning, i, e.ntsID >> 16);
 									}
@@ -1564,29 +1565,34 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 				if (bDisplayLogList_ && 0 <= index && index < (int)logList_.size()) {
 					std::list<LOG_ELEM>::const_iterator it = logList_.begin();
 					for (int i = 0; i < index; ++i, ++it);
-					if (it->marker[0] != TEXT('#') && it->marker[0] != TEXT('.')) {
-						// ƒ†[ƒU[NG‚Ì’uŠ·ƒpƒ^[ƒ“‚ğ‚Â‚­‚é
+
+#pragma region NicoJKKakolog
+					PostMessage(this->hForce_, NicoJKKakolog::NicoJKKakolog::WM_ADDCHATMODRULE, (WPARAM)new NicoJKKakolog::IdNgChatModRule(NicoJKKakolog::NicoJKKakolog::utf8_wide_conv.to_bytes(it->marker)), 0);
+#pragma endregion
+
+					/*if (it->marker[0] != TEXT('#') && it->marker[0] != TEXT('.')) {
+						// ãƒ¦ãƒ¼ã‚¶ãƒ¼NGã®ç½®æ›ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’ã¤ãã‚‹
 						RPL_ELEM e;
 						lstrcpyn(e.section, TEXT("AutoReplace"), _countof(e.section));
 						wsprintf(e.pattern, TEXT("s/^<chat(?=.*? user_id=\"%.14s%s.*>.*<)/<chat abone=\"1\"/g"),
 						         it->marker, lstrlen(it->marker) > 14 ? TEXT("") : TEXT("\""));
 						if (e.AssignFromPattern()) {
-							// Šù‘¶ƒpƒ^[ƒ“‚©‚Ç‚¤‚©’²‚×‚é
+							// æ—¢å­˜ãƒ‘ã‚¿ãƒ¼ãƒ³ã‹ã©ã†ã‹èª¿ã¹ã‚‹
 							std::vector<RPL_ELEM> autoRplList;
 							LoadRplListFromIni(TEXT("AutoReplace"), &autoRplList);
 							std::vector<RPL_ELEM>::const_iterator jt = autoRplList.begin();
 							for (; jt != autoRplList.end() && lstrcmp(jt->pattern, e.pattern); ++jt);
-							// ƒƒbƒZ[ƒWƒ{ƒbƒNƒX‚ÅŠm”F
+							// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒœãƒƒã‚¯ã‚¹ã§ç¢ºèª
 							TCHAR text[_countof(it->marker) + _countof(it->text) + 32];
 							wsprintf(text, TEXT(">>%d ID:%s\n%s"), it->no, it->marker, it->text);
 							if (jt != autoRplList.end()) {
-								if (MessageBox(hwnd, text, TEXT("NicoJK - NGy‰ğœz‚µ‚Ü‚·"), MB_OKCANCEL) == IDOK) {
+								if (MessageBox(hwnd, text, TEXT("NicoJK - NGã€è§£é™¤ã€‘ã—ã¾ã™"), MB_OKCANCEL) == IDOK) {
 									autoRplList.erase(jt);
 									for (int i = 0; i < (int)autoRplList.size(); autoRplList[i].key = i, ++i);
 									SaveRplListToIni(TEXT("AutoReplace"), autoRplList);
 								}
 							} else {
-								if (MessageBox(hwnd, text, TEXT("NicoJK - NG“o˜^‚µ‚Ü‚·"), MB_OKCANCEL) == IDOK) {
+								if (MessageBox(hwnd, text, TEXT("NicoJK - NGç™»éŒ²ã—ã¾ã™"), MB_OKCANCEL) == IDOK) {
 									autoRplList.push_back(e);
 									while ((int)autoRplList.size() > max(s_.maxAutoReplace, 0)) {
 										autoRplList.erase(autoRplList.begin());
@@ -1595,17 +1601,17 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 									SaveRplListToIni(TEXT("AutoReplace"), autoRplList);
 								}
 							}
-							// ’uŠ·ƒŠƒXƒg‚ğXV
+							// ç½®æ›ãƒªã‚¹ãƒˆã‚’æ›´æ–°
 							rplList_ = autoRplList;
 							LoadRplListFromIni(TEXT("CustomReplace"), &rplList_);
 						}
-					}
+					}*/
 				}
 			}
 			break;
 		case IDC_CB_POST:
 			if (HIWORD(wParam) == CBN_EDITCHANGE) {
-				// ƒRƒƒ“ƒg‘•ü—á‚ğì¬‚·‚é
+				// ã‚³ãƒ¡ãƒ³ãƒˆè£…é£¾ä¾‹ã‚’ä½œæˆã™ã‚‹
 				TCHAR comm[POST_COMMENT_MAX + 32];
 				GetPostComboBoxText(comm, _countof(comm));
 				while (SendDlgItemMessage(hwnd, IDC_CB_POST, CB_DELETESTRING, 0, 0) > 0);
@@ -1617,18 +1623,18 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 					SendDlgItemMessage(hwnd, IDC_CB_POST, CB_ADDSTRING, 0, reinterpret_cast<LPARAM>(text));
 					p += p[len] ? len + 1 : len;
 				}
-				// •¶š”Œx‚·‚é
+				// æ–‡å­—æ•°è­¦å‘Šã™ã‚‹
 				int excess = lstrlen(comm) - (POST_COMMENT_MAX - 1);
 				if (excess > 0) {
 					TCHAR text[64];
-					wsprintf(text, TEXT("Warning:%d•¶š‚ğ’´‚¦‚Ä‚¢‚Ü‚·(+%d)B"), POST_COMMENT_MAX - 1, excess);
+					wsprintf(text, TEXT("Warning:%dæ–‡å­—ã‚’è¶…ãˆã¦ã„ã¾ã™(+%d)ã€‚"), POST_COMMENT_MAX - 1, excess);
 					OutputMessageLog(text);
 				}
 			}
 			break;
 		case IDOK:
 		case IDCANCEL:
-			// ‰B‚·‚¾‚¯
+			// éš ã™ã ã‘
 			ShowWindow(hwnd, SW_HIDE);
 			SetWindowLongPtr(hwnd, DWLP_MSGRESULT, 0);
 			return TRUE;
@@ -1638,7 +1644,7 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 		switch (wParam) {
 		case TIMER_UPDATE:
 			if (!bDisplayLogList_ && IsWindowVisible(hwnd)) {
-				// ¨‚¢‚ğXV‚·‚é
+				// å‹¢ã„ã‚’æ›´æ–°ã™ã‚‹
 				char szGet[_countof(cookie_) + 256];
 				lstrcpyA(szGet, "GET /api/v2_app/getchannels HTTP/1.1\r\n");
 				AppendHttpHeader(szGet, "Host: ", JK_HOST_NAME, "\r\n");
@@ -1652,12 +1658,12 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 		case TIMER_JK_WATCHDOG:
 			SetTimer(hwnd, TIMER_JK_WATCHDOG, max(JK_WATCHDOG_INTERVAL, 10000), NULL);
 			if (jkLeaveThreadCheck_ > 0 && --jkLeaveThreadCheck_ == 0) {
-				OutputMessageLog(TEXT("leave_threadƒ^ƒO‚É‚æ‚èØ’f‚µ‚Ü‚·B"));
+				OutputMessageLog(TEXT("leave_threadã‚¿ã‚°ã«ã‚ˆã‚Šåˆ‡æ–­ã—ã¾ã™ã€‚"));
 				jkSocket_.Shutdown();
 				SetTimer(hwnd, TIMER_JK_WATCHDOG, 1000, NULL);
 			}
 			if (currentJKToGet_ >= 0 && !bUsingLogfileDriver_) {
-				// ƒp[ƒ}ƒŠƒ“ƒN‚ğæ“¾
+				// ãƒ‘ãƒ¼ãƒãƒªãƒ³ã‚¯ã‚’å–å¾—
 				char szGet[_countof(cookie_) + 256];
 				wsprintfA(szGet, "GET /api/v2/getflv?v=jk%d HTTP/1.1\r\n", currentJKToGet_);
 				AppendHttpHeader(szGet, "Host: ", JK_HOST_NAME, "\r\n");
@@ -1667,24 +1673,24 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 					currentJK_ = currentJKToGet_;
 					bConnectedToCommentServer_ = false;
 					jkBuf_.clear();
-					OutputMessageLog(TEXT("ƒp[ƒ}ƒŠƒ“ƒN‚ÉÚ‘±ŠJn‚µ‚Ü‚µ‚½B"));
+					OutputMessageLog(TEXT("ãƒ‘ãƒ¼ãƒãƒªãƒ³ã‚¯ã«æ¥ç¶šé–‹å§‹ã—ã¾ã—ãŸã€‚"));
 				}
 			}
 			break;
 		case TIMER_FORWARD:
 			bFlipFlop_ = !bFlipFlop_;
 			if (hSyncThread_ || !bHalfSkip_ || bFlipFlop_) {
-				// ƒIƒtƒZƒbƒg‚ğ’²®‚·‚é
+				// ã‚ªãƒ•ã‚»ãƒƒãƒˆã‚’èª¿æ•´ã™ã‚‹
 				bool bNotify = false;
 				if (0 < forwardOffsetDelta_ && forwardOffsetDelta_ <= 30000) {
-					// ‘Oi‚³‚¹‚Ä’²®
+					// å‰é€²ã•ã›ã¦èª¿æ•´
 					int delta = min(forwardOffsetDelta_, forwardOffsetDelta_ < 10000 ? 500 : 2000);
 					forwardOffset_ += delta;
 					forwardOffsetDelta_ -= delta;
 					bNotify = forwardOffsetDelta_ == 0;
 					commentWindow_.Forward(delta);
 				} else if (forwardOffsetDelta_ != 0) {
-					// ƒƒOƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚Äˆê‹C‚É’²®
+					// ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‰ã˜ã¦ä¸€æ°—ã«èª¿æ•´
 					forwardOffset_ += forwardOffsetDelta_;
 					forwardOffsetDelta_ = 0;
 					bNotify = true;
@@ -1696,12 +1702,12 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 					wsprintf(text, TEXT("(Offset %d)"), forwardOffset_ / 1000);
 					commentWindow_.AddChat(text, RGB(0x00,0xFF,0xFF), CCommentWindow::CHAT_POS_UE);
 				}
-				// ƒRƒƒ“ƒg‚Ì•\¦‚ği‚ß‚é
+				// ã‚³ãƒ¡ãƒ³ãƒˆã®è¡¨ç¤ºã‚’é€²ã‚ã‚‹
 				DWORD tick = timeGetTime();
 				commentWindow_.Forward(min(static_cast<int>(tick - forwardTick_), 5000));
 				forwardTick_ = tick;
 
-				// ƒ`ƒƒƒbƒg‚ğ‚Æ‚Á‚Ä‚«‚Ä•\¦
+				// ãƒãƒ£ãƒƒãƒˆã‚’ã¨ã£ã¦ãã¦è¡¨ç¤º
 				FILETIME ft;
 				if (GetCurrentTot(&ft)) {
 					bool bRead = false;
@@ -1718,17 +1724,22 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 					
 					for (const NicoJKKakolog::Chat &chat : nicoJKKakolog->GetChats(tm))
 					{
-						commentWindow_.AddChat(NicoJKKakolog::NicoJKKakolog::utf8_wide_conv.from_bytes(chat.text).c_str(), chat.color,
-							(chat.position == NicoJKKakolog::Chat::Position::Default) ? CCommentWindow::CHAT_POS_DEFAULT : (chat.position == NicoJKKakolog::Chat::Position::Down) ? CCommentWindow::CHAT_POS_SHITA : CCommentWindow::CHAT_POS_UE,
-							(chat.size == NicoJKKakolog::Chat::Size::Default) ? CCommentWindow::CHAT_SIZE_DEFAULT : CCommentWindow::CHAT_SIZE_SMALL);
-						
-						// ƒŠƒXƒgƒ{ƒbƒNƒX‚ÌƒƒO•\¦ƒLƒ…[‚É’Ç‰Á
+						if (!chat.ng)
+						{
+							commentWindow_.AddChat(NicoJKKakolog::NicoJKKakolog::utf8_wide_conv.from_bytes(chat.text).c_str(), chat.color,
+								(chat.position == NicoJKKakolog::Chat::Position::Default) ? CCommentWindow::CHAT_POS_DEFAULT : (chat.position == NicoJKKakolog::Chat::Position::Down) ? CCommentWindow::CHAT_POS_SHITA : CCommentWindow::CHAT_POS_UE,
+								(chat.size == NicoJKKakolog::Chat::Size::Default) ? CCommentWindow::CHAT_SIZE_DEFAULT : CCommentWindow::CHAT_SIZE_SMALL);
+						}
+
+						// ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®ãƒ­ã‚°è¡¨ç¤ºã‚­ãƒ¥ãƒ¼ã«è¿½åŠ 
 						LOG_ELEM e;
 						FILETIME localft;
 						FileTimeToLocalFileTime(&ft, &localft);
 						FileTimeToSystemTime(&localft, &e.st);
 						e.no = chat.number;
 						std::wstring wstr = NicoJKKakolog::NicoJKKakolog::utf8_wide_conv.from_bytes(chat.text);
+						if (chat.ng)
+							wstr = L"ğŸ†–" + wstr;
 						e.text[wstr.copy(e.text, CCommentWindow::CHAT_TEXT_MAX - 1)] = '\0';
 						wstr = NicoJKKakolog::NicoJKKakolog::utf8_wide_conv.from_bytes(chat.userId);
 						e.marker[wstr.copy(e.marker, 28 - 1)] = '\0';
@@ -1740,7 +1751,7 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 #pragma endregion
 
 					if (bRead) {
-						// date‘®«’l‚Í•b¸“x‚µ‚©‚È‚¢‚Ì‚ÅƒRƒƒ“ƒg•\¦‚ª’cq‚É‚È‚ç‚È‚¢‚æ‚¤“K“–‚É‚²‚Ü‚©‚·
+						// dateå±æ€§å€¤ã¯ç§’ç²¾åº¦ã—ã‹ãªã„ã®ã§ã‚³ãƒ¡ãƒ³ãƒˆè¡¨ç¤ºãŒå›£å­ã«ãªã‚‰ãªã„ã‚ˆã†é©å½“ã«ã”ã¾ã‹ã™
 						commentWindow_.ScatterLatestChats(1000);
 						PostMessage(hwnd, WM_UPDATE_LIST, FALSE, 0);
 					}
@@ -1751,7 +1762,7 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 			break;
 		case TIMER_SETUP_CURJK:
 			{
-				// ‹’®ó‘Ô‚ª•Ï‰»‚µ‚½‚Ì‚Å‹’®’†‚ÌƒT[ƒrƒX‚É‘Î‰‚·‚éÀ‹µID‚ğ’²‚×‚Ä•ÏX‚·‚é
+				// è¦–è´çŠ¶æ…‹ãŒå¤‰åŒ–ã—ãŸã®ã§è¦–è´ä¸­ã®ã‚µãƒ¼ãƒ“ã‚¹ã«å¯¾å¿œã™ã‚‹å®Ÿæ³IDã‚’èª¿ã¹ã¦å¤‰æ›´ã™ã‚‹
 				KillTimer(hwnd, TIMER_SETUP_CURJK);
 				NETWORK_SERVICE_ID_ELEM e = {GetCurrentNetworkServiceID(), 0};
 				std::vector<NETWORK_SERVICE_ID_ELEM>::const_iterator it =
@@ -1762,14 +1773,14 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 					jkSocket_.Shutdown();
 					//commentWindow_.ClearChat();
 					SetTimer(hwnd, TIMER_JK_WATCHDOG, 1000, NULL);
-					// ‘I‘ğ€–Ú‚ğXV‚·‚é‚½‚ß
+					// é¸æŠé …ç›®ã‚’æ›´æ–°ã™ã‚‹ãŸã‚
 					SendMessage(hwnd, WM_UPDATE_LIST, TRUE, 0);
 				}
 			}
 			break;
 		case TIMER_OPEN_DROPFILE:
-			// D&D‚³‚ê‚½À‹µƒƒOƒtƒ@ƒCƒ‹‚ğŠJ‚­
-			// TSƒtƒ@ƒCƒ‹‚Æ‚Ì“¯D&D‚ğl—¶‚µ‚ÄRelƒ`ƒFƒbƒN‚ÍŠî€‚Æ‚·‚éTOT‚Ìæ“¾ƒ^ƒCƒ~ƒ“ƒO‚ğ’x‚ç‚¹‚é
+			// D&Dã•ã‚ŒãŸå®Ÿæ³ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã
+			// TSãƒ•ã‚¡ã‚¤ãƒ«ã¨ã®åŒæ™‚D&Dã‚’è€ƒæ…®ã—ã¦Relãƒã‚§ãƒƒã‚¯æ™‚ã¯åŸºæº–ã¨ã™ã‚‹TOTã®å–å¾—ã‚¿ã‚¤ãƒŸãƒ³ã‚°ã‚’é…ã‚‰ã›ã‚‹
 			if (--dropFileTimeout_ < 0 || bSpecFile_) {
 				KillTimer(hwnd, TIMER_OPEN_DROPFILE);
 			} else {
@@ -1814,39 +1825,39 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 		{
 			HWND hList = GetDlgItem(hwnd, IDC_FORCELIST);
 			if (!bDisplayLogList_ || !IsWindowVisible(hwnd)) {
-				// ƒŠƒXƒg‚ª‘‚¦‘±‚¯‚È‚¢‚æ‚¤‚É‚·‚é
+				// ãƒªã‚¹ãƒˆãŒå¢—ãˆç¶šã‘ãªã„ã‚ˆã†ã«ã™ã‚‹
 				for (; logList_.size() > COMMENT_TRIMEND; logList_.pop_front());
 				logListDisplayedSize_ = 0;
 			}
 			if (!IsWindowVisible(hwnd)) {
-				// ”ñ•\¦’†‚ÍƒTƒ{‚é
+				// éè¡¨ç¤ºä¸­ã¯ã‚µãƒœã‚‹
 				if (ListBox_GetCount(hList) != 0) {
 					ListBox_ResetContent(hList);
 				}
 				return TRUE;
 			} else if (!bDisplayLogList_ && !wParam) {
-				// ¨‚¢ƒŠƒXƒg•\¦’†‚Í·•ªXV(wParam==FALSE)‚µ‚È‚¢
+				// å‹¢ã„ãƒªã‚¹ãƒˆè¡¨ç¤ºä¸­ã¯å·®åˆ†æ›´æ–°(wParam==FALSE)ã—ãªã„
 				return TRUE;
 			}
-			// •`‰æ‚ğˆê’â~
+			// æç”»ã‚’ä¸€æ™‚åœæ­¢
 			SendMessage(hList, WM_SETREDRAW, FALSE, 0);
 			int iTopItemIndex = ListBox_GetTopIndex(hList);
-			// wParam!=FALSE‚Ì‚Æ‚«‚ÍƒŠƒXƒg‚Ì“à—e‚ğƒŠƒZƒbƒg‚·‚é
+			// wParam!=FALSEã®ã¨ãã¯ãƒªã‚¹ãƒˆã®å†…å®¹ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹
 			if (wParam) {
 				ListBox_ResetContent(hList);
-				// wParam==2‚Ì‚Æ‚«‚ÍƒXƒNƒ[ƒ‹ˆÊ’u‚ğ•Û‘¶‚·‚é
+				// wParam==2ã®ã¨ãã¯ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä½ç½®ã‚’ä¿å­˜ã™ã‚‹
 				if (wParam != 2) {
 					iTopItemIndex = 0;
 				}
 			}
 			if (bDisplayLogList_) {
-				// ƒƒOƒŠƒXƒg•\¦’†
+				// ãƒ­ã‚°ãƒªã‚¹ãƒˆè¡¨ç¤ºä¸­
 				int iSelItemIndex = ListBox_GetCurSel(hList);
 				if (logList_.size() < logListDisplayedSize_ || ListBox_GetCount(hList) != logListDisplayedSize_) {
 					ListBox_ResetContent(hList);
 					logListDisplayedSize_ = 0;
 				}
-				// logList_‚ÆƒŠƒXƒgƒ{ƒbƒNƒX‚Ì“à—e‚ªí‚É“¯Šú‚·‚é‚æ‚¤‚ÉXV‚·‚é
+				// logList_ã¨ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®å†…å®¹ãŒå¸¸ã«åŒæœŸã™ã‚‹ã‚ˆã†ã«æ›´æ–°ã™ã‚‹
 				std::list<LOG_ELEM>::const_iterator it = logList_.end();
 				for (size_t i = logList_.size() - logListDisplayedSize_; i > 0; --i, --it);
 				for (; it != logList_.end(); ++it) {
@@ -1869,11 +1880,11 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 					ListBox_SetTopIndex(hList, max(iTopItemIndex, 0));
 				}
 			} else {
-				// ¨‚¢ƒŠƒXƒg•\¦’†
+				// å‹¢ã„ãƒªã‚¹ãƒˆè¡¨ç¤ºä¸­
 				std::vector<FORCE_ELEM>::const_iterator it = forceList_.begin();
 				for (; it != forceList_.end(); ++it) {
 					TCHAR text[_countof(it->name) + 64];
-					wsprintf(text, TEXT("jk%d (%s) ¨‚¢F%d"), it->jkID, it->name, it->force);
+					wsprintf(text, TEXT("jk%d (%s) å‹¢ã„ï¼š%d"), it->jkID, it->name, it->force);
 					ListBox_AddString(hList, text);
 					if (it->jkID == currentJKToGet_) {
 						ListBox_SetCurSel(hList, ListBox_GetCount(hList) - 1);
@@ -1881,7 +1892,7 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 				}
 				ListBox_SetTopIndex(hList, iTopItemIndex);
 			}
-			// •`‰æ‚ğÄŠJ
+			// æç”»ã‚’å†é–‹
 			SendMessage(hList, WM_SETREDRAW, TRUE, 0);
 			InvalidateRect(hList, NULL, FALSE);
 		}
@@ -1896,7 +1907,7 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 
 			int ret = channelSocket_.ProcessRecv(wParam, lParam, &channelBuf_);
 			if (ret == -2) {
-				// Ø’f
+				// åˆ‡æ–­
 				channelBuf_.push_back('\0');
 				bool bCleared = false;
 				std::cmatch m, mVideo, mForce, mName;
@@ -1925,7 +1936,7 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 		}
 		return TRUE;
 	case WMS_JK:
-		{
+		/*{
 			static const std::regex reMs("^(?=.*?(?:^|&)done=true(?:&|$)).*?(?:^|&)ms=(\\d+\\.\\d+\\.\\d+\\.\\d+)(?:&|$)");
 			static const std::regex reMsPort("(?:^|&)ms_port=(\\d+)(?:&|$)");
 			static const std::regex reThreadID("(?:^|&)thread_id=(\\d+)(?:&|$)");
@@ -1938,12 +1949,12 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 
 			int ret = jkSocket_.ProcessRecv(wParam, lParam, &jkBuf_);
 			if (ret < 0) {
-				// Ø’f
+				// åˆ‡æ–­
 				if (bConnectedToCommentServer_) {
 					bConnectedToCommentServer_ = false;
 					commentServerResponse_[0] = '\0';
 					jkLeaveThreadCheck_ = 0;
-					OutputMessageLog(TEXT("ƒRƒƒ“ƒgƒT[ƒo‚Æ‚Ì’ÊM‚ğØ’f‚µ‚Ü‚µ‚½B"));
+					OutputMessageLog(TEXT("ã‚³ãƒ¡ãƒ³ãƒˆã‚µãƒ¼ãƒã¨ã®é€šä¿¡ã‚’åˆ‡æ–­ã—ã¾ã—ãŸã€‚"));
 					WriteToLogfile(-1);
 				} else if (ret == -2 && currentJK_ == currentJKToGet_) {
 					jkBuf_.push_back('\0');
@@ -1954,16 +1965,16 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 					    std::regex_search(p, mThreadID, reThreadID) &&
 					    lstrcmpA(jkLeaveThreadID_, mThreadID[1].str().c_str()))
 					{
-						// ƒRƒƒ“ƒgƒT[ƒo‚ÉÚ‘±
+						// ã‚³ãƒ¡ãƒ³ãƒˆã‚µãƒ¼ãƒã«æ¥ç¶š
 						static const char szRequestTemplate[] = "<thread res_from=\"-10\" version=\"20061206\" thread=\"%.15s\" />";
 						char szRequest[_countof(szRequestTemplate) + 16];
 						wsprintfA(szRequest, szRequestTemplate, mThreadID[1].str().c_str());
 						jkLeaveThreadID_[0] = '\0';
-						// '\0'‚Ü‚Å‘—‚é
+						// '\0'ã¾ã§é€ã‚‹
 						if (jkSocket_.Send(hwnd, WMS_JK, mMs[1].str().c_str(), static_cast<unsigned short>(atoi(mMsPort[1].first)), szRequest, lstrlenA(szRequest) + 1, true)) {
 							bConnectedToCommentServer_ = true;
 							jkBuf_.clear();
-							// ƒRƒƒ“ƒg“Še‚Ì‚½‚ß
+							// ã‚³ãƒ¡ãƒ³ãƒˆæŠ•ç¨¿ã®ãŸã‚
 							bGetflvIsPremium_ = std::regex_search(p, reIsPremium);
 							getflvUserID_[0] = '\0';
 							std::cmatch m;
@@ -1972,16 +1983,16 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 							}
 							if (getflvUserID_[0] && std::regex_search(p, m, reNickname)) {
 								TCHAR text[128];
-								wsprintf(text, TEXT("ƒRƒƒ“ƒgƒT[ƒo‚ÉÚ‘±ŠJn‚µ‚Ü‚µ‚½(login=%.16S)B"), m[1].str().c_str());
+								wsprintf(text, TEXT("ã‚³ãƒ¡ãƒ³ãƒˆã‚µãƒ¼ãƒã«æ¥ç¶šé–‹å§‹ã—ã¾ã—ãŸ(login=%.16S)ã€‚"), m[1].str().c_str());
 								OutputMessageLog(text);
 							} else {
-								OutputMessageLog(TEXT("ƒRƒƒ“ƒgƒT[ƒo‚ÉÚ‘±ŠJn‚µ‚Ü‚µ‚½B"));
+								OutputMessageLog(TEXT("ã‚³ãƒ¡ãƒ³ãƒˆã‚µãƒ¼ãƒã«æ¥ç¶šé–‹å§‹ã—ã¾ã—ãŸã€‚"));
 							}
 						}
 					}
 				}
 			} else {
-				// óM’†
+				// å—ä¿¡ä¸­
 				if (bConnectedToCommentServer_) {
 					jkBuf_.push_back('\0');
 					const char *p = &jkBuf_[0];
@@ -1989,7 +2000,7 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 					bool bRead = false;
 					bool bCarried = false;
 					while (p < tail) {
-						// ƒƒO‚Å“Á•Ê‚ÈˆÓ–¡‚ğ‚à‚Â‚½‚ß‰üs•¶š‚Í”’l•¶šQÆ‚É’uŠ·
+						// ãƒ­ã‚°ã§ç‰¹åˆ¥ãªæ„å‘³ã‚’ã‚‚ã¤ãŸã‚æ”¹è¡Œæ–‡å­—ã¯æ•°å€¤æ–‡å­—å‚ç…§ã«ç½®æ›
 						int len, rplLen;
 						char rpl[CHAT_TAG_MAX + 16];
 						for (len = 0, rplLen = 0; p[len]; ++len) {
@@ -2004,13 +2015,13 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 						rpl[rplLen] = '\0';
 
 						if (&p[len] == tail) {
-							// ƒ^ƒO‚Ì“r’†‚ÅƒpƒPƒbƒg•ªŠ„‚³‚ê‚éê‡‚ª‚ ‚é‚½‚ßŒJ‚è‰z‚µ
+							// ã‚¿ã‚°ã®é€”ä¸­ã§ãƒ‘ã‚±ãƒƒãƒˆåˆ†å‰²ã•ã‚Œã‚‹å ´åˆãŒã‚ã‚‹ãŸã‚ç¹°ã‚Šè¶Šã—
 							jkBuf_.pop_back();
 							jkBuf_.erase(jkBuf_.begin(), jkBuf_.end() - len);
 							bCarried = true;
 							break;
 						}
-						// w’èƒtƒ@ƒCƒ‹Ä¶’†‚Í¬‚¶‚é‚ÆŸT“©‚µ‚¢‚Ì‚Å•\¦‚µ‚È‚¢BŒã‘Şw’è‚Í‚ ‚é’ö“x”½‰f
+						// æŒ‡å®šãƒ•ã‚¡ã‚¤ãƒ«å†ç”Ÿä¸­ã¯æ··ã˜ã‚‹ã¨é¬±é™¶ã—ã„ã®ã§è¡¨ç¤ºã—ãªã„ã€‚å¾Œé€€æŒ‡å®šã¯ã‚ã‚‹ç¨‹åº¦åæ˜ 
 						if (ProcessChatTag(rpl, !bSpecFile_, min(max(-forwardOffset_, 0), 30000))) {
 							dprintf(TEXT("#")); // DEBUG
 							WriteToLogfile(currentJK_, rpl);
@@ -2018,21 +2029,21 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 						}
 						std::cmatch m;
 						if (std::regex_search(rpl, m, reChatNo)) {
-							// ƒRƒƒ“ƒg“Še‚Ì‚½‚ß‚ÉÅVƒRƒƒ“ƒg‚ÌƒRƒ”Ô‚ğ‹L˜^
+							// ã‚³ãƒ¡ãƒ³ãƒˆæŠ•ç¨¿ã®ãŸã‚ã«æœ€æ–°ã‚³ãƒ¡ãƒ³ãƒˆã®ã‚³ãƒ¡ç•ªã‚’è¨˜éŒ²
 							lastChatNo_ = atoi(m[1].first);
 						} else if (!commentServerResponse_[0] && !StrCmpNA(rpl, "<thread ", 8)) {
-							// ƒRƒƒ“ƒg“Še‚Ì‚½‚ß‚ÉÚ‘±‰“š‚ğ‹L˜^B‚±‚ê‚ª‹ó•¶š—ñ‚Å‚È‚¢ŠÔ‚Í“Še‰Â”\
+							// ã‚³ãƒ¡ãƒ³ãƒˆæŠ•ç¨¿ã®ãŸã‚ã«æ¥ç¶šå¿œç­”ã‚’è¨˜éŒ²ã€‚ã“ã‚ŒãŒç©ºæ–‡å­—åˆ—ã§ãªã„é–“ã¯æŠ•ç¨¿å¯èƒ½
 							lstrcpynA(commentServerResponse_, rpl, _countof(commentServerResponse_));
 							commentServerResponseTick_ = GetTickCount();
 						} else if (std::regex_search(rpl, m, reChatResult)) {
-							// ƒRƒƒ“ƒg“Še¸”s‚Ì‰“š‚ğæ“¾‚µ‚½
+							// ã‚³ãƒ¡ãƒ³ãƒˆæŠ•ç¨¿å¤±æ•—ã®å¿œç­”ã‚’å–å¾—ã—ãŸ
 							TCHAR text[64];
-							wsprintf(text, TEXT("Error:ƒRƒƒ“ƒg“Še‚É¸”s‚µ‚Ü‚µ‚½(status=%d)B"), atoi(m[1].first));
+							wsprintf(text, TEXT("Error:ã‚³ãƒ¡ãƒ³ãƒˆæŠ•ç¨¿ã«å¤±æ•—ã—ã¾ã—ãŸ(status=%d)ã€‚"), atoi(m[1].first));
 							OutputMessageLog(text);
 						} else if (std::regex_search(rpl, m, reLeaveThreadID)) {
-							// leave_thread reason="2"(à4ƒŠƒZƒbƒg?)‚É‚æ‚èØ’f‚³‚ê‚æ‚¤‚Æ‚µ‚Ä‚¢‚é
+							// leave_thread reason="2"(â‰’4æ™‚ãƒªã‚»ãƒƒãƒˆ?)ã«ã‚ˆã‚Šåˆ‡æ–­ã•ã‚Œã‚ˆã†ã¨ã—ã¦ã„ã‚‹
 							lstrcpynA(jkLeaveThreadID_, m[1].str().c_str(), _countof(jkLeaveThreadID_));
-							// ‚½‚Ü‚ÉƒT[ƒo‚©‚çØ’f‚³‚ê‚È‚¢ê‡‚ª‚ ‚é‚½‚ß
+							// ãŸã¾ã«ã‚µãƒ¼ãƒã‹ã‚‰åˆ‡æ–­ã•ã‚Œãªã„å ´åˆãŒã‚ã‚‹ãŸã‚
 							jkLeaveThreadCheck_ = 2;
 						}
 #ifdef _DEBUG
@@ -2051,10 +2062,10 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 					}
 				}
 			}
-		}
+		}*/
 		return TRUE;
 	case WMS_POST:
-		{
+		/*{
 			static const std::regex rePostkey("postkey=([0-9A-Za-z\\-_]+)");
 			static const std::regex reThread("^<thread[^>]*? thread=\"(\\d+)\"");
 			static const std::regex reTicket("^<thread[^>]*? ticket=\"(.+?)\"");
@@ -2063,7 +2074,7 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 
 			int ret = postSocket_.ProcessRecv(wParam, lParam, &postBuf_);
 			if (ret == -2) {
-				// Ø’f
+				// åˆ‡æ–­
 				postBuf_.push_back('\0');
 				std::cmatch mPostkey, mThread, mTicket, mServerTime;
 				const char *p = &postBuf_[FindHttpBody(&postBuf_[0])];
@@ -2073,10 +2084,10 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 				    std::regex_search(commentServerResponse_, mServerTime, reServerTime) &&
 				    getflvUserID_[0] && GetTickCount() - lastPostTick_ >= POST_COMMENT_INTERVAL)
 				{
-					// ƒRƒƒ“ƒg—“‚ğ•¶šƒR[ƒh•ÏŠ·
+					// ã‚³ãƒ¡ãƒ³ãƒˆæ¬„ã‚’æ–‡å­—ã‚³ãƒ¼ãƒ‰å¤‰æ›
 					TCHAR comm[POST_COMMENT_MAX], mail[64];
 					GetPostComboBoxText(comm, _countof(comm), mail, _countof(mail));
-					// Tab•¶šorƒŒƒR[ƒhƒZƒpƒŒ[ƒ^->‰üs
+					// Tabæ–‡å­—orãƒ¬ã‚³ãƒ¼ãƒ‰ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿->æ”¹è¡Œ
 					for (LPTSTR q = comm; *q; ++q) {
 						if (*q == TEXT('\t') || *q == TEXT('\x1e')) *q = TEXT('\n');
 					}
@@ -2088,21 +2099,21 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 					len = WideCharToMultiByte(CP_UTF8, 0, mail, -1, u8mail, _countof(u8mail) - 1, NULL, NULL);
 					u8mail[len] = '\0';
 					EncodeEntityReference(u8comm, u8commEnc, _countof(u8commEnc));
-					// vpos‚Í10msec’PˆÊB“à•”Œv‚Ì‚¸‚ê‚É‰e‹¿‚³‚ê‚È‚¢‚æ‚¤‚ÉƒT[ƒo‚ğŠî€‚É•â³
+					// vposã¯10msecå˜ä½ã€‚å†…éƒ¨æ™‚è¨ˆã®ãšã‚Œã«å½±éŸ¿ã•ã‚Œãªã„ã‚ˆã†ã«ã‚µãƒ¼ãƒæ™‚åˆ»ã‚’åŸºæº–ã«è£œæ­£
 					int vpos = (int)((LONGLONG)strtoul(mServerTime[1].first, NULL, 10) - strtoul(mThread[1].first, NULL, 10)) * 100 +
 					           (int)(GetTickCount() - commentServerResponseTick_) / 10;
 					if (std::regex_match(u8mail, reMailIsValid) && vpos >= 0) {
-						// ƒRƒƒ“ƒg“Še
+						// ã‚³ãƒ¡ãƒ³ãƒˆæŠ•ç¨¿
 						static const char szRequestTemplate[] =
 							"<chat thread=\"%.15s\" ticket=\"%.15s\" vpos=\"%d\" postkey=\"%.40s\" mail=\"%s%s\" user_id=\"%s\" premium=\"%d\" staff=\"0\">%s</chat>";
 						char szRequest[_countof(szRequestTemplate) + _countof(u8commEnc) + _countof(u8mail) + _countof(getflvUserID_) + 256];
 						wsprintfA(szRequest, szRequestTemplate, mThread[1].str().c_str(), mTicket[1].str().c_str(), vpos, mPostkey[1].str().c_str(),
 						          u8mail, s_.bAnonymity ? " 184" : "", getflvUserID_, (int)bGetflvIsPremium_, u8commEnc);
-						// '\0'‚Ü‚Å‘—‚é
+						// '\0'ã¾ã§é€ã‚‹
 						if (jkSocket_.Send(hwnd, WMS_JK, NULL, 0, szRequest, lstrlenA(szRequest) + 1, true)) {
 							lastPostTick_ = GetTickCount();
 							GetPostComboBoxText(lastPostComm_, _countof(lastPostComm_));
-							// ƒAƒ“ƒhƒD‚Å‚«‚é‚æ‚¤‚É‘I‘ğíœ‚ÅÁ‚·
+							// ã‚¢ãƒ³ãƒ‰ã‚¥ã§ãã‚‹ã‚ˆã†ã«é¸æŠå‰Šé™¤ã§æ¶ˆã™
 							if (SendDlgItemMessage(hwnd, IDC_CB_POST, CB_SETEDITSEL, 0, MAKELPARAM(0, -1)) == TRUE) {
 								SendDlgItemMessage(hwnd, IDC_CB_POST, WM_CLEAR, 0, 0);
 							}
@@ -2113,44 +2124,44 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 						}
 					}
 				}
-				OutputMessageLog(TEXT("Error:ƒRƒƒ“ƒg“Še‚ğƒLƒƒƒ“ƒZƒ‹‚µ‚Ü‚µ‚½B"));
+				OutputMessageLog(TEXT("Error:ã‚³ãƒ¡ãƒ³ãƒˆæŠ•ç¨¿ã‚’ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã—ã¾ã—ãŸã€‚"));
 			}
-		}
+		}*/
 		return TRUE;
 	case WM_SET_ZORDER:
-		// ‘S‰æ–Ê‚âÅ‘å‰»‚Í‘O–Ê‚Ì‚Ù‚¤‚ª“s‡‚ª‚æ‚¢‚Í‚¸
+		// å…¨ç”»é¢ã‚„æœ€å¤§åŒ–æ™‚ã¯å‰é¢ã®ã»ã†ãŒéƒ½åˆãŒã‚ˆã„ã¯ãš
 		if ((s_.hideForceWindow & 4) || m_pApp->GetFullscreen() || (GetWindowLong(m_pApp->GetAppWindow(), GWL_STYLE) & WS_MAXIMIZE)) {
-			// TVTestƒEƒBƒ“ƒhƒE‚Ì‘O–Ê‚É‚à‚Á‚Ä‚­‚é
+			// TVTestã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®å‰é¢ã«ã‚‚ã£ã¦ãã‚‹
 			SetWindowPos(hwnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
 			SetWindowPos(hwnd, m_pApp->GetFullscreen() || m_pApp->GetAlwaysOnTop() ? HWND_TOPMOST : HWND_TOP,
 			             0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
 		} else {
-			// TVTestƒEƒBƒ“ƒhƒE‚Ì”w–Ê‚É‚à‚Á‚Ä‚­‚é
+			// TVTestã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®èƒŒé¢ã«ã‚‚ã£ã¦ãã‚‹
 			SetWindowPos(hwnd, m_pApp->GetAppWindow(), 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
 		}
 		return TRUE;
 	case WM_POST_COMMENT:
-		{
+		/*{
 			TCHAR comm[POST_COMMENT_MAX + 1];
 			if (GetDlgItemText(hwnd, IDC_CB_POST, comm, _countof(comm)) && comm[0] == TEXT('@')) {
-				// ƒ[ƒJƒ‹ƒRƒ}ƒ“ƒh‚Æ‚µ‚Äˆ—
+				// ãƒ­ãƒ¼ã‚«ãƒ«ã‚³ãƒãƒ³ãƒ‰ã¨ã—ã¦å‡¦ç†
 				ProcessLocalPost(&comm[1]);
 				return TRUE;
 			}
 			GetPostComboBoxText(comm, _countof(comm));
 			if (GetTickCount() - lastPostTick_ < POST_COMMENT_INTERVAL) {
-				OutputMessageLog(TEXT("Error:“ŠeŠÔŠu‚ª’Z‚·‚¬‚Ü‚·B"));
+				OutputMessageLog(TEXT("Error:æŠ•ç¨¿é–“éš”ãŒçŸ­ã™ãã¾ã™ã€‚"));
 			} else if (lstrlen(comm) >= POST_COMMENT_MAX) {
-				OutputMessageLog(TEXT("Error:“ŠeƒRƒƒ“ƒg‚ª’·‚·‚¬‚Ü‚·B"));
+				OutputMessageLog(TEXT("Error:æŠ•ç¨¿ã‚³ãƒ¡ãƒ³ãƒˆãŒé•·ã™ãã¾ã™ã€‚"));
 			} else if (comm[0] && !lstrcmp(comm, lastPostComm_)) {
-				OutputMessageLog(TEXT("Error:“ŠeƒRƒƒ“ƒg‚ª‘O‰ñ‚Æ“¯‚¶‚Å‚·B"));
+				OutputMessageLog(TEXT("Error:æŠ•ç¨¿ã‚³ãƒ¡ãƒ³ãƒˆãŒå‰å›ã¨åŒã˜ã§ã™ã€‚"));
 			} else if (comm[0]) {
 				static const std::regex reThread("^<thread[^>]*? thread=\"(\\d+)\"");
 				std::cmatch mThread;
 				if (!std::regex_search(commentServerResponse_, mThread, reThread) || !getflvUserID_[0]) {
-					OutputMessageLog(TEXT("Error:ƒRƒƒ“ƒgƒT[ƒo‚ÉÚ‘±‚µ‚Ä‚¢‚È‚¢‚©ƒƒOƒCƒ“‚µ‚Ä‚¢‚Ü‚¹‚ñB"));
+					OutputMessageLog(TEXT("Error:ã‚³ãƒ¡ãƒ³ãƒˆã‚µãƒ¼ãƒã«æ¥ç¶šã—ã¦ã„ãªã„ã‹ãƒ­ã‚°ã‚¤ãƒ³ã—ã¦ã„ã¾ã›ã‚“ã€‚"));
 				} else {
-					// ƒ|ƒXƒgƒL[æ“¾ŠJn
+					// ãƒã‚¹ãƒˆã‚­ãƒ¼å–å¾—é–‹å§‹
 					char szGet[_countof(cookie_) + 256];
 					wsprintfA(szGet, "GET /api/v2/getpostkey?thread=%.15s&block_no=%d HTTP/1.1\r\n", mThread[1].str().c_str(), (lastChatNo_ + 1) / 100);
 					AppendHttpHeader(szGet, "Host: ", JK_HOST_NAME, "\r\n");
@@ -2161,7 +2172,7 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 					}
 				}
 			}
-		}
+		}*/
 		return TRUE;
 	case WM_SIZE:
 		{
@@ -2172,7 +2183,7 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 			GetWindowRect(hItem, &rc);
 			MapWindowPoints(NULL, hwnd, reinterpret_cast<LPPOINT>(&rc), 2);
 			if (!cookie_[0]) {
-				// ƒNƒbƒL[‚ªİ’è‚³‚ê‚Ä‚¢‚È‚¯‚ê‚ÎŠÔˆá‚¢‚È‚­“Še•s”\‚È‚Ì‚Å“ü—Íƒ{ƒbƒNƒX‚ğ•\¦‚µ‚È‚¢
+				// ã‚¯ãƒƒã‚­ãƒ¼ãŒè¨­å®šã•ã‚Œã¦ã„ãªã‘ã‚Œã°é–“é•ã„ãªãæŠ•ç¨¿ä¸èƒ½ãªã®ã§å…¥åŠ›ãƒœãƒƒã‚¯ã‚¹ã‚’è¡¨ç¤ºã—ãªã„
 				SetWindowPos(hItem, NULL, rc.left, rcParent.bottom, rcParent.right-rc.left*2, rc.bottom-rc.top, SWP_NOZORDER);
 			} else {
 				padding += 6 + static_cast<int>(SendMessage(hItem, CB_GETITEMHEIGHT, static_cast<WPARAM>(-1), 0));
@@ -2195,7 +2206,7 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 	return FALSE;
 }
 
-// ƒXƒgƒŠ[ƒ€ƒR[ƒ‹ƒoƒbƒN(•ÊƒXƒŒƒbƒh)
+// ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯(åˆ¥ã‚¹ãƒ¬ãƒƒãƒ‰)
 BOOL CALLBACK CNicoJK::StreamCallback(BYTE *pData, void *pClientData)
 {
 	CNicoJK *pThis = static_cast<CNicoJK*>(pClientData);
@@ -2207,10 +2218,10 @@ BOOL CALLBACK CNicoJK::StreamCallback(BYTE *pData, void *pClientData)
 	BYTE bAdaptationLength = pData[4];
 	BYTE bPcrFlag = pData[5]&0x10;
 
-	// ƒV[ƒN‚âƒ|[ƒY‚ğŒŸo‚·‚é‚½‚ß‚ÉPCR‚ğ’²‚×‚é
+	// ã‚·ãƒ¼ã‚¯ã‚„ãƒãƒ¼ã‚ºã‚’æ¤œå‡ºã™ã‚‹ãŸã‚ã«PCRã‚’èª¿ã¹ã‚‹
 	if (bHasAdaptation && bAdaptationLength >= 5 && bPcrFlag && !bTransportError) {
 		DWORD pcr = (static_cast<DWORD>(pData[5+1])<<24) | (pData[5+2]<<16) | (pData[5+3]<<8) | pData[5+4];
-		// QÆPID‚ÌPCR‚ªŒ»‚ê‚é‚±‚Æ‚È‚­5‰ñ•Ê‚ÌPCR‚ªoŒ»‚·‚ê‚ÎAQÆPID‚ğ•ÏX‚·‚é
+		// å‚ç…§PIDã®PCRãŒç¾ã‚Œã‚‹ã“ã¨ãªã5å›åˆ¥ã®PCRãŒå‡ºç¾ã™ã‚Œã°ã€å‚ç…§PIDã‚’å¤‰æ›´ã™ã‚‹
 		if (pid != pThis->pcrPid_) {
 			int i = 0;
 			for (; pThis->pcrPids_[i] >= 0; ++i) {
@@ -2233,11 +2244,11 @@ BOOL CALLBACK CNicoJK::StreamCallback(BYTE *pData, void *pClientData)
 		//dprintf(TEXT("CNicoJK::StreamCallback() PCR\n")); // DEBUG
 		CBlockLock lock(&pThis->streamLock_);
 		DWORD tick = GetTickCount();
-		// 2•bˆÈãPCR‚ğæ“¾‚Å‚«‚Ä‚¢‚È‚¢¨ƒ|[ƒY‚©‚ç‰ñ•œ?
+		// 2ç§’ä»¥ä¸ŠPCRã‚’å–å¾—ã§ãã¦ã„ãªã„â†’ãƒãƒ¼ã‚ºã‹ã‚‰å›å¾©?
 		bool bReset = tick - pThis->pcrTick_ >= 2000;
 		pThis->pcrTick_ = tick;
 		if (pid == pThis->pcrPid_) {
-			// 1•bˆÈãPCR‚ª”ò‚ñ‚Å‚¢‚é¨ƒV[ƒN?
+			// 1ç§’ä»¥ä¸ŠPCRãŒé£›ã‚“ã§ã„ã‚‹â†’ã‚·ãƒ¼ã‚¯?
 			bReset = bReset || pcr - pThis->pcr_ >= 45000;
 			pThis->pcr_ = pcr;
 		}
@@ -2247,12 +2258,12 @@ BOOL CALLBACK CNicoJK::StreamCallback(BYTE *pData, void *pClientData)
 		}
 	}
 
-	// TOTƒpƒPƒbƒg‚Í’nã”g‚ÌÀ‘ª‚Å6•b‚É1ŒÂ’ö“x
-	// ARIB‹KŠi‚Å‚ÍÅ’á30•b‚É1ŒÂ
+	// TOTãƒ‘ã‚±ãƒƒãƒˆã¯åœ°ä¸Šæ³¢ã®å®Ÿæ¸¬ã§6ç§’ã«1å€‹ç¨‹åº¦
+	// ARIBè¦æ ¼ã§ã¯æœ€ä½30ç§’ã«1å€‹
 	if (pid == 0x14 && bPayloadUnitStart && bHasPayload && !bTransportError) {
 		BYTE *pPayload = pData + 4;
 		if (bHasAdaptation) {
-			// ƒAƒ_ƒvƒe[ƒVƒ‡ƒ“ƒtƒB[ƒ‹ƒh‚ğƒXƒLƒbƒv‚·‚é
+			// ã‚¢ãƒ€ãƒ—ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’ã‚¹ã‚­ãƒƒãƒ—ã™ã‚‹
 			if (bAdaptationLength > 182) {
 				pPayload = NULL;
 			} else {
@@ -2263,11 +2274,11 @@ BOOL CALLBACK CNicoJK::StreamCallback(BYTE *pData, void *pClientData)
 			BYTE *pTable = pPayload + 1 + pPayload[0];
 			// TOT or TDT (ARIB STD-B10)
 			if (pTable + 7 < pData + 188 && (pTable[0] == 0x73 || pTable[0] == 0x70)) {
-				// TOT‚ÆTickƒJƒEƒ“ƒg‚ğ‹L˜^‚·‚é
+				// TOTæ™‚åˆ»ã¨Tickã‚«ã‚¦ãƒ³ãƒˆã‚’è¨˜éŒ²ã™ã‚‹
 				SYSTEMTIME st;
 				FILETIME ft;
 				if (AribToSystemTime(&pTable[3], &st) && SystemTimeToFileTime(&st, &ft)) {
-					// UTC‚É•ÏŠ·
+					// UTCã«å¤‰æ›
 					ft += -32400000LL * FILETIME_MILLISECOND;
 					dprintf(TEXT("CNicoJK::StreamCallback() TOT\n")); // DEBUG
 					CBlockLock lock(&pThis->streamLock_);

@@ -5,7 +5,10 @@
 #include "ChatProviderEntry/NiconicoJikkyouLogChatProviderEntry.h"
 #include "ChatProviderEntry/NiconicoJikkyouLogFileStreamChatProviderEntry.h"
 #include "ChatProviderEntry\NichanChatProviderEntry.h"
+#include "ChatModRule\IdNgChatModRule.h"
+#include "ChatModRule\WordNgChatModRule.h"
 #include "SimpleArgumentParser.h"
+#include <iterator>
 
 namespace NicoJKKakolog {
 
@@ -13,6 +16,7 @@ namespace NicoJKKakolog {
 
 	NicoJKKakolog::NicoJKKakolog():
 		timelag(std::chrono::milliseconds(0))
+		//modrules({ std::pair<std::unique_ptr<ChatModRule>,int>(std::piecewise_construct,{new IdNgChatModRule("")},{0}) })
 	{
 	}
 
@@ -26,41 +30,37 @@ namespace NicoJKKakolog {
 		initCommonCtrl.dwSize = 8;
 		initCommonCtrl.dwICC = ICC_LISTVIEW_CLASSES;
 		InitCommonControlsEx(&initCommonCtrl);
+
+		//NGリストを設定ファイルから作成
+		for (const auto &ng : this->iniFile.GetSectionContent(L"NGList"))
+		{
+			if (ng.first.size() == 0)
+				continue;
+			if (ng.first[0] == L'U')
+				this->modrules.emplace_back(std::unique_ptr<ChatModRule>(new IdNgChatModRule(utf8_wide_conv.to_bytes(ng.second))), 0);
+			else if(ng.first[0]==L'W')
+				this->modrules.emplace_back(std::unique_ptr<ChatModRule>(new WordNgChatModRule(utf8_wide_conv.to_bytes(ng.second))), 0);
+		}
 	}
 
 	void NicoJKKakolog::DialogInit(HWND dialog)
 	{
 		this->dialog = dialog;
-		//this->listview = listview;
-		
+
 		//ChatProviderEntryを登録
-		//this->chatProviderEntries.clear();
 		this->chatProviderEntries.insert(std::end(this->chatProviderEntries), {
 			new NiconicoJikkyouChatProviderEntry(&this->iniFile),
 			new NiconicoJikkyouLogChatProviderEntry(&this->iniFile),
 			new NiconicoJikkyouLogFileStreamChatProviderEntry(),
 			new NichanChatProviderEntry(this->hInstance,dialog,&this->iniFile)
 		});
-
-		LVCOLUMN lvcol;
-		lvcol.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT;
-		lvcol.fmt = LVCFMT_LEFT;
-		lvcol.cx = 160;             // 表示位置
-		lvcol.pszText = _T("チャット取得元");  // 見出し
-		ListView_InsertColumn(GetDlgItem(dialog,IDC_LISTVIEW), 0, &lvcol);
-
-		lvcol.cx = 320;             // 表示位置
-		lvcol.pszText = _T("説明");  // 見出し
-		ListView_InsertColumn(GetDlgItem(dialog, IDC_LISTVIEW), 1, &lvcol);
-
-		ListView_SetExtendedListViewStyle(GetDlgItem(dialog, IDC_LISTVIEW), ListView_GetExtendedListViewStyle(GetDlgItem(dialog, IDC_LISTVIEW)) | LVS_EX_CHECKBOXES | LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT);
-
+		
 		//コマンドライン引数処理
 		Utility::SimpleArgumentParser argparser;
 		//    デフォルトでオンにするチャット元
 		std::wstring commentSource=argparser.GetOptionArgument(L"jkchatsrc");
 		std::vector<std::wstring> defaultOnProviderNames;
-		if (commentSource.size()>0)
+		if (!commentSource.empty())
 		{
 			std::wstring::size_type start,end;
 			for (start=0,end=commentSource.find(L',');end != std::wstring::npos; start=end+1,end = commentSource.find(L',',end+1))
@@ -92,8 +92,22 @@ namespace NicoJKKakolog {
 			SendDlgItemMessage(dialog, IDC_RADIO_CHATSELECT, BM_SETCHECK, BST_CHECKED, 0);
 			PostMessage(dialog, WM_COMMAND, (WPARAM)IDC_RADIO_CHATSELECT, 0);
 		}
-		
+
 		chatProviders.resize(chatProviderEntries.size(), nullptr);
+
+		//GUIのチャット元リストのコラムを設定
+		LVCOLUMN lvcol;
+		lvcol.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT;
+		lvcol.fmt = LVCFMT_LEFT;
+		lvcol.cx = 160;             // 表示位置
+		lvcol.pszText = _T("チャット取得元");  // 見出し
+		ListView_InsertColumn(GetDlgItem(dialog, IDC_LISTVIEW), 0, &lvcol);
+
+		lvcol.cx = 320;             // 表示位置
+		lvcol.pszText = _T("説明");  // 見出し
+		ListView_InsertColumn(GetDlgItem(dialog, IDC_LISTVIEW), 1, &lvcol);
+
+		ListView_SetExtendedListViewStyle(GetDlgItem(dialog, IDC_LISTVIEW), ListView_GetExtendedListViewStyle(GetDlgItem(dialog, IDC_LISTVIEW)) | LVS_EX_CHECKBOXES | LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT);
 
 		//GUIのチャット元リストを作成
 		for (size_t i = 0; i<chatProviderEntries.size(); i++)
@@ -150,6 +164,10 @@ namespace NicoJKKakolog {
 			case IDC_CHAT_SYNC:
 				timelag = std::chrono::milliseconds(0);
 				return TRUE;
+			case IDC_NG:
+				ngSettingDialog.reset(new NgSettingDialog(this->hInstance, this->dialog, this->modrules));
+				SetTimer(dialog, NGSETTINGDIALOG_UPDATE_TIMER, 8000, NULL);
+				return TRUE;
 			}
 			break;
 		case WM_NOTIFY:
@@ -166,36 +184,51 @@ namespace NicoJKKakolog {
 			return FALSE;
 		//listviewのチェックボックスの状態が変わった（アプリケーション定義）
 		case WM_CHECKSTATECHANGE:
-		{
-			int    i = (int)lParam;
-			TCHAR  szName[256];
-			LVITEM item;
+			{
+				int    i = (int)lParam;
+				/*TCHAR  szName[256];
+				LVITEM item;
 
-			item.mask = LVIF_TEXT;
-			item.iItem = i;
-			item.iSubItem = 0;
-			item.pszText = szName;
-			item.cchTextMax = sizeof(szName) / sizeof(TCHAR);
-			ListView_GetItem(GetDlgItem(dialog, IDC_LISTVIEW), &item);
+				item.mask = LVIF_TEXT;
+				item.iItem = i;
+				item.iSubItem = 0;
+				item.pszText = szName;
+				item.cchTextMax = sizeof(szName) / sizeof(TCHAR);
+				ListView_GetItem(GetDlgItem(dialog, IDC_LISTVIEW), &item);*/
 
-			if (ListView_GetCheckState(GetDlgItem(dialog, IDC_LISTVIEW), i)) {
-				if (chatProviders.at(i) == nullptr)
-				{
-					IChatProvider *provider = chatProviderEntries.at(i)->NewProvider();
-					if (provider)
-						chatProviders.at(i) = provider;
-					else
-						ListView_SetCheckState(GetDlgItem(dialog, IDC_LISTVIEW), i, false);
+				if (ListView_GetCheckState(GetDlgItem(dialog, IDC_LISTVIEW), i)) {
+					if (chatProviders.at(i) == nullptr)
+					{
+						IChatProvider *provider = chatProviderEntries.at(i)->NewProvider();
+						if (provider)
+							chatProviders.at(i) = provider;
+						else
+							ListView_SetCheckState(GetDlgItem(dialog, IDC_LISTVIEW), i, false);
+					}
+				}
+				else {
+					//ListView_DeleteItem(listview, i);
+					delete chatProviders.at(i);
+					chatProviders.at(i) = nullptr;
 				}
 			}
-			else {
-				//ListView_DeleteItem(listview, i);
-				delete chatProviders.at(i);
-				chatProviders.at(i) = nullptr;
-			}
-		}
-		return FALSE;
+			return FALSE;
 
+		case WM_ADDCHATMODRULE:
+			this->modrules.emplace_back(std::unique_ptr<ChatModRule>((ChatModRule *) wParam), 0);
+			PostMessage(this->ngSettingDialog->GetHandle(), NgSettingDialog::WM_MODRULEUPDATE, 0, -1);
+			return FALSE;
+
+		case WM_REMOVECHATMODRULE:
+			this->modrules.erase(std::find_if(std::begin(this->modrules), std::end(this->modrules),
+				[&wParam](const decltype(this->modrules)::value_type &val) {return val.first.get() == (ChatModRule *)wParam; }));
+			PostMessage(this->ngSettingDialog->GetHandle(), NgSettingDialog::WM_MODRULEUPDATE, 0, -1);
+			return FALSE;
+
+		case WM_TIMER:
+			if(wParam== NGSETTINGDIALOG_UPDATE_TIMER)
+				PostMessage(this->ngSettingDialog->GetHandle(), NgSettingDialog::WM_MODRULEUPDATE, 0, -1);
+			return FALSE;
 		}
 
 		return FALSE;
@@ -236,6 +269,7 @@ namespace NicoJKKakolog {
 		chin.StartTime = std::chrono::system_clock::from_time_t(FileTimeToUnixTime(fiti));
 		chin.Duration = std::chrono::seconds(pi.Duration);
 
+		auto tp = std::chrono::system_clock::from_time_t(t)+timelag;
 		std::vector<Chat> ret;
 		int i = 0;
 		for (IChatProvider *&provider : chatProviders)
@@ -244,8 +278,18 @@ namespace NicoJKKakolog {
 			{
 				try
 				{
-					auto hoge = provider->Get(chin, std::chrono::system_clock::from_time_t(t) + timelag);
-					ret.insert(std::end(ret), std::begin(hoge), std::end(hoge));
+					auto hoge = provider->Get(chin, tp);
+					for (Chat &chat : hoge)
+					{
+						//チャット修正
+						for (auto &modrule : this->modrules)
+						{
+							if (modrule.first->Modify(chat))
+								modrule.second++;
+						}
+
+						ret.push_back(std::move(chat));
+					}
 				}
 				catch (const ChatProviderError &e) {
 					MessageBoxA(this->dialog, e.what(), "チャット取得エラー", 0);

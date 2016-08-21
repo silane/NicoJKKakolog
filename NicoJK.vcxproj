@@ -177,6 +177,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AsyncSocket.h" />
+    <ClInclude Include="NicoJKKakolog\NgSettingDialog.h" />
+    <ClInclude Include="NicoJKKakolog\ChatModRule\IdNgChatModRule.h" />
+    <ClInclude Include="NicoJKKakolog\ChatModRule\ChatModRule.h" />
     <ClInclude Include="NicoJKKakolog\NichanUtils\FuzzyNichanThreadSelector.h" />
     <ClInclude Include="NicoJKKakolog\NichanChatProviderSettingDialog.h" />
     <ClInclude Include="NicoJKKakolog\NichanUtils\KeywordNichanThreadSelector.h" />
@@ -216,9 +219,12 @@
     <ClInclude Include="TextFileReader.h" />
     <ClInclude Include="TVTestPlugin.h" />
     <ClInclude Include="Util.h" />
+    <ClInclude Include="NicoJKKakolog\ChatModRule\WordNgChatModRule.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AsyncSocket.cpp" />
+    <ClCompile Include="NicoJKKakolog\NgSettingDialog.cpp" />
+    <ClCompile Include="NicoJKKakolog\ChatModRule\IdNgChatModRule.cpp" />
     <ClCompile Include="NicoJKKakolog\NichanUtils\FuzzyNichanThreadSelector.cpp" />
     <ClCompile Include="NicoJKKakolog\NichanChatProviderSettingDialog.cpp" />
     <ClCompile Include="NicoJKKakolog\NichanUtils\KeywordNichanThreadSelector.cpp" />
@@ -292,12 +298,14 @@
     <ClCompile Include="NicoJKKakolog\ChatProvider\TestChatProvider.cpp" />
     <ClCompile Include="TextFileReader.cpp" />
     <ClCompile Include="Util.cpp" />
+    <ClCompile Include="NicoJKKakolog\ChatModRule\WordNgChatModRule.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NicoJK.rc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="ribbon1.mfcribbon-ms" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
