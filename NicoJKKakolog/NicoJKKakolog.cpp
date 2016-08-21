@@ -216,17 +216,19 @@ namespace NicoJKKakolog {
 
 		case WM_ADDCHATMODRULE:
 			this->modrules.emplace_back(std::unique_ptr<ChatModRule>((ChatModRule *) wParam), 0);
-			PostMessage(this->ngSettingDialog->GetHandle(), NgSettingDialog::WM_MODRULEUPDATE, 0, -1);
+			if(this->ngSettingDialog)
+				PostMessage(this->ngSettingDialog->GetHandle(), NgSettingDialog::WM_MODRULEUPDATE, 0, -1);
 			return FALSE;
 
 		case WM_REMOVECHATMODRULE:
 			this->modrules.erase(std::find_if(std::begin(this->modrules), std::end(this->modrules),
 				[&wParam](const decltype(this->modrules)::value_type &val) {return val.first.get() == (ChatModRule *)wParam; }));
-			PostMessage(this->ngSettingDialog->GetHandle(), NgSettingDialog::WM_MODRULEUPDATE, 0, -1);
+			if(this->ngSettingDialog)
+				PostMessage(this->ngSettingDialog->GetHandle(), NgSettingDialog::WM_MODRULEUPDATE, 0, -1);
 			return FALSE;
 
 		case WM_TIMER:
-			if(wParam== NGSETTINGDIALOG_UPDATE_TIMER)
+			if(wParam== NGSETTINGDIALOG_UPDATE_TIMER && this->ngSettingDialog)
 				PostMessage(this->ngSettingDialog->GetHandle(), NgSettingDialog::WM_MODRULEUPDATE, 0, -1);
 			return FALSE;
 		}
