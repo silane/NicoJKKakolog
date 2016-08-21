@@ -1466,8 +1466,8 @@ INT_PTR CNicoJK::ForceDialogProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 		}
 		break;
 	case WM_HSCROLL:
-		if (reinterpret_cast<HWND>(lParam) == GetDlgItem(hwnd, IDC_SLIDER_OPACITY) && LOWORD(wParam) == SB_THUMBTRACK) {
-			BYTE newOpacity = static_cast<BYTE>(HIWORD(wParam) * 255 / 10);
+		if (reinterpret_cast<HWND>(lParam) == GetDlgItem(hwnd, IDC_SLIDER_OPACITY)) {
+			BYTE newOpacity = static_cast<BYTE>(SendDlgItemMessage(hwnd,IDC_SLIDER_OPACITY,TBM_GETPOS,0,0) * 255 / 10);
 			if (commentWindow_.GetOpacity() == 0 && newOpacity != 0 && m_pApp->GetPreview()) {
 				commentWindow_.ClearChat();
 				HWND hwnd = FindVideoContainer();
