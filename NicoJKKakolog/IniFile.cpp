@@ -28,18 +28,10 @@ namespace Utility
 
 	bool IniFile::GetBool(const std::basic_string<TCHAR> &section, const std::basic_string<TCHAR> &key, bool defaultVal) const
 	{
-		static const std::basic_regex<TCHAR> reTrue(TEXT("^true$"), std::regex_constants::icase);
-		static const std::basic_regex<TCHAR> reFalse(TEXT("^false$"), std::regex_constants::icase);
+		static const std::basic_regex<TCHAR> reTrue(TEXT("^true|1|enabled?|on|yes|accept$"), std::regex_constants::icase);
+		static const std::basic_regex<TCHAR> reFalse(TEXT("^false|0|disabled?|off|no|reject$"), std::regex_constants::icase);
 
 		auto str = GetString(section, key, TEXT(""));
-
-		try {
-			std::basic_string<TCHAR>::size_type idx;
-			int ret = std::stoi(str, &idx);
-			if (idx == str.size())
-				return ret;
-		}
-		catch (...) {}
 
 		if (std::regex_match(str, reTrue))
 			return true;
@@ -81,5 +73,20 @@ namespace Utility
 			str = str.substr(idx + 1);
 		}
 		return map;
-	}	
+	}
+
+	void IniFile::SetString(const std::basic_string <TCHAR> &section, const std::basic_string<TCHAR> &key, const std::basic_string<TCHAR> &val)
+	{
+		WritePrivateProfileString(section.c_str(),key.c_str(),val.c_str(),filePath.c_str());
+	}
+
+	void IniFile::RemoveSection(const std::basic_string<TCHAR> &section)
+	{
+		WritePrivateProfileString(section.c_str(), NULL,NULL, filePath.c_str());
+	}
+
+	void IniFile::RemoveKey(const std::basic_string<TCHAR> &section, const std::basic_string<TCHAR> &key)
+	{
+		WritePrivateProfileString(section.c_str(), key.c_str(), NULL, filePath.c_str());
+	}
 }

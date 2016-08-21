@@ -305,7 +305,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="ribbon1.mfcribbon-ms" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

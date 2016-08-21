@@ -21,4 +21,9 @@ namespace NicoJKKakolog
 	{
 		return u8"NGWord: " + this->ngword;
 	}
+
+	std::string WordNgChatModRule::GetWord() const
+	{
+		return this->ngword;
+	}
 }

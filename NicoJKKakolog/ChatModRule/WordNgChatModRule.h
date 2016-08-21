@@ -13,5 +13,7 @@ namespace NicoJKKakolog
 
 		virtual bool Modify(Chat &chat) override;
 		virtual std::string GetDescription() override;
+
+		std::string GetWord() const;
 	};
 }

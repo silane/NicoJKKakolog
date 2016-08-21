@@ -306,6 +306,17 @@ namespace NicoJKKakolog {
 
 	NicoJKKakolog::~NicoJKKakolog()
 	{
+		this->iniFile.RemoveSection(L"NGList");
+		int i = 0;
+		for (const auto &item : this->modrules)
+		{
+			if (IdNgChatModRule *rule = dynamic_cast<IdNgChatModRule *>(item.first.get()))
+				this->iniFile.SetString(L"NGList", L'U' + std::to_wstring(i),NicoJKKakolog::NicoJKKakolog::utf8_wide_conv.from_bytes(rule->GetId()));
+			else if (WordNgChatModRule *rule = dynamic_cast<WordNgChatModRule *>(item.first.get()))
+				this->iniFile.SetString(L"NGList", L'W' + std::to_wstring(i), NicoJKKakolog::NicoJKKakolog::utf8_wide_conv.from_bytes(rule->GetWord()));
+			i++;
+		}
+
 		for (IChatProvider *provider : this->chatProviders)
 		{
 			delete provider;

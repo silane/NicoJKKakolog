@@ -21,5 +21,10 @@ namespace Utility
 		bool GetBool(const std::basic_string<TCHAR> &section, const std::basic_string<TCHAR> &key, bool defaultVal) const;
 		std::vector < std::basic_string<TCHAR>> GetSections() const;
 		std::unordered_map<std::basic_string<TCHAR>, std::basic_string<TCHAR>> GetSectionContent(const std::basic_string<TCHAR> &section) const;
+
+		void SetString(const std::basic_string <TCHAR> &section, const std::basic_string<TCHAR> &key, const std::basic_string<TCHAR> &val);
+
+		void RemoveSection(const std::basic_string<TCHAR> &section);
+		void RemoveKey(const std::basic_string<TCHAR> &section, const std::basic_string<TCHAR> &key);
 	};
 }
