@@ -1,9 +1,6 @@
 #include "../../stdafx.h"
 #include "NiconicoJikkyouChatProvider.h"
-//#include "NetworkServiceIDTable.h"
-//#include <sstream>
 #include <pplx\pplxtasks.h>
-#include "../../PracticalSocket/PracticalSocket.h"
 
 namespace NicoJKKakolog
 {
@@ -61,8 +58,8 @@ namespace NicoJKKakolog
 
 				std::string body("<thread res_from=\"-10\" version=\"20061206\" thread=\"" + utility::conversions::to_utf8string(thread_id) + "\" />");
 				body.push_back('\0');
-				TCPSocket socket(utility::conversions::to_utf8string( ms),(unsigned short)std::stoi( utility::conversions::to_utf8string( ms_port)));
-				socket.send(body.c_str(), (int)body.size());
+				this->socket.reset(new TCPSocket(utility::conversions::to_utf8string( ms),(unsigned short)std::stoi( utility::conversions::to_utf8string( ms_port))));
+				socket->send(body.c_str(), (int)body.size());
 
 				if (ct.is_canceled())
 					return;
@@ -71,7 +68,7 @@ namespace NicoJKKakolog
 				while (true) {
 					constexpr int BUFFER_SIZE = 2048;
 					char buf[BUFFER_SIZE];
-					int ret=socket.recv(buf, BUFFER_SIZE);
+					int ret=socket->recv(buf, BUFFER_SIZE);
 					if (ct.is_canceled())
 						break;
 
@@ -96,6 +93,7 @@ namespace NicoJKKakolog
 	NiconicoJikkyouChatProvider::~NiconicoJikkyouChatProvider() noexcept
 	{
 		try {
+			this->socket.reset(nullptr);
 			this->cancelSource.cancel();
 			this->chatCollectTask.wait();
 		}
