@@ -45,8 +45,7 @@ namespace NicoJKKakolog
 		static std::wstring_convert < std::codecvt_utf8<wchar_t>, wchar_t > utf8_wide_conv;
 
 		NgSettingDialog *this_ = (NgSettingDialog *)GetWindowLongPtr(hWnd, GWLP_USERDATA);
-		wchar_t text[2048];
-
+		
 		switch (msg)
 		{
 		case WM_INITDIALOG:
@@ -69,31 +68,34 @@ namespace NicoJKKakolog
 			return TRUE;
 
 		case WM_COMMAND:
+		{
+			wchar_t text[2048];
 			switch (LOWORD(wParam))
 			{
 			case IDC_NGIDADD:
 				GetWindowTextW(GetDlgItem(hWnd, IDC_NGTEXTEDIT), text, sizeof(text) / sizeof(text[0]));
-				if(text[0]!=L'\0')
-					PostMessage(this_->owner, NicoJKKakolog::WM_ADDCHATMODRULE, (WPARAM)new IdNgChatModRule(utf8_wide_conv.to_bytes(text)),0);
+				if (text[0] != L'\0')
+					PostMessage(this_->owner, NicoJKKakolog::WM_ADDCHATMODRULE, (WPARAM)new IdNgChatModRule(utf8_wide_conv.to_bytes(text)), 0);
 				return TRUE;
 			case IDC_NGWORDADD:
 				GetWindowTextW(GetDlgItem(hWnd, IDC_NGTEXTEDIT), text, sizeof(text) / sizeof(text[0]));
-				if(text[0]!=L'\0')
+				if (text[0] != L'\0')
 					PostMessage(this_->owner, NicoJKKakolog::WM_ADDCHATMODRULE, (WPARAM)new WordNgChatModRule(utf8_wide_conv.to_bytes(text)), 0);
 				return TRUE;
 			case IDC_REMOVENG:
-				for (int idx = ListView_GetNextItem(GetDlgItem(hWnd, IDC_NGLIST), -1, LVNI_SELECTED | LVNI_ALL); idx != -1; idx=ListView_GetNextItem(GetDlgItem(hWnd, IDC_NGLIST), idx, LVNI_SELECTED | LVNI_ALL))
+				for (int idx = ListView_GetNextItem(GetDlgItem(hWnd, IDC_NGLIST), -1, LVNI_SELECTED | LVNI_ALL); idx != -1; idx = ListView_GetNextItem(GetDlgItem(hWnd, IDC_NGLIST), idx, LVNI_SELECTED | LVNI_ALL))
 				{
 					LVITEM item;
 					item.mask = TVIF_PARAM;
 					item.iItem = idx;
 					item.iSubItem = 0;
 					ListView_GetItem(GetDlgItem(hWnd, IDC_NGLIST), &item);
-					PostMessage(this_->owner, NicoJKKakolog::WM_REMOVECHATMODRULE,(WPARAM) item.lParam, 0);
+					PostMessage(this_->owner, NicoJKKakolog::WM_REMOVECHATMODRULE, (WPARAM)item.lParam, 0);
 				}
 				return TRUE;
 			}
-			break;
+		}
+		break;
 		case WM_MODRULEUPDATE:
 			if (lParam < 0)
 			{
@@ -125,7 +127,7 @@ namespace NicoJKKakolog
 					delete[] item.pszText;
 				}
 			}
-			else if (lParam < this_->modrules.size())
+			else if ((std::size_t)lParam < this_->modrules.size())
 			{
 				std::size_t idx = (std::size_t)wParam;
 				LVITEM item;

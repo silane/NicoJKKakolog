@@ -81,9 +81,6 @@
     <ClInclude Include="NicoJKKakolog\NicoJKKakolog.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="PracticalSocket\PracticalSocket.h">
-      <Filter>ヘッダー ファイル\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="NicoJKKakolog\ChatProvider\IChatProvider.h">
       <Filter>ヘッダー ファイル\ChatProvider</Filter>
     </ClInclude>
@@ -165,6 +162,45 @@
     <ClInclude Include="NicoJKKakolog\NgSettingDialog.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="MySock\EndPoint\EndPoint.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="MySock\EndPoint\IPEndPoint.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="MySock\EndPoint\RawEndPoint.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="MySock\EndPoint\UnixDomainEndPoint.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="MySock\AddressInfoErrorCategory.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="MySock\CommonIncludes.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="MySock\Dns.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="MySock\EndPointUtil.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="MySock\IPAddress.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="MySock\MemoryBlock.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="MySock\Socket.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="MySock\SocketAddress.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="MySock\WinsockInitializer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -199,9 +235,6 @@
     </ClCompile>
     <ClCompile Include="NicoJKKakolog\NicoJKKakolog.cpp">
       <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="PracticalSocket\PracticalSocket.cpp">
-      <Filter>ソース ファイル\Utils</Filter>
     </ClCompile>
     <ClCompile Include="NicoJKKakolog\ChatProvider\NicoJikkyouLogFileStreamChatProvider.cpp">
       <Filter>ソース ファイル\ChatProvider</Filter>
@@ -267,6 +300,39 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="NicoJKKakolog\NgSettingDialog.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="MySock\EndPoint\IPEndPoint.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="MySock\EndPoint\RawEndPoint.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="MySock\EndPoint\UnixDomainEndPoint.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="MySock\AddressInfoErrorCategory.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="MySock\Dns.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="MySock\EndPointUtil.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="MySock\IPAddress.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="MySock\MemoryBlock.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="MySock\Socket.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="MySock\SocketAddress.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="MySock\WinsockInitializer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>

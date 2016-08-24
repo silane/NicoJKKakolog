@@ -177,6 +177,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AsyncSocket.h" />
+    <ClInclude Include="MySock\AddressInfoErrorCategory.h" />
+    <ClInclude Include="MySock\CommonIncludes.h" />
+    <ClInclude Include="MySock\Dns.h" />
+    <ClInclude Include="MySock\EndPointUtil.h" />
+    <ClInclude Include="MySock\EndPoint\EndPoint.h" />
+    <ClInclude Include="MySock\EndPoint\IPEndPoint.h" />
+    <ClInclude Include="MySock\EndPoint\RawEndPoint.h" />
+    <ClInclude Include="MySock\EndPoint\UnixDomainEndPoint.h" />
+    <ClInclude Include="MySock\IPAddress.h" />
+    <ClInclude Include="MySock\MemoryBlock.h" />
+    <ClInclude Include="MySock\Socket.h" />
+    <ClInclude Include="MySock\SocketAddress.h" />
+    <ClInclude Include="MySock\WinsockInitializer.h" />
     <ClInclude Include="NicoJKKakolog\NgSettingDialog.h" />
     <ClInclude Include="NicoJKKakolog\ChatModRule\IdNgChatModRule.h" />
     <ClInclude Include="NicoJKKakolog\ChatModRule\ChatModRule.h" />
@@ -211,7 +224,6 @@
     <ClInclude Include="NicoJKKakolog\NiconicoUtils\NiconicoLoginSession.h" />
     <ClInclude Include="NicoJKKakolog\ChatProvider\OnceASecondChatProvider.h" />
     <ClInclude Include="OsdCompositor.h" />
-    <ClInclude Include="PracticalSocket\PracticalSocket.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="NicoJKKakolog\SimpleArgumentParser.h" />
     <ClInclude Include="stdafx.h" />
@@ -223,6 +235,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AsyncSocket.cpp" />
+    <ClCompile Include="MySock\AddressInfoErrorCategory.cpp" />
+    <ClCompile Include="MySock\Dns.cpp" />
+    <ClCompile Include="MySock\EndPointUtil.cpp" />
+    <ClCompile Include="MySock\EndPoint\IPEndPoint.cpp" />
+    <ClCompile Include="MySock\EndPoint\RawEndPoint.cpp" />
+    <ClCompile Include="MySock\EndPoint\UnixDomainEndPoint.cpp" />
+    <ClCompile Include="MySock\IPAddress.cpp" />
+    <ClCompile Include="MySock\MemoryBlock.cpp" />
+    <ClCompile Include="MySock\Socket.cpp" />
+    <ClCompile Include="MySock\SocketAddress.cpp" />
+    <ClCompile Include="MySock\WinsockInitializer.cpp" />
     <ClCompile Include="NicoJKKakolog\NgSettingDialog.cpp" />
     <ClCompile Include="NicoJKKakolog\ChatModRule\IdNgChatModRule.cpp" />
     <ClCompile Include="NicoJKKakolog\NichanUtils\FuzzyNichanThreadSelector.cpp" />
@@ -272,20 +295,6 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MaxSpeed</Optimization>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="PracticalSocket\PracticalSocket.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </ForcedIncludeFiles>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </ForcedIncludeFiles>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </ForcedIncludeFiles>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="NicoJKKakolog\NiconicoUtils\DefaultJkIdTable.cpp" />
     <ClCompile Include="NicoJKKakolog\SimpleArgumentParser.cpp" />

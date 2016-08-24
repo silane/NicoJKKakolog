@@ -2,8 +2,7 @@
 #include "IChatProvider.h"
 #include "../NiconicoUtils/NiconicoJikkyouXmlParser.h"
 #include <unordered_map>
-#include <cpprest\http_client.h>
-#include "../../PracticalSocket/PracticalSocket.h"
+#include <cpprest/http_client.h>
 
 namespace NicoJKKakolog
 {
@@ -23,8 +22,6 @@ namespace NicoJKKakolog
 		
 		concurrency::task<void> chatCollectTask;
 		concurrency::cancellation_token_source cancelSource;
-
-		std::unique_ptr<TCPSocket> socket;
 
 	public:
 		NiconicoJikkyouChatProvider(const std::unordered_map<uint_least32_t, int> &jkidTable);

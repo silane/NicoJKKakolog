@@ -1,6 +1,9 @@
 #include "../../stdafx.h"
 #include "NiconicoJikkyouChatProvider.h"
-#include <pplx\pplxtasks.h>
+#include <pplx/pplxtasks.h>
+#include "../../MySock/Socket.h"
+#include "../../MySock/EndPoint/IPEndPoint.h"
+#include "../../MySock/Dns.h"
 
 namespace NicoJKKakolog
 {
@@ -58,8 +61,13 @@ namespace NicoJKKakolog
 
 				std::string body("<thread res_from=\"-10\" version=\"20061206\" thread=\"" + utility::conversions::to_utf8string(thread_id) + "\" />");
 				body.push_back('\0');
-				this->socket.reset(new TCPSocket(utility::conversions::to_utf8string( ms),(unsigned short)std::stoi( utility::conversions::to_utf8string( ms_port))));
-				socket->send(body.c_str(), (int)body.size());
+				MySock::Socket socket(AF_INET, SOCK_STREAM, 0);
+				socket.SetReceiveTimeout(3000);
+				auto addresses = MySock::Dns::GetHostAddresses(utility::conversions::to_utf8string(ms));
+				if (addresses.empty())
+					throw std::runtime_error("couldn't resolve host name");
+				socket.Connect(MySock::IPEndPoint(addresses[0], (unsigned short)std::stoi(utility::conversions::to_utf8string(ms_port))));
+				socket.Send(body.c_str(), (int)body.size());
 
 				if (ct.is_canceled())
 					return;
@@ -68,14 +76,21 @@ namespace NicoJKKakolog
 				while (true) {
 					constexpr int BUFFER_SIZE = 2048;
 					char buf[BUFFER_SIZE];
-					int ret=socket->recv(buf, BUFFER_SIZE);
+					int ret;
+					try
+					{
+						ret = socket.Receive(buf, BUFFER_SIZE);
+					}
+					catch (const MySock::TimeoutError &)
+					{
+					}
+
 					if (ct.is_canceled())
 						break;
 
-					if (ret < 0)
-						throw SocketException("Error in recv function");
-					if (ret == EOF)
+					if (ret == 0)
 						break;
+					
 					{
 						std::lock_guard<std::mutex> lock(this->parserMutex);
 						this->parser.PushString(std::string(buf, ret));
@@ -93,7 +108,6 @@ namespace NicoJKKakolog
 	NiconicoJikkyouChatProvider::~NiconicoJikkyouChatProvider() noexcept
 	{
 		try {
-			this->socket.reset(nullptr);
 			this->cancelSource.cancel();
 			this->chatCollectTask.wait();
 		}
