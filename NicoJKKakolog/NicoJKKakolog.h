@@ -3,8 +3,8 @@
 #include <codecvt>
 #include "../TVTestPlugin.h"
 #include "IniFile.h"
-#include "ChatProviderEntry\IChatProviderEntry.h"
-#include "ChatModRule\ChatModRule.h"
+#include "ChatProviderEntry/IChatProviderEntry.h"
+#include "ChatModRule/IChatModRule.h"
 #include "NgSettingDialog.h"
 
 namespace NicoJKKakolog {
@@ -36,7 +36,7 @@ namespace NicoJKKakolog {
 		std::chrono::milliseconds timelag;
 
 		//チャットの修正ルールのリスト(NG化も含む)
-		std::vector<std::pair<std::unique_ptr<ChatModRule>, int>> modrules;
+		std::vector<std::pair<std::unique_ptr<IChatModRule>, int>> modrules;
 
 	private:
 		static std::time_t FileTimeToUnixTime(const FILETIME &ft);

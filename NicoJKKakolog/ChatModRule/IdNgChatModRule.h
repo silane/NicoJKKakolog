@@ -1,10 +1,10 @@
 #pragma once
-#include "ChatModRule.h"
+#include "IChatModRule.h"
 #include <string>
 
 namespace NicoJKKakolog
 {
-	class IdNgChatModRule :public ChatModRule
+	class IdNgChatModRule :public IChatModRule
 	{
 	private:
 		std::string ngid;
@@ -14,7 +14,7 @@ namespace NicoJKKakolog
 		virtual ~IdNgChatModRule();
 
 		virtual bool Modify(Chat &chat) override;
-		virtual std::string GetDescription() override;
+		virtual std::string GetDescription() const override;
 
 		std::string GetId() const;
 	};

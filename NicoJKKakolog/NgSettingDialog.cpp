@@ -3,13 +3,14 @@
 #include <locale>
 #include <codecvt>
 #include "NgSettingDialog.h"
-#include "ChatModRule\IdNgChatModRule.h"
-#include "ChatModRule\WordNgChatModRule.h"
+#include "ChatModRule/IdNgChatModRule.h"
+#include "ChatModRule/WordNgChatModRule.h"
+#include "ChatModRule/JyougeIroKomeNgChatModRule.h"
 #include "NicoJKKakolog.h"
 
 namespace NicoJKKakolog
 {
-	NgSettingDialog::NgSettingDialog(HINSTANCE instance,HWND owner, const std::vector < std::pair<std::unique_ptr<ChatModRule>, int>> &modrules) :
+	NgSettingDialog::NgSettingDialog(HINSTANCE instance,HWND owner, const std::vector < std::pair<std::unique_ptr<IChatModRule>, int>> &modrules) :
 		instance(instance), modrules(modrules),owner(owner)
 	{
 		this->dialog = CreateDialog(instance, MAKEINTRESOURCE(IDD_NG), NULL, DialogProc);
@@ -92,6 +93,9 @@ namespace NicoJKKakolog
 					ListView_GetItem(GetDlgItem(hWnd, IDC_NGLIST), &item);
 					PostMessage(this_->owner, NicoJKKakolog::WM_REMOVECHATMODRULE, (WPARAM)item.lParam, 0);
 				}
+				return TRUE;
+			case IDC_JYOUGEIROKOMENG:
+				SendMessage(this_->owner, NicoJKKakolog::WM_ADDCHATMODRULE, (WPARAM)new JyougeIroKomeNgChatModRule(), 0);
 				return TRUE;
 			}
 		}

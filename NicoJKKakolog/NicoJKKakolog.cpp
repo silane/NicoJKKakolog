@@ -5,8 +5,9 @@
 #include "ChatProviderEntry/NiconicoJikkyouLogChatProviderEntry.h"
 #include "ChatProviderEntry/NiconicoJikkyouLogFileStreamChatProviderEntry.h"
 #include "ChatProviderEntry\NichanChatProviderEntry.h"
-#include "ChatModRule\IdNgChatModRule.h"
-#include "ChatModRule\WordNgChatModRule.h"
+#include "ChatModRule/IdNgChatModRule.h"
+#include "ChatModRule/WordNgChatModRule.h"
+#include "ChatModRule/JyougeIroKomeNgChatModRule.h"
 #include "SimpleArgumentParser.h"
 #include <iterator>
 
@@ -16,7 +17,6 @@ namespace NicoJKKakolog {
 
 	NicoJKKakolog::NicoJKKakolog():
 		timelag(std::chrono::milliseconds(0))
-		//modrules({ std::pair<std::unique_ptr<ChatModRule>,int>(std::piecewise_construct,{new IdNgChatModRule("")},{0}) })
 	{
 	}
 
@@ -37,9 +37,9 @@ namespace NicoJKKakolog {
 			if (ng.first.size() == 0)
 				continue;
 			if (ng.first[0] == L'U')
-				this->modrules.emplace_back(std::unique_ptr<ChatModRule>(new IdNgChatModRule(utf8_wide_conv.to_bytes(ng.second))), 0);
+				this->modrules.emplace_back(std::unique_ptr<IChatModRule>(new IdNgChatModRule(utf8_wide_conv.to_bytes(ng.second))), 0);
 			else if(ng.first[0]==L'W')
-				this->modrules.emplace_back(std::unique_ptr<ChatModRule>(new WordNgChatModRule(utf8_wide_conv.to_bytes(ng.second))), 0);
+				this->modrules.emplace_back(std::unique_ptr<IChatModRule>(new WordNgChatModRule(utf8_wide_conv.to_bytes(ng.second))), 0);
 		}
 	}
 
@@ -215,14 +215,14 @@ namespace NicoJKKakolog {
 			return FALSE;
 
 		case WM_ADDCHATMODRULE:
-			this->modrules.emplace_back(std::unique_ptr<ChatModRule>((ChatModRule *) wParam), 0);
+			this->modrules.emplace_back(std::unique_ptr<IChatModRule>((IChatModRule *) wParam), 0);
 			if(this->ngSettingDialog)
 				PostMessage(this->ngSettingDialog->GetHandle(), NgSettingDialog::WM_MODRULEUPDATE, 0, -1);
 			return FALSE;
 
 		case WM_REMOVECHATMODRULE:
 			this->modrules.erase(std::find_if(std::begin(this->modrules), std::end(this->modrules),
-				[&wParam](const decltype(this->modrules)::value_type &val) {return val.first.get() == (ChatModRule *)wParam; }));
+				[&wParam](const decltype(this->modrules)::value_type &val) {return val.first.get() == (IChatModRule *)wParam; }));
 			if(this->ngSettingDialog)
 				PostMessage(this->ngSettingDialog->GetHandle(), NgSettingDialog::WM_MODRULEUPDATE, 0, -1);
 			return FALSE;

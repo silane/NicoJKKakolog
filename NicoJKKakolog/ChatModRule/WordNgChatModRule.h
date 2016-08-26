@@ -1,9 +1,9 @@
 #pragma once
-#include "ChatModRule.h"
+#include "IChatModRule.h"
 
 namespace NicoJKKakolog
 {
-	class WordNgChatModRule :public ChatModRule
+	class WordNgChatModRule :public IChatModRule
 	{
 	private:
 		std::string ngword;
@@ -12,7 +12,7 @@ namespace NicoJKKakolog
 		virtual ~WordNgChatModRule()=default;
 
 		virtual bool Modify(Chat &chat) override;
-		virtual std::string GetDescription() override;
+		virtual std::string GetDescription() const override;
 
 		std::string GetWord() const;
 	};

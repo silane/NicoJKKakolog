@@ -22,7 +22,7 @@ namespace NicoJKKakolog
 		return true;
 	}
 
-	std::string IdNgChatModRule::GetDescription()
+	std::string IdNgChatModRule::GetDescription() const
 	{
 		return u8"NGID: " + ngid;
 	}
