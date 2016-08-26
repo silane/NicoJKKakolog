@@ -69,28 +69,24 @@ namespace NicoJKKakolog
 				socket.Connect(MySock::IPEndPoint(addresses[0], (unsigned short)std::stoi(utility::conversions::to_utf8string(ms_port))));
 				socket.Send(body.c_str(), (int)body.size());
 
-				if (ct.is_canceled())
-					return;
-
 				//コメント受信ループ
-				while (true) {
+				while (!ct.is_canceled()) {
 					constexpr int BUFFER_SIZE = 2048;
 					char buf[BUFFER_SIZE];
-					int ret;
+					int ret=0;
+
 					try
 					{
 						ret = socket.Receive(buf, BUFFER_SIZE);
 					}
 					catch (const MySock::TimeoutError &)
 					{
+						continue;
 					}
-
-					if (ct.is_canceled())
-						break;
 
 					if (ret == 0)
 						break;
-					
+
 					{
 						std::lock_guard<std::mutex> lock(this->parserMutex);
 						this->parser.PushString(std::string(buf, ret));
