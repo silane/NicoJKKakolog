@@ -14,6 +14,6 @@ namespace NicoJKKakolog
 
 	std::string JyougeIroKomeNgChatModRule::GetDescription() const
 	{
-		return u8"上下コメかつ色コメをNG";
+		return u8"上下コメかつ色コメNG";
 	}
 }

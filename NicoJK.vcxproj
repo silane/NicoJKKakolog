@@ -177,6 +177,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AsyncSocket.h" />
+    <ClInclude Include="NicoJKKakolog\ChatModRule\JyougeKomeNgChatModRule.h" />
     <ClInclude Include="NicoJKKakolog\ChatModRule\JyougeIroKomeNgChatModRule.h" />
     <ClInclude Include="MySock\AddressInfoErrorCategory.h" />
     <ClInclude Include="MySock\CommonIncludes.h" />
@@ -236,6 +237,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AsyncSocket.cpp" />
+    <ClCompile Include="NicoJKKakolog\ChatModRule\JyougeKomeNgChatModRule.cpp" />
     <ClCompile Include="NicoJKKakolog\ChatModRule\JyougeIroKomeNgChatModRule.cpp" />
     <ClCompile Include="MySock\AddressInfoErrorCategory.cpp" />
     <ClCompile Include="MySock\Dns.cpp" />
