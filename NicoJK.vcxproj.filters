@@ -96,9 +96,6 @@
     <ClInclude Include="NicoJKKakolog\ChatProvider\NiconicoJikkyouLogStreamChatProvider.h">
       <Filter>ヘッダー ファイル\ChatProvider</Filter>
     </ClInclude>
-    <ClInclude Include="NicoJKKakolog\ChatProvider\TestChatProvider.h">
-      <Filter>ヘッダー ファイル\ChatProvider</Filter>
-    </ClInclude>
     <ClInclude Include="NicoJKKakolog\ChatProvider\OnceASecondChatProvider.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -252,9 +249,6 @@
       <Filter>ソース ファイル\ChatProvider</Filter>
     </ClCompile>
     <ClCompile Include="NicoJKKakolog\ChatProvider\NiconicoJikkyouLogStreamChatProvider.cpp">
-      <Filter>ソース ファイル\ChatProvider</Filter>
-    </ClCompile>
-    <ClCompile Include="NicoJKKakolog\ChatProvider\TestChatProvider.cpp">
       <Filter>ソース ファイル\ChatProvider</Filter>
     </ClCompile>
     <ClCompile Include="NicoJKKakolog\ChatProvider\OnceASecondChatProvider.cpp">

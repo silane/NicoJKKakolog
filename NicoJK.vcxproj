@@ -229,7 +229,6 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="NicoJKKakolog\SimpleArgumentParser.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="NicoJKKakolog\ChatProvider\TestChatProvider.h" />
     <ClInclude Include="TextFileReader.h" />
     <ClInclude Include="TVTestPlugin.h" />
     <ClInclude Include="Util.h" />
@@ -308,7 +307,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="NicoJKKakolog\ChatProvider\TestChatProvider.cpp" />
     <ClCompile Include="TextFileReader.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="NicoJKKakolog\ChatModRule\WordNgChatModRule.cpp" />
