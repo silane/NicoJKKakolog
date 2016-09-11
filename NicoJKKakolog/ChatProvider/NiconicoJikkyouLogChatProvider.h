@@ -13,11 +13,9 @@ namespace NicoJKKakolog {
 		public OnceASecondChatProvider
 	{
 	private:
-		web::http::client::http_client client;
 		std::unordered_map<uint_least32_t, int> jkidTable;
 		NiconicoLoginSession *login;
-		NiconicoJikkyouXmlParser parser;
-
+		
 		std::mutex chatsMutex;
 		std::multimap<std::time_t, Chat> chats;
 
@@ -25,6 +23,8 @@ namespace NicoJKKakolog {
 
 		int lastJkId;
 		std::chrono::system_clock::time_point lastGetTime;
+
+		pplx::task<std::vector<std::pair<std::time_t, Chat>>> CollectChat(int jkId,const std::chrono::system_clock::time_point &startTime,const std::chrono::system_clock::time_point &endTime,int lastChatNum);
 
 	public:
 		NiconicoJikkyouLogChatProvider(const std::unordered_map<uint_least32_t, int> &jkidTable,NiconicoLoginSession *login);
