@@ -11,8 +11,7 @@ namespace NicoJKKakolog
 
 	public:
 		explicit IdNgChatModRule(const std::string &ngid);
-		virtual ~IdNgChatModRule();
-
+		
 		virtual bool Modify(Chat &chat) override;
 		virtual std::string GetDescription() const override;
 

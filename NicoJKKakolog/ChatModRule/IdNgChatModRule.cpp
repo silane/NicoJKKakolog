@@ -8,11 +8,6 @@ namespace NicoJKKakolog
 	{
 	}
 
-
-	IdNgChatModRule::~IdNgChatModRule()
-	{
-	}
-
 	bool IdNgChatModRule::Modify(Chat &chat)
 	{
 		if (chat.userId != this->ngid)
