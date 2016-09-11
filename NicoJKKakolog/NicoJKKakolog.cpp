@@ -294,10 +294,10 @@ namespace NicoJKKakolog {
 					}
 				}
 				catch (const ChatProviderError &e) {
-					MessageBoxA(this->dialog, e.what(), "チャット取得エラー", 0);
-					//TODO: ChatProviderとChatProviderEntryが１対１に対応している前提のコードになっちゃってる
 					ListView_SetCheckState(GetDlgItem(dialog, IDC_LISTVIEW), i, FALSE);
 					SendMessage(dialog, WM_CHECKSTATECHANGE, 0, (LPARAM)i);
+					MessageBoxA(this->dialog, e.what(), "チャット取得エラー", 0);
+					//TODO: ChatProviderとChatProviderEntryが１対１に対応している前提のコードになっちゃってる
 				}
 			}
 			i++;
