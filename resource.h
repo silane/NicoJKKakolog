@@ -22,9 +22,9 @@
 #define IDC_NGWORDADD                   1008
 #define IDC_REMOVENG                    1009
 #define IDC_NG                          1009
-#define IDC_JYOUGEIROKOMENG             1013
-#define IDC_BUTTON1                     1014
+#define IDC_IROKOMENG                   1013
 #define IDC_JYOUGEKOMENG                1014
+#define IDC_JYOUGEIROKOMENG             1015
 #define IDC_RADIO_CHATSELECT            2000
 #define IDC_LISTVIEW                    2001
 #define IDC_CHAT_BACKWARD               2002

@@ -7,6 +7,7 @@
 #include "ChatModRule/WordNgChatModRule.h"
 #include "ChatModRule/JyougeIroKomeNgChatModRule.h"
 #include "ChatModRule/JyougeKomeNgChatModRule.h"
+#include "ChatModRule/IroKomeNgChatModRule.h"
 #include "NicoJKKakolog.h"
 
 namespace NicoJKKakolog
@@ -100,6 +101,9 @@ namespace NicoJKKakolog
 				return TRUE;
 			case IDC_JYOUGEKOMENG:
 				SendMessage(this_->owner, NicoJKKakolog::WM_ADDCHATMODRULE, (WPARAM)new JyougeKomeNgChatModRule(), 0);
+				return TRUE;
+			case IDC_IROKOMENG:
+				SendMessage(this_->owner, NicoJKKakolog::WM_ADDCHATMODRULE, (WPARAM)new IroKomeNgChatModRule(), 0);
 				return TRUE;
 			}
 		}

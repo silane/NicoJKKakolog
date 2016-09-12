@@ -204,6 +204,9 @@
     <ClInclude Include="NicoJKKakolog\ChatModRule\JyougeKomeNgChatModRule.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="NicoJKKakolog\ChatModRule\IroKomeNgChatModRule.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -339,6 +342,9 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="NicoJKKakolog\ChatModRule\JyougeKomeNgChatModRule.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="NicoJKKakolog\ChatModRule\IroKomeNgChatModRule.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
