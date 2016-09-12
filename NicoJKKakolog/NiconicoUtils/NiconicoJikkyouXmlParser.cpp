@@ -118,6 +118,7 @@ Chat NiconicoJikkyouXmlParser::GetChatFromChatTag(const std::string &str)
 	static const std::regex reColor("(?:^| )#([0-9A-Fa-f]{6})(?: |$)");
 
 	Chat ret;
+	ret.color = RGB(255, 255, 255);
 	std::smatch sm;
 	std::regex_match(str, sm, reChat);
 	ret.text = sm.str(2);
