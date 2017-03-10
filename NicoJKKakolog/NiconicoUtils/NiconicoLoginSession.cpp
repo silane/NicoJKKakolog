@@ -30,11 +30,14 @@ namespace NicoJKKakolog {
 				if (cookie == std::end(h))
 					return false;
 
-				utility::string_t::size_type idx = cookie->second.find(U("user_session="));
-				if (idx == utility::string_t::npos)
-					return false;
-				this->userSession = utility::conversions::to_utf8string( cookie->second.substr(idx, cookie->second.find(U(";"),idx) - idx));
-				return true;
+				for (utility::string_t::size_type idx = cookie->second.find(U("user_session=")); idx != utility::string_t::npos; idx = cookie->second.find(U("user_session="), idx + 1))
+				{
+					this->userSession = utility::conversions::to_utf8string(cookie->second.substr(idx, cookie->second.find(U(";"), idx) - idx));
+					if (this->userSession != "user_session=deleted")
+						return true;
+				}
+				this->userSession.clear();
+				return false;
 
 			}).get();
 		}
