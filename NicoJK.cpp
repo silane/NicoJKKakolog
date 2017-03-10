@@ -144,7 +144,7 @@ bool CNicoJK::GetPluginInfo(TVTest::PluginInfo *pInfo)
 	pInfo->Type           = TVTest::PLUGIN_TYPE_NORMAL;
 	pInfo->Flags          = 0;
 	pInfo->pszPluginName  = L"NicoJKKakolog";
-	pInfo->pszCopyright   = L"(c) 2016 silane";
+	pInfo->pszCopyright   = L"(c) 2017 silane";
 	pInfo->pszDescription = L"ニコニコ,2ch実況を表示";
 	return true;
 }
