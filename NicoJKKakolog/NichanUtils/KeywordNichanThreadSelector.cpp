@@ -17,7 +17,7 @@ namespace NicoJKKakolog
 		this->xpathThreads.reset(new MyXml::XPathExpr(u8"/html/body/div[2]/small/a/@href["+xpath+u8"]"));
 	}
 
-	std::vector<std::string> KeywordNichanThreadSelector::Get(const ChannelInfo &channel, const std::chrono::system_clock::time_point &t)
+	std::vector<std::string> KeywordNichanThreadSelector::Get(const ChannelInfo &, const std::chrono::system_clock::time_point &)
 	{
 		MyXml::Doc doc(htmlReadFile(this->threadUrl.c_str(),nullptr, htmlParserOption::HTML_PARSE_RECOVER));
 

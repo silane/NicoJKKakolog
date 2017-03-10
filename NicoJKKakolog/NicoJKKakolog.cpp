@@ -20,6 +20,8 @@ namespace NicoJKKakolog {
 	{
 	}
 
+#pragma warning(push)
+#pragma warning(disable: 4458)
 	void NicoJKKakolog::Init(HINSTANCE hInstance,TVTest::CTVTestApp *tvtest, const std::basic_string<TCHAR> &iniFileName)
 	{
 		this->hInstance = hInstance;
@@ -42,7 +44,10 @@ namespace NicoJKKakolog {
 				this->modrules.emplace_back(std::unique_ptr<IChatModRule>(new WordNgChatModRule(utf8_wide_conv.to_bytes(ng.second))), 0);
 		}
 	}
+#pragma warning(pop)
 
+#pragma warning(push)
+#pragma warning(disable: 4458)
 	void NicoJKKakolog::DialogInit(HWND dialog)
 	{
 		this->dialog = dialog;
@@ -147,6 +152,7 @@ namespace NicoJKKakolog {
 
 		SendMessage(dialog, WM_SIZE, 0, 0);
 	}
+#pragma warning(pop)
 
 	INT_PTR NicoJKKakolog::DialogProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
@@ -306,6 +312,8 @@ namespace NicoJKKakolog {
 		return ret;
 	}
 
+#pragma warning(push)
+#pragma warning(disable: 4456)
 	NicoJKKakolog::~NicoJKKakolog()
 	{
 		this->iniFile.RemoveSection(L"NGList");
@@ -329,7 +337,7 @@ namespace NicoJKKakolog {
 			delete entry;
 		}
 	}
-
+#pragma warning(pop)
 
 
 	std::time_t NicoJKKakolog::FileTimeToUnixTime(const FILETIME &ft)

@@ -74,7 +74,7 @@ namespace NicoJKKakolog
 		}
 	}
 
-	std::vector<Chat> NichanChatProvider::GetOnceASecond(const ChannelInfo &channel, std::chrono::system_clock::time_point t)
+	std::vector<Chat> NichanChatProvider::GetOnceASecond(const ChannelInfo &, std::chrono::system_clock::time_point t)
 	{
 		std::vector<Chat> ret;
 

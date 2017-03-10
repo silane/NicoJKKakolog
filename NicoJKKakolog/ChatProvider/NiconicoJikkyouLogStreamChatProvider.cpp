@@ -42,7 +42,7 @@ namespace NicoJKKakolog
 		});
 	}
 
-	std::vector<Chat> NiconicoJikkyouLogStreamChatProvider::GetOnceASecond(const ChannelInfo & channel, std::chrono::system_clock::time_point t)
+	std::vector<Chat> NiconicoJikkyouLogStreamChatProvider::GetOnceASecond(const ChannelInfo & , std::chrono::system_clock::time_point t)
 	{
 		std::vector<Chat> ret;
 		decltype(chats.equal_range(std::chrono::system_clock::to_time_t(t))) range;

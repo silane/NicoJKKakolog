@@ -12,6 +12,8 @@ namespace NicoJKKakolog {
 	{
 	}
 
+#pragma warning(push)
+#pragma warning(disable: 4458)
 	bool NiconicoLoginSession::Login(const std::string &mail, const std::string &password)
 	{
 		web::http::client::http_client client(U("https://secure.nicovideo.jp/secure/login?site=niconico"));
@@ -45,6 +47,7 @@ namespace NicoJKKakolog {
 			return false;
 		}
 	}
+#pragma warning(pop)
 	void NiconicoLoginSession::Logout() 
 	{
 		if (!IsLoggedIn())

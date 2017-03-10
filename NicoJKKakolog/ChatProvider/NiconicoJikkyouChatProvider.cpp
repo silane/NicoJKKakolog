@@ -12,7 +12,7 @@ namespace NicoJKKakolog
 	{
 	}
 
-	std::vector<Chat> NiconicoJikkyouChatProvider::Get(const ChannelInfo &channel, std::chrono::system_clock::time_point t)
+	std::vector<Chat> NiconicoJikkyouChatProvider::Get(const ChannelInfo &channel, std::chrono::system_clock::time_point)
 	{
 		int jkID;
 		try	{

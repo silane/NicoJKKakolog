@@ -8,10 +8,13 @@ namespace Utility
 		SetFilePath(filePath);
 	}
 
+#pragma warning(push)
+#pragma warning(disable: 4458)
 	void IniFile::SetFilePath(const std::basic_string<TCHAR> &filePath)
 	{
 		this->filePath = filePath;
 	}
+#pragma warning(pop)
 
 	int IniFile::GetInt(const std::basic_string<TCHAR> &section, const std::basic_string<TCHAR> &key, int defaultVal) const
 	{

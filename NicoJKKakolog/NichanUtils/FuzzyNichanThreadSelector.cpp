@@ -64,7 +64,7 @@ namespace NicoJKKakolog
 	}
 
 
-	std::vector<std::string> FuzzyNichanThreadSelector::Get(const ChannelInfo &channel, const std::chrono::system_clock::time_point &t)
+	std::vector<std::string> FuzzyNichanThreadSelector::Get(const ChannelInfo &, const std::chrono::system_clock::time_point &)
 	{
 		auto board = Nichan::ParseBoardFromUrl(this->boardUrl);
 

@@ -208,7 +208,7 @@ namespace Nichan
 		return ret;
 	}
 
-	std::unique_ptr<BoardParser> DetectBoardParser(const MyXml::Doc &doc)
+	std::unique_ptr<BoardParser> DetectBoardParser(const MyXml::Doc &)
 	{
 		return std::unique_ptr<BoardParser>(new Type1BoardParser());
 	}

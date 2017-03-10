@@ -14,7 +14,7 @@ namespace NicoJKKakolog
 				uint_least32_t serviceId = (uint_least32_t)std::stol(pair.first, nullptr, 0);
 				serviceId = serviceId >> 16 | serviceId << 16;//‚È‚º‚©‹t‚É‚È‚Á‚Ä‚¢‚é‚ç‚µ‚¢
 				jkIdTable[serviceId] = std::stoi(pair.second);
-			}catch(const std::invalid_argument &e){}
+			}catch(const std::invalid_argument &){}
 		}
 	}
 
